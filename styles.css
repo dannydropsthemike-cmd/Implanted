@@ -1028,13 +1028,302 @@ footer a:hover {
     letter-spacing: 0.3px;
 }
 
-/* --- RESPONSIVE --- */
-@media (max-width: 768px) {
-    header { flex-direction: column; gap: 1rem; padding-bottom: 1.5rem; }
-    .hero h2 { font-size: 2.5rem; }
-    .img-placeholder { width: 100%; max-width: 320px; transform: none !important; }
-    .mission { padding: 5rem 8%; }
-    .policy-container, .contact-container { margin: 3rem 5%; padding: 2rem; }
-    .product-detail-container { flex-direction: column; gap: 2.5rem; }
-    .product-detail-title { font-size: 2rem; }
+/* ============================================================
+   RESPONSIVE — Mobile-first, portrait + landscape
+   ============================================================
+
+   Breakpoints:
+     ≤ 480px   — phones (portrait primary)
+     ≤ 767px   — phones (covers landscape too via orientation query)
+     768–1024px — tablets
+     landscape + max-height 500px — phone landscape special case
+   ============================================================ */
+
+/* ---- TABLET (≤ 1024px) ---- */
+@media (max-width: 1024px) {
+    .shop-grid       { gap: 2rem; padding: 3rem 4% 6rem 4%; }
+    .product-card    { width: 100%; max-width: 480px; }
+    .expectations-grid { gap: 2.5rem; }
+    .product-detail-container { gap: 3rem; padding: 0 4%; }
+}
+
+/* ---- PHONE (≤ 767px) — portrait + landscape ---- */
+@media (max-width: 767px) {
+
+    /* -- Header -- */
+    header {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.75rem 5% 1rem 5%;
+    }
+
+    .logo { height: 66px; }
+
+    nav { gap: 22px; }
+
+    nav a {
+        font-size: 0.78rem;
+        letter-spacing: 1px;
+    }
+
+    /* -- Hero -- */
+    .hero {
+        padding: 3rem 5% 2.5rem 5%;
+    }
+
+    .hero h2 {
+        font-size: 1.9rem;
+        margin-bottom: 2rem;
+        line-height: 1.35;
+    }
+
+    .image-gallery {
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+    }
+
+    .img-placeholder {
+        width: 88vw;
+        max-width: 340px;
+        height: 56vw;
+        max-height: 280px;
+        transform: none !important;
+        border-width: 8px;
+    }
+
+    /* -- Mission -- */
+    .mission {
+        margin: 2rem auto 3.5rem auto;
+        padding: 1.5rem 6%;
+    }
+
+    .mission h2 { font-size: 2.4rem; }
+
+    .mission p {
+        font-size: 1.05rem;
+        line-height: 1.9;
+    }
+
+    .inline-logo-svg {
+        height: 2.6em;
+        margin-top: -0.8em;
+        margin-bottom: -0.8em;
+    }
+
+    /* -- Expectations / Process -- */
+    .expectations {
+        padding: 1.5rem 5% 4rem 5%;
+    }
+
+    .expectations h2 { margin-bottom: 2.5rem; }
+
+    .expectations h2::before,
+    .expectations h2::after { display: none; }
+
+    .expectations-grid {
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    .expectation-item {
+        flex: none;
+        width: 100%;
+        max-width: 340px;
+        padding: 1.25rem 1rem;
+    }
+
+    /* -- Policy / Contact containers -- */
+    .policy-container,
+    .contact-container {
+        margin: 2rem 4%;
+        padding: 1.75rem 5%;
+    }
+
+    .policy-container h1,
+    .contact-container h1 { font-size: 1.9rem; margin-bottom: 1.75rem; }
+
+    .policy-container h2 { font-size: 1.2rem; }
+
+    /* -- Chat -- */
+    .chat-window { height: 55vh; min-height: 280px; }
+
+    .chat-textarea { font-size: 0.95rem; }   /* prevents iOS zoom-on-focus */
+
+    /* -- Shop -- */
+    .shop-header { padding: 3rem 5% 1.5rem 5%; }
+
+    .shop-header h1 { font-size: 2.2rem; }
+
+    .shop-grid {
+        flex-direction: column;
+        align-items: center;
+        gap: 1.75rem;
+        padding: 2.5rem 5% 5rem 5%;
+    }
+
+    .product-card {
+        width: 100%;
+        max-width: 420px;
+    }
+
+    .product-image-wrap { height: 56vw; max-height: 320px; }
+
+    /* -- Product detail -- */
+    .product-detail-back {
+        padding: 2rem 5% 0 5%;
+        font-size: 0.78rem;
+    }
+
+    .product-detail-container {
+        flex-direction: column;
+        gap: 2rem;
+        margin: 1.5rem auto 5rem auto;
+        padding: 0 5%;
+    }
+
+    .product-detail-images,
+    .product-detail-info { flex: none; width: 100%; }
+
+    .product-detail-title  { font-size: 1.9rem; }
+    .product-detail-price  { font-size: 1.8rem; }
+
+    /* -- Footer -- */
+    footer {
+        padding: 2.5rem 5%;
+        font-size: 0.75rem;
+        letter-spacing: 0.8px;
+    }
+
+    footer a { margin: 0 10px; }
+}
+
+/* ---- SMALL PHONES (≤ 390px) ---- */
+@media (max-width: 390px) {
+    .hero h2       { font-size: 1.6rem; }
+    .mission h2    { font-size: 2rem; }
+    nav            { gap: 14px; }
+    nav a          { font-size: 0.72rem; }
+    .logo          { height: 56px; }
+}
+
+/* ---- PHONE LANDSCAPE (short viewport, wide screen) ---- */
+@media (max-width: 900px) and (orientation: landscape) and (max-height: 500px) {
+
+    /* Compact header — keep it one row */
+    header {
+        flex-direction: row;
+        padding: 0.4rem 3%;
+        gap: 0;
+    }
+
+    .logo { height: 52px; }
+
+    nav { gap: 20px; }
+
+    nav a { font-size: 0.78rem; }
+
+    /* Hero — side-by-side layout in landscape */
+    .hero {
+        padding: 1.5rem 4% 1.5rem 4%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .hero h2 {
+        font-size: 1.55rem;
+        margin-bottom: 1.25rem;
+    }
+
+    /* Gallery: row of smaller cards */
+    .image-gallery {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: center;
+        gap: 1rem;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+        width: 100%;
+    }
+
+    .img-placeholder {
+        width: 34vw;
+        max-width: 200px;
+        height: 26vw;
+        max-height: 160px;
+        flex-shrink: 0;
+        border-width: 6px;
+    }
+
+    /* Mission */
+    .mission {
+        padding: 1rem 6%;
+        margin: 1rem auto 2rem auto;
+    }
+
+    .mission h2    { font-size: 2rem; margin-top: 1rem; }
+    .mission p     { font-size: 0.95rem; line-height: 1.8; }
+
+    /* Process — row layout */
+    .expectations  { padding: 1rem 4% 3rem 4%; }
+    .expectations h2 { margin-bottom: 1.75rem; }
+
+    .expectations-grid {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: center;
+        gap: 1.25rem;
+        overflow-x: auto;
+    }
+
+    .expectation-item {
+        flex: 0 0 200px;
+        padding: 1rem 0.75rem;
+    }
+
+    .icon-circle   { width: 56px; height: 56px; }
+    .icon-svg      { width: 26px; height: 26px; }
+
+    /* Shop */
+    .shop-header   { padding: 2rem 5% 1rem 5%; }
+    .shop-header h1 { font-size: 2rem; }
+
+    .shop-grid {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding: 1.5rem 4% 3rem 4%;
+        gap: 1.25rem;
+        justify-content: flex-start;
+    }
+
+    .product-card         { width: 260px; flex-shrink: 0; }
+    .product-image-wrap   { height: 200px; }
+
+    /* Product detail — keep two columns */
+    .product-detail-container {
+        flex-direction: row;
+        gap: 2rem;
+        margin: 1rem auto 3rem auto;
+        padding: 0 4%;
+    }
+
+    .product-detail-title  { font-size: 1.5rem; }
+    .product-detail-price  { font-size: 1.5rem; }
+
+    /* Chat */
+    .chat-window           { height: 45vh; min-height: 220px; }
+    .contact-container     { margin: 1.5rem 4%; padding: 1.25rem 4%; }
+    .contact-container h1  { font-size: 1.6rem; margin-bottom: 1rem; }
+
+    /* Policy */
+    .policy-container      { margin: 1.5rem 4%; padding: 1.25rem 4%; }
+    .policy-container h1   { font-size: 1.6rem; margin-bottom: 1rem; }
+
+    /* Footer */
+    footer { padding: 1.75rem 4%; font-size: 0.72rem; }
 }
