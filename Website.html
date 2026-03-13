@@ -1,0 +1,1687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>implanted | Custom 3D Pet Decor</title>
+    <!-- Importing Google Fonts: Dancing Script (Logo), Montserrat (Body), Playfair Display (Headings) -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Montserrat:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- GENERAL STYLES --- */
+        :root {
+            /* Palette: Lighter Mochas, Warm Sand, Soft Creams */
+            --header-footer-bg: #8D6E63; /* Much lighter, warm mocha brown */
+            --header-text: #FFF8E1; /* Soft cream for contrast against brown */
+            
+            --text-color: #5D4037; /* Medium brown for text, softer than black */
+            --text-light: #FFFFFF; 
+            
+            --accent-green: #7CB342; /* Slightly softer, more organic green */
+            
+            --bg-body-start: #FFFCF9; /* Very warm white */
+            --bg-body-end: #EFEBE7;   /* Slightly deeper warm beige for bottom */
+            --border-color: #E0D8D0;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-color);
+            background-color: var(--bg-body-start);
+            line-height: 1.9; 
+            font-weight: 400;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            
+            /* Blended Gradient Background + Noise */
+            background-image: 
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E"),
+                linear-gradient(to bottom, var(--bg-body-start) 0%, var(--bg-body-end) 100%);
+            background-attachment: fixed;
+                
+            overflow-x: hidden;
+        }
+
+        /* --- UTILITIES FOR SINGLE PAGE APP --- */
+        .hidden {
+            display: none !important;
+        }
+        
+        .fade-in {
+            animation: fadeInPage 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeInPage {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- HEADER --- */
+        header {
+            background-color: var(--header-footer-bg);
+            color: var(--header-text);
+            padding: 0.8rem 1%; 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(141, 110, 99, 0.2); 
+            position: relative;
+            z-index: 10;
+        }
+
+        /* SVG Logo Styles */
+        .logo {
+            text-decoration: none;
+            display: block;
+            height: 90px;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .logo:hover {
+            transform: scale(1.02);
+        }
+
+        .logo svg {
+            overflow: visible;
+            filter: drop-shadow(0px 2px 3px rgba(0,0,0,0.1));
+        }
+
+        .underline-path {
+            transition: stroke-dashoffset 0.8s ease-out;
+            stroke-dasharray: 200;
+            stroke-dashoffset: 60; 
+        }
+
+        .logo:hover .underline-path {
+            stroke-dashoffset: 0;
+        }
+
+        nav {
+            display: flex;
+            gap: 35px;
+        }
+
+        nav a {
+            color: var(--header-text);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            position: relative;
+            padding-bottom: 5px;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        /* Nav hover effect - sliding underline */
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            background-color: var(--header-text);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        nav a:hover {
+            color: #FFFFFF;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            text-align: center;
+            padding: 8rem 5% 4rem 5%;
+            background-color: transparent;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out forwards;
+            animation-delay: 0.2s;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .hero h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            margin-bottom: 4rem;
+            font-weight: 400;
+            color: var(--text-color);
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+        }
+
+        .green-text {
+            color: var(--accent-green);
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.3em;
+            font-weight: 700;
+            display: inline-block;
+            animation: float 6s ease-in-out infinite;
+            cursor: default;
+            transition: transform 0.3s ease, text-shadow 0.3s ease;
+        }
+        
+        .green-text:hover {
+            transform: scale(1.1);
+            text-shadow: 2px 2px 5px rgba(124, 179, 66, 0.3);
+        }
+        
+        .furry-text {
+            color: #8D6E63; 
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.3em;
+            font-weight: 700;
+            display: inline-block;
+            animation: float 6s ease-in-out infinite;
+            animation-delay: 0.5s;
+            cursor: default;
+            transition: transform 0.3s ease, text-shadow 0.3s ease;
+        }
+        
+        .furry-text:hover {
+            transform: scale(1.1);
+            text-shadow: 2px 2px 5px rgba(141, 110, 99, 0.3);
+        }
+
+        .image-gallery {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .img-placeholder {
+            width: 300px;
+            height: 420px;
+            background-color: #F5F0EB; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #A1887F;
+            border-radius: 4px; 
+            object-fit: cover;
+            background-size: cover;
+            background-position: center;
+            border: 12px solid #FDFBF9; 
+            box-shadow: 0 10px 30px rgba(141, 110, 99, 0.15); 
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            position: relative;
+        }
+
+        .img-placeholder::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 2rem;
+            opacity: 0;
+            transition: all 0.5s ease;
+            transform: scale(0);
+        }
+
+        .img-placeholder:nth-child(1) { transform: rotate(-2deg); }
+        .img-placeholder:nth-child(2) { transform: rotate(1deg); margin-top: -20px; }
+        .img-placeholder:nth-child(3) { transform: rotate(2deg); }
+
+        .img-placeholder:hover {
+            transform: scale(1.05) rotate(0deg) translateY(-10px);
+            box-shadow: 0 20px 40px rgba(141, 110, 99, 0.25);
+            z-index: 5;
+        }
+
+        .img-placeholder:hover::before {
+            opacity: 1;
+            transform: scale(1) rotate(20deg);
+        }
+
+        /* --- MISSION SECTION --- */
+        .mission {
+            max-width: 900px;
+            margin: 4rem auto 6rem auto;
+            padding: 2rem 5%;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Simplified accent line */
+        .mission::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent-green);
+            opacity: 0.6;
+            border-radius: 2px;
+        }
+
+        .mission h2 {
+            font-family: 'Dancing Script', cursive; 
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            margin-top: 2rem;
+            color: var(--text-color);
+            font-weight: 700;
+        }
+
+        .mission p {
+            font-size: 1.35rem;
+            line-height: 2.1;
+            color: #6D4C41;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .highlight-keyword {
+            color: var(--accent-green);
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            cursor: default;
+        }
+        
+        .highlight-keyword:hover {
+            color: #6D4C41;
+        }
+
+        /* Inline Logo Styles for Mission Section */
+        .inline-logo-svg {
+            display: inline-block;
+            vertical-align: middle;
+            height: 3.5em; 
+            margin-top: -1em;
+            margin-bottom: -1em;
+            margin-right: -0.6em; 
+            margin-left: -0.5em; 
+            transform: translateY(0px); 
+        }
+        
+        .inline-logo-svg path.underline-path {
+             transition: stroke-dashoffset 1s ease-out;
+             stroke-dasharray: 200;
+             stroke-dashoffset: 0; 
+        }
+
+        /* --- EXPECTATIONS SECTION --- */
+        .expectations {
+            padding: 2rem 5% 8rem 5%;
+            background-color: transparent;
+            text-align: center;
+        }
+
+        .expectations h2 {
+            margin-bottom: 5rem;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: #A1887F; 
+            position: relative;
+            display: inline-block;
+        }
+        
+        .expectations h2::before, .expectations h2::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40px;
+            height: 1px;
+            background-color: #D7CCC8;
+            opacity: 0.6;
+        }
+        .expectations h2::before { left: -60px; }
+        .expectations h2::after { right: -60px; }
+
+        .expectations-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 4rem;
+        }
+
+        .expectation-item {
+            flex: 0 1 280px;
+            text-align: center;
+            padding: 2rem;
+            border-radius: 8px; 
+            transition: transform 0.3s ease;
+        }
+
+        .expectation-item:hover {
+            transform: translateY(-10px);
+        }
+
+        .expectation-item h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            margin-top: 1.5rem;
+            color: #5D4037;
+            font-weight: 600;
+            font-style: italic;
+        }
+
+        .expectation-item p {
+            font-size: 0.95rem;
+            color: #8D6E63;
+            line-height: 1.6;
+            margin-top: 0.5rem;
+        }
+        
+        .icon-circle {
+            width: 80px;
+            height: 80px;
+            background-color: rgba(255, 255, 255, 0.4); 
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(141, 110, 99, 0.05);
+        }
+
+        .expectation-item:hover .icon-circle {
+            background-color: #FFFFFF;
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(141, 110, 99, 0.15);
+        }
+
+        .icon-svg {
+            width: 36px;
+            height: 36px;
+            stroke: var(--accent-green);
+            stroke-width: 1.5;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: stroke 0.3s ease;
+        }
+        
+        .expectation-item:hover .icon-svg {
+            stroke: #5D4037; 
+        }
+
+        /* --- SCROLL REVEAL --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(80px); 
+            transition: all 1.2s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- CONTACT & POLICY STYLES --- */
+        .policy-container, .contact-container {
+            max-width: 800px;
+            margin: 6rem auto;
+            padding: 3rem 5%;
+            background-color: rgba(255, 255, 255, 0.6);
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(141, 110, 99, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .policy-container h1, .contact-container h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--text-color);
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .policy-container h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: #8D6E63;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #D7CCC8;
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .policy-container p, .policy-container ul {
+            margin-bottom: 1.5rem;
+            color: #6D4C41;
+        }
+        
+        .policy-container li {
+            margin-bottom: 0.8rem;
+        }
+
+        .highlight {
+            color: var(--accent-green);
+            font-weight: 500;
+        }
+
+        /* --- LIVE CHAT STYLES --- */
+        .chat-window {
+            display: flex;
+            flex-direction: column;
+            height: 420px;
+            background-color: #FDFAF7;
+            border: 1px solid #E0D8D0;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            scroll-behavior: smooth;
+        }
+
+        .chat-messages::-webkit-scrollbar { width: 4px; }
+        .chat-messages::-webkit-scrollbar-track { background: transparent; }
+        .chat-messages::-webkit-scrollbar-thumb { background: #D7CCC8; border-radius: 2px; }
+
+        .chat-empty {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #BCAAA4;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            gap: 0.5rem;
+        }
+
+        .chat-bubble {
+            max-width: 75%;
+            padding: 0.7rem 1rem;
+            border-radius: 14px;
+            font-size: 0.88rem;
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        .bubble-customer {
+            background-color: #EFEBE9;
+            color: #5D4037;
+            align-self: flex-end;
+            border-bottom-right-radius: 3px;
+        }
+
+        .bubble-admin {
+            background-color: #7CB342;
+            color: white;
+            align-self: flex-start;
+            border-bottom-left-radius: 3px;
+        }
+
+        .bubble-meta {
+            font-size: 0.65rem;
+            opacity: 0.6;
+            margin-top: 4px;
+            text-align: right;
+        }
+
+        .bubble-admin .bubble-meta { text-align: left; }
+
+        .chat-input-row {
+            display: flex;
+            gap: 0.75rem;
+            border-top: 1px solid #E0D8D0;
+            padding: 0.9rem 1rem;
+            background-color: #FFFCF9;
+            align-items: flex-end;
+        }
+
+        .chat-textarea {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 2px solid #E0D8D0;
+            border-radius: 6px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.88rem;
+            background-color: #FDFAF7;
+            resize: none;
+            transition: border-color 0.3s;
+            min-height: 44px;
+            max-height: 110px;
+            line-height: 1.5;
+            color: #5D4037;
+        }
+
+        .chat-textarea:focus { outline: none; border-color: var(--accent-green); }
+        .chat-textarea::placeholder { color: #BCAAA4; }
+        .chat-textarea:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .chat-send-btn {
+            background-color: var(--accent-green);
+            color: white;
+            padding: 0.65rem 1.3rem;
+            border: none;
+            border-radius: 6px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.82rem;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.15s, opacity 0.3s;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .chat-send-btn:hover:not(:disabled) { background-color: #689f38; transform: translateY(-1px); }
+        .chat-send-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        .chat-status-bar {
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+            text-align: center;
+            min-height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .status-dot.connecting { background-color: #FFA726; animation: pulse 1.2s infinite; }
+        .status-dot.connected { background-color: var(--accent-green); }
+        .status-dot.error { background-color: #EF5350; }
+        .status-dot.rate-limited { background-color: #8D6E63; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .countdown-text { color: #8D6E63; font-style: italic; }
+        .connected-text { color: var(--accent-green); }
+        .error-text { color: #EF5350; }
+
+        .contact-container h1 { margin-bottom: 0.5rem; }
+        .contact-intro { text-align: center; color: #8D6E63; font-size: 0.92rem; margin-bottom: 2rem; letter-spacing: 0.3px; }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: var(--header-footer-bg);
+            color: #EFEBE9;
+            text-align: center;
+            padding: 4rem 2rem;
+            font-size: 0.85rem;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+        }
+
+        footer a {
+            color: #EFEBE9;
+            text-decoration: none;
+            margin: 0 20px;
+            transition: color 0.3s, opacity 0.3s;
+            opacity: 0.8;
+            border-bottom: 1px solid transparent;
+            cursor: pointer;
+        }
+
+        footer a:hover {
+            opacity: 1;
+            border-bottom: 1px solid #EFEBE9;
+        }
+
+        /* --- SHOP PAGE --- */
+        .shop-header {
+            text-align: center;
+            padding: 5rem 5% 2rem 5%;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out forwards;
+            animation-delay: 0.1s;
+        }
+
+        .shop-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 400;
+            color: var(--text-color);
+            margin-bottom: 0.75rem;
+        }
+
+        .shop-header p {
+            font-size: 1rem;
+            color: #8D6E63;
+            letter-spacing: 0.5px;
+        }
+
+        .shop-divider {
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent-green);
+            opacity: 0.6;
+            border-radius: 2px;
+            margin: 1.5rem auto 0 auto;
+        }
+
+        .shop-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 3rem;
+            padding: 4rem 5% 8rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* --- PRODUCT CARD --- */
+        .product-card {
+            background-color: rgba(255, 255, 255, 0.55);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            width: 460px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(141, 110, 99, 0.1);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 18px 40px rgba(141, 110, 99, 0.2);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background-color: #D32F2F;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 20px;
+            z-index: 2;
+        }
+
+        .product-image-wrap {
+            width: 100%;
+            height: 460px;
+            overflow: hidden;
+            background-color: #F5F0EB;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-image-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .product-card:hover .product-image-wrap img {
+            transform: scale(1.05);
+        }
+
+        /* Placeholder when no image */
+        .product-image-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            color: #A1887F;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .product-image-placeholder svg {
+            width: 48px;
+            height: 48px;
+            stroke: #C8A99A;
+            stroke-width: 1.2;
+            fill: none;
+        }
+
+        .product-info {
+            padding: 1.8rem 1.75rem 2rem 1.75rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .product-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            font-style: italic;
+            color: var(--text-color);
+            margin: 0 0 0.4rem 0;
+            position: relative;
+        }
+
+        .product-name-the {
+            font-family: 'Dancing Script', cursive;
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: #A1887F;
+            position: absolute;
+            top: -14px;
+            left: 1px;
+            letter-spacing: 0.3px;
+            line-height: 1;
+        }
+
+        .product-subtitle {
+            font-size: 0.82rem;
+            color: #A1887F;
+            letter-spacing: 0.5px;
+            margin: 0 0 1.25rem 0;
+        }
+
+        .product-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .product-price {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            color: var(--text-color);
+            font-weight: 400;
+        }
+
+        .product-price span {
+            font-size: 0.85rem;
+            color: #A1887F;
+            font-family: 'Montserrat', sans-serif;
+            display: block;
+            line-height: 1;
+        }
+
+        .shop-btn {
+            background-color: var(--header-footer-bg);
+            color: var(--header-text);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            white-space: nowrap;
+        }
+
+        .shop-btn:hover {
+            background-color: #6D4C41;
+            transform: translateY(-2px);
+        }
+
+        .product-sale-badge {
+            color: #D32F2F;
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin: 0 0 0.75rem 0;
+        }
+
+        /* Coming soon notice */
+        .shop-notice {
+            text-align: center;
+            padding: 0 5% 4rem 5%;
+            color: #A1887F;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        .shop-notice strong {
+            color: var(--accent-green);
+        }
+
+        /* --- PRODUCT DETAIL PAGE --- */
+        .product-detail-container {
+            max-width: 1100px;
+            margin: 5rem auto 8rem auto;
+            padding: 0 5%;
+            display: flex;
+            gap: 5rem;
+            align-items: flex-start;
+        }
+
+        .product-detail-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #A1887F;
+            font-size: 0.82rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            padding: 4rem 5% 0 5%;
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            transition: color 0.3s;
+        }
+
+        .product-detail-back:hover { color: var(--text-color); }
+
+        .product-detail-images {
+            flex: 1 1 50%;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .product-detail-main-img {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            background-color: #F5F0EB;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-detail-main-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-detail-thumb-row {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .product-detail-thumb {
+            width: 80px;
+            height: 80px;
+            background-color: #F5F0EB;
+            border-radius: 4px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            overflow: hidden;
+            transition: border-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-detail-thumb.active,
+        .product-detail-thumb:hover { border-color: var(--accent-green); }
+
+        .product-detail-thumb svg {
+            width: 32px;
+            height: 32px;
+            stroke: #C8A99A;
+            stroke-width: 1.2;
+            fill: none;
+        }
+
+        .product-detail-info {
+            flex: 1 1 50%;
+            padding-top: 1rem;
+        }
+
+        .product-detail-tag {
+            font-size: 0.78rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #A1887F;
+            margin-bottom: 0.75rem;
+        }
+
+        .product-detail-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.6rem;
+            font-weight: 400;
+            font-style: italic;
+            color: var(--text-color);
+            margin: 0 0 0.5rem 0;
+            line-height: 1.2;
+        }
+
+        .product-detail-sale {
+            color: #D32F2F;
+            font-size: 0.92rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 1.25rem;
+        }
+
+        .product-detail-price-row {
+            display: flex;
+            align-items: baseline;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-detail-price {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            color: var(--text-color);
+            font-weight: 400;
+        }
+
+        .product-detail-price-orig {
+            font-size: 1.2rem;
+            color: #BCAAA4;
+            text-decoration: line-through;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .product-detail-shipping {
+            font-size: 0.82rem;
+            color: #A1887F;
+            margin-bottom: 2rem;
+        }
+
+        .product-detail-divider {
+            width: 60px;
+            height: 2px;
+            background-color: var(--accent-green);
+            opacity: 0.6;
+            border-radius: 2px;
+            margin: 1.75rem 0;
+        }
+
+        .product-detail-desc {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.05rem;
+            color: #6D4C41;
+            line-height: 2;
+            margin-bottom: 2rem;
+        }
+
+        .product-detail-features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 2.5rem 0;
+        }
+
+        .product-detail-features li {
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: #6D4C41;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .product-detail-features li::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: var(--accent-green);
+            flex-shrink: 0;
+        }
+
+        .product-detail-order-btn {
+            width: 100%;
+            background-color: var(--header-footer-bg);
+            color: var(--header-text);
+            border: none;
+            padding: 1.1rem 2rem;
+            border-radius: 4px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.88rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            margin-bottom: 1rem;
+        }
+
+        .product-detail-order-btn:hover {
+            background-color: #6D4C41;
+            transform: translateY(-2px);
+        }
+
+        .product-detail-note {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #A1887F;
+            letter-spacing: 0.3px;
+        }
+
+        @media (max-width: 768px) {
+            .product-detail-container { flex-direction: column; gap: 2.5rem; }
+            .product-detail-title { font-size: 2rem; }
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                padding-bottom: 1.5rem;
+            }
+            .hero h2 {
+                font-size: 2.5rem;
+            }
+            .img-placeholder {
+                width: 100%;
+                max-width: 320px;
+                transform: none !important; 
+            }
+            .mission {
+                padding: 5rem 8%;
+            }
+            .policy-container, .contact-container { margin: 3rem 5%; padding: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <!-- Logo -->
+        <a onclick="showPage('home')" class="logo" aria-label="implanted Home">
+            <svg width="260" height="90" viewBox="0 0 260 90" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <path id="textCurve" d="M 20,65 Q 130,15 240,65" fill="transparent" />
+                </defs>
+                <text font-family="'Dancing Script', cursive" font-size="42" fill="#FFF8E1" font-weight="bold" style="filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.1));">
+                    <textPath href="#textCurve" startOffset="50%" text-anchor="middle">
+                        implanted
+                    </textPath>
+                </text>
+                <path d="M 50,70 Q 130,30 210,70" stroke="#A5D6A7" stroke-width="3" fill="transparent" stroke-linecap="round" class="underline-path"/>
+            </svg>
+        </a>
+        
+        <!-- Navigation -->
+        <nav>
+            <a onclick="showPage('home')">Home</a>
+            <a onclick="showPage('shop')">Store</a>
+            <a onclick="showPage('contact')">Contact</a>
+        </nav>
+    </header>
+
+    <!-- WRAPPER FOR HOME PAGE CONTENT -->
+    <div id="content-home" class="fade-in">
+        <!-- Hero / Images Section -->
+        <section class="hero">
+            <h2>Your <span class="furry-text">furry friend</span> with your <span class="green-text">green one</span></h2>
+            
+            <div class="image-gallery">
+                <div class="img-placeholder" style="background-image: url('https://res.cloudinary.com/daa6tizgt/image/upload/v1771214526/Small_Plant_With_Scout_zicju2.png');"></div>
+                <div class="img-placeholder" style="background-image: url('https://res.cloudinary.com/daa6tizgt/image/upload/v1771215765/Anthurium_Plant_With_Scout_tm4mo8.png');"></div>
+                <div class="img-placeholder" style="background-image: url('https://res.cloudinary.com/daa6tizgt/image/upload/v1771216226/Medium_Plant_With_Scout_usuotl.png');"></div>
+            </div>
+        </section>
+
+        <!-- Mission Section -->
+        <section class="mission reveal">
+            <h2>Our Mission</h2>
+            <p>
+                <svg class="inline-logo-svg" width="200" height="80" viewBox="0 0 250 80" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="implanted">
+                    <defs>
+                        <path id="inlineTextCurve" d="M 15,60 Q 125,10 235,60" fill="transparent" />
+                    </defs>
+                    <text font-family="'Dancing Script', cursive" font-size="38" fill="#5D4037" font-weight="bold">
+                        <textPath href="#inlineTextCurve" startOffset="50%" text-anchor="middle">
+                            implanted
+                        </textPath>
+                    </text>
+                    <path d="M 45,65 Q 125,25 205,65" stroke="#7CB342" stroke-width="4" fill="transparent" stroke-linecap="round" class="underline-path"/>
+                </svg>serves those who love their pets, who want them to be <span class="highlight-keyword">forever planted</span> in their hearts, to be <span class="highlight-keyword">forever remembered</span>. Doing this is no easy task, but we try. We offer what we think to be one of the best ways to <span class="highlight-keyword">engrave</span> your pet into your home, <span class="highlight-keyword">custom, human-made</span> products with your furry friend right on the front. Whether you just got that perfect photo of them, or they have passed on and want a way to remember them, we're here for you.
+            </p>
+        </section>
+
+        <!-- Expectations Section -->
+        <section class="expectations reveal">
+            <h2>The Process</h2>
+            <div class="expectations-grid">
+                <div class="expectation-item">
+                    <div class="icon-circle">
+                        <!-- SVG Box Icon -->
+                        <svg class="icon-svg" viewBox="0 0 24 24">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                        </svg>
+                    </div>
+                    <h3>Shipped in 1-7 Days</h3>
+                    <p>Your product will be made and shipped within 1-7 days, unless told otherwise.</p>
+                </div>
+                <div class="expectation-item">
+                    <div class="icon-circle">
+                        <!-- SVG Hand Icon - 5 fingers spread upright -->
+                        <svg class="icon-svg" viewBox="0 0 24 24">
+                            <!-- Thumb (shortest, leftmost, straight up) -->
+                            <path d="M6 16V11a1.2 1.2 0 0 1 2.4 0V15"></path>
+                            <!-- Index finger -->
+                            <path d="M8.4 15V7.5a1.2 1.2 0 0 1 2.4 0V14.5"></path>
+                            <!-- Middle finger (tallest) -->
+                            <path d="M10.8 14.5V6a1.2 1.2 0 0 1 2.4 0V14.5"></path>
+                            <!-- Ring finger -->
+                            <path d="M13.2 14.5V7.5a1.2 1.2 0 0 1 2.4 0V14.5"></path>
+                            <!-- Pinky (shortest, rightmost) -->
+                            <path d="M15.6 14.5V10a1.2 1.2 0 0 1 2.4 0V15"></path>
+                            <!-- Palm -->
+                            <path d="M6 16 C6 16 5.5 18 6.5 19.2 C7.5 20.4 16 20.4 17 19.2 C18 18 18 15 18 15"></path>
+                        </svg>
+                    </div>
+                    <h3>Human Made Design</h3>
+                    <p>Your pet will be recreated by a human that can accentuate its features, not by an AI perfectly copying pixels.</p>
+                </div>
+                <div class="expectation-item">
+                    <div class="icon-circle">
+                        <!-- SVG Heart Icon -->
+                        <svg class="icon-svg" viewBox="0 0 24 24">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                    </div>
+                    <h3>Lifelike</h3>
+                    <p>Your recreated pet will be based off of the image YOU send, not a description, thought, true lifelike accuracy, while keeping the aesthetic.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- WRAPPER FOR CONTACT CONTENT (Live Chat) -->
+    <div id="content-contact" class="hidden fade-in">
+        <div class="contact-container">
+            <h1>Support Chat</h1>
+            <p class="contact-intro">Send us a message and we'll get back to you as soon as possible. One message per 30 minutes.</p>
+
+            <!-- Status Bar -->
+            <div class="chat-status-bar" id="chatStatusBar">
+                <span class="status-dot connecting" id="statusDot"></span>
+                <span id="statusText" class="countdown-text">Connecting…</span>
+            </div>
+
+            <!-- Chat Window -->
+            <div class="chat-window">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="chat-empty" id="chatEmpty">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#D7CCC8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        <span>No messages yet — say hello!</span>
+                    </div>
+                </div>
+                <div class="chat-input-row">
+                    <textarea id="chatInput" class="chat-textarea" placeholder="Type your message…" rows="1" disabled
+                        oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,110)+'px'"
+                        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage();}"></textarea>
+                    <button class="chat-send-btn" id="sendBtn" onclick="sendMessage()" disabled>Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WRAPPER FOR PRIVACY CONTENT (Hidden by default) -->
+    <div id="content-privacy" class="hidden fade-in">
+        <div class="policy-container">
+            <h1>Privacy Policy</h1>
+            
+            <p>At <strong>implanted</strong>, we care about your privacy just as much as we care about creating beautiful keepsakes for your home. We believe in being transparent about the information we collect and how we use it.</p>
+
+            <h2>What We Collect</h2>
+            <p>To create your custom order and ensure it reaches you safely, we collect the following:</p>
+            <ul>
+                <li><strong>Names & Shipping Addresses:</strong> Used solely to ship your finished product to your doorstep.</li>
+                <li><strong>Email Addresses:</strong> Used to send you order confirmations, tracking updates, and receipts.</li>
+                <li><strong>Pet Photos:</strong> The most important part! We collect the photos you upload to design your custom piece.</li>
+            </ul>
+
+            <h2>How We Use Your Photos</h2>
+            <p>Your pet's photo is the heart of our work. We use it strictly as a reference to sculpt the digital 3D model for your plant stake. </p>
+            <p>We are proud of the work we do. Occasionally, we may record the creation process or post photos of the <span class="highlight">finished product</span> on our social media channels to showcase our art. However, absolutely <strong>no personal information</strong> about you (the buyer) will ever be made public.</p>
+
+            <h2>Secure Payments & Data</h2>
+            <p>Your security is our priority. We use <span class="highlight">Stripe</span> for secure payment processing. We do not store your credit card information on our servers.</p>
+            <p>We use <strong>[Form Service]</strong> to securely collect and organize the images you upload during the ordering process.</p>
+
+            <h2>Our Promise</h2>
+            <p>We value the trust you place in us. We <strong>do not sell, trade, or rent</strong> your personal information to anyone, for any reason.</p>
+
+            <h2>Contact Us</h2>
+            <p>If you have any questions about our privacy practices or your order, please reach out to us using our built-in contact system linked in the <strong>top right</strong> of the page.</p>
+        </div>
+    </div>
+
+    <!-- WRAPPER FOR TERMS OF SERVICE CONTENT (Hidden by default) -->
+    <div id="content-terms" class="hidden fade-in">
+        <div class="policy-container">
+            <h1>Terms of Service</h1>
+            
+            <p>Welcome to <strong>implanted</strong>. By placing an order with us, you agree to the following terms. We keep things simple because we believe in trust and transparency.</p>
+
+            <h2>1. Your Photos & Copyright</h2>
+            <p>You promise that any photo you upload is yours or you have permission to use it. Please do not upload photos that you do not own the rights to (for example, photos taken by a professional photographer unless you have their permission).</p>
+            
+            <h2>2. Photo Requirements</h2>
+            <p>To ensure your custom piece looks exactly like your best friend, the photo you upload <strong>MUST</strong> meet the following criteria:</p>
+            <ul>
+                <li><strong>Fully in Frame:</strong> Your pet's entire body (from ears to paws) must be clearly visible and mostly in the frame.</li>
+                <li><strong>No Obstructions:</strong> Please avoid photos where grass, toys, cage bars, or other objects are blocking their face.</li>
+                <li><strong>Good Lighting:</strong> We need nice, bright lighting to see their unique markings and features clearly. Shadows or blurriness make it hard for us to sculpt effectively.</li>
+            </ul>
+
+            <h2>3. Our Creation Process & Data Deletion</h2>
+            <p>We use your uploaded photo as a reference to hand-sculpt a digital 3D model. This is an artistic interpretation, not a machine scan. <strong>Once your physical product is created and shipped, we permanently delete your original photo from our active production files.</strong> We do not keep a database of customer pet photos.</p>
+
+            <h2>4. Returns on Custom Items</h2>
+            <p>Because every plant stake is custom-made specifically for your pet, we cannot accept returns for "change of mind." However, if your item arrives broken or defective, please contact us within 48 hours of delivery, and we will make it right.</p>
+
+            <h2>5. Product Care & Safety</h2>
+            <p>Our plant stakes are 3D printed from PLA (a plant-based plastic). While durable, they can warp in extreme heat. Please do not put them in the dishwasher or leave them in a hot car.</p>
+            <p><strong>Safety Warning:</strong> These are decorative items, not toys. They have pointed ends for inserting into soil. Please keep them out of reach of small children.</p>
+        </div>
+    </div>
+
+    <!-- WRAPPER FOR SHOP CONTENT -->
+    <div id="content-shop" class="hidden fade-in">
+        <div class="shop-header">
+            <h1>Our Collection</h1>
+            <p>Each piece is human drawn, custom-made to hold your pet's likeness.</p>
+            <div class="shop-divider"></div>
+        </div>
+
+        <div class="shop-grid">
+            <!-- Placeholder Product Card -->
+            <div class="product-card" onclick="showPage('product-pet-plant-stake')" style="cursor:pointer;">
+                <div class="product-badge" style="display:none;">25% Off</div>
+
+                <div class="product-image-wrap">
+                    <!-- Swap this src for a real product photo when ready -->
+                    <div class="product-image-placeholder">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Simple plant-in-pot icon -->
+                            <path d="M12 2C9 2 6.5 4 6.5 7c0 2.2 1.3 4.1 3.2 5H8v1h8v-1h-1.7c1.9-.9 3.2-2.8 3.2-5C17.5 4 15 2 12 2z"/>
+                            <rect x="9" y="14" width="6" height="1" rx="0.5"/>
+                            <path d="M10 15v5M14 15v5"/>
+                            <rect x="8" y="20" width="8" height="2" rx="1"/>
+                        </svg>
+                        <span>Photo coming soon</span>
+                    </div>
+                </div>
+
+                <div class="product-info">
+                    <h3 class="product-name"><span class="product-name-the">the</span>Implanted Pet Stake</h3>
+                    <p class="product-subtitle">Hand-sculpted · 3D Printed · PLA Material</p>
+                    <div class="product-footer">
+                        <div class="product-price">
+                            $34.99
+                        </div>
+                        <button class="shop-btn" onclick="event.stopPropagation(); showPage('product-pet-plant-stake')">View Item</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- WRAPPER FOR PRODUCT DETAIL: Pet Plant Stake -->
+    <div id="content-product-pet-plant-stake" class="hidden fade-in">
+        <div class="product-detail-back" onclick="showPage('shop')">
+            ← Back to Store
+        </div>
+
+        <div class="product-detail-container">
+            <!-- Left: Images -->
+            <div class="product-detail-images">
+                <div class="product-detail-main-img" id="mainProductImg">
+                    <!-- Replace with <img src="..." alt="Pet Plant Stake"> when photo is ready -->
+                    <div class="product-image-placeholder">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2C9 2 6.5 4 6.5 7c0 2.2 1.3 4.1 3.2 5H8v1h8v-1h-1.7c1.9-.9 3.2-2.8 3.2-5C17.5 4 15 2 12 2z"/>
+                            <rect x="9" y="14" width="6" height="1" rx="0.5"/>
+                            <path d="M10 15v5M14 15v5"/>
+                            <rect x="8" y="20" width="8" height="2" rx="1"/>
+                        </svg>
+                        <span>Photo coming soon</span>
+                    </div>
+                </div>
+                <!-- Thumbnail row: add more thumbs as more photos are available -->
+                <div class="product-detail-thumb-row">
+                    <div class="product-detail-thumb active">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2C9 2 6.5 4 6.5 7c0 2.2 1.3 4.1 3.2 5H8v1h8v-1h-1.7c1.9-.9 3.2-2.8 3.2-5C17.5 4 15 2 12 2z"/>
+                            <rect x="9" y="14" width="6" height="1" rx="0.5"/>
+                            <path d="M10 15v5M14 15v5"/>
+                            <rect x="8" y="20" width="8" height="2" rx="1"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Info -->
+            <div class="product-detail-info">
+                <p class="product-detail-tag">Custom · Hand-Made</p>
+                <h1 class="product-detail-title">Implanted Pet Stake</h1>
+                <p class="product-detail-sale" style="display:none;">25% Off</p>
+
+                <div class="product-detail-price-row">
+                    <span class="product-detail-price">$34.99</span>
+                    <span class="product-detail-price-orig" style="display:none;">$46.65</span>
+                </div>
+
+                <div class="product-detail-divider"></div>
+
+                <p class="product-detail-desc">
+                    What's better than a cute plant stake? A plant stake with your FAVORITE pet on it! Meet the Implanted Pet Stake, where you upload a photo, we process it, and put it onto a 3d model.
+                </p>
+
+                <ul class="product-detail-features">
+                    <li>Custom 3D-sculpted from your photo</li>
+                    <li>Human-drawn digital model — not AI generated</li>
+                    <li>Printed in durable, plant-based PLA material</li>
+                    <li>Fits standard plant pots and garden soil</li>
+                    <li>Great for memorial keepsakes or everyday decor</li>
+                </ul>
+
+                <button class="product-detail-order-btn">Order Now</button>
+                <p class="product-detail-note">Orders are made-to-order. Please allow 5–10 business days for production.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>Copyright implanted 2026</p>
+        
+        <!-- Transparency Statement -->
+        <div style="margin-top: 15px; font-size: 0.75rem; opacity: 0.6; max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.5;">
+            <p>Transparency: This website was coded with the assistance of Artificial Intelligence. Some image scenarios are AI-enhanced for visualization.</p>
+        </div>
+
+        <div style="margin-top: 25px;">
+            <a onclick="showPage('privacy')">Privacy Policy</a> | <a onclick="showPage('terms')">Terms of Service</a>
+        </div>
+    </footer>
+
+    <!-- Script for Logic -->
+    <!-- Live Chat Script -->
+    <script>
+        // =====================================================================
+        // CONFIGURATION — update this when your server address changes
+        // =====================================================================
+        const CHAT_SERVER = "https://uninterdicted-karissa-vulpecular.ngrok-free.dev";
+        // =====================================================================
+
+        let myUserId = null;          // Set to IP once fetched
+        let pollInterval = null;      // Message polling interval
+        let countdownInterval = null; // Rate-limit countdown interval
+        let isConnected = false;
+
+        // --- UI helpers ---
+        function setStatus(type, text) {
+            const dot = document.getElementById('statusDot');
+            const label = document.getElementById('statusText');
+            dot.className = `status-dot ${type}`;
+            label.className = `${type}-text`;
+            label.textContent = text;
+        }
+
+        function enableInput(enabled) {
+            document.getElementById('chatInput').disabled = !enabled;
+            document.getElementById('sendBtn').disabled = !enabled;
+        }
+
+        // --- Render messages ---
+        function renderMessages(messages) {
+            const area = document.getElementById('chatMessages');
+            const empty = document.getElementById('chatEmpty');
+
+            if (!messages || messages.length === 0) {
+                empty.style.display = 'flex';
+                return;
+            }
+            empty.style.display = 'none';
+
+            // Only re-render if content changed (avoid scroll jump on no-change polls)
+            const newHash = JSON.stringify(messages.map(m => m.timestamp + m.message));
+            if (area.dataset.lastHash === newHash) return;
+            area.dataset.lastHash = newHash;
+
+            const wasAtBottom = area.scrollHeight - area.scrollTop - area.clientHeight < 60;
+
+            // Remove all bubbles, keep the empty placeholder
+            Array.from(area.querySelectorAll('.chat-bubble')).forEach(el => el.remove());
+
+            messages.forEach(msg => {
+                const isAdmin = msg.sender === 'admin';
+                const bubble = document.createElement('div');
+                bubble.className = `chat-bubble ${isAdmin ? 'bubble-admin' : 'bubble-customer'}`;
+                const time = msg.timestamp ? msg.timestamp.split(' ')[1].substring(0, 5) : '';
+                const label = isAdmin ? 'Support' : 'You';
+                bubble.innerHTML = `
+                    <div>${escapeHtml(msg.message)}</div>
+                    <div class="bubble-meta">${label} · ${time}</div>
+                `;
+                area.appendChild(bubble);
+            });
+
+            if (wasAtBottom) area.scrollTop = area.scrollHeight;
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+        }
+
+        // --- Countdown timer display ---
+        function startCountdown(seconds) {
+            clearInterval(countdownInterval);
+            enableInput(false);
+            let remaining = seconds;
+
+            function tick() {
+                const m = Math.floor(remaining / 60);
+                const s = remaining % 60;
+                setStatus('rate-limited', `Next message in ${m}:${String(s).padStart(2,'0')}`);
+                if (remaining <= 0) {
+                    clearInterval(countdownInterval);
+                    setStatus('connected', `Connected · Reply anytime`);
+                    enableInput(true);
+                }
+                remaining--;
+            }
+            tick();
+            countdownInterval = setInterval(tick, 1000);
+        }
+
+        // --- Poll for new messages ---
+        async function pollMessages() {
+            if (!myUserId) return;
+            try {
+                const res = await fetch(`${CHAT_SERVER}/chat/get/me`, { cache: 'no-store' });
+                if (!res.ok) return;
+                const messages = await res.json();
+                renderMessages(messages);
+            } catch (e) { /* silent - server briefly unavailable */ }
+        }
+
+        // --- Initialize chat ---
+        async function initChat() {
+            setStatus('connecting', 'Connecting…');
+            enableInput(false);
+            try {
+                // 1. Get our IP / user ID
+                const ipRes = await fetch(`${CHAT_SERVER}/chat/my_ip`);
+                if (!ipRes.ok) throw new Error('Server unreachable');
+                const ipData = await ipRes.json();
+                myUserId = ipData.ip;
+
+                // 2. Check rate limit
+                const rateRes = await fetch(`${CHAT_SERVER}/chat/rate_status`);
+                const rateData = await rateRes.json();
+
+                // 3. Load existing messages
+                await pollMessages();
+
+                isConnected = true;
+
+                if (rateData.can_send) {
+                    setStatus('connected', 'Connected · Send us a message!');
+                    enableInput(true);
+                } else {
+                    startCountdown(rateData.seconds_remaining);
+                }
+
+                // Start polling every 4 seconds
+                clearInterval(pollInterval);
+                pollInterval = setInterval(pollMessages, 4000);
+
+            } catch (err) {
+                setStatus('error', 'Could not connect to support server.');
+                console.error('Chat init error:', err);
+            }
+        }
+
+        // --- Send message ---
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if (!text || !isConnected) return;
+
+            enableInput(false);
+            input.value = '';
+            input.style.height = 'auto';
+
+            try {
+                const res = await fetch(`${CHAT_SERVER}/chat/send`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sender: 'customer', message: text })
+                });
+                const data = await res.json();
+
+                if (data.status === 'rate_limited') {
+                    startCountdown(data.seconds_remaining);
+                } else if (data.status === 'success') {
+                    await pollMessages();
+                    startCountdown(30 * 60); // start 30-min countdown
+                } else {
+                    setStatus('error', 'Could not send message. Try again.');
+                    enableInput(true);
+                }
+            } catch (err) {
+                setStatus('error', 'Network error. Please try again.');
+                enableInput(true);
+            }
+        }
+
+        // Init chat when contact page is shown
+        const _origShowPage = showPage;
+        function showPage(pageName) {
+            _origShowPage(pageName);
+            if (pageName === 'contact') {
+                // Small delay for DOM to show
+                setTimeout(initChat, 100);
+            } else if (pageName !== 'contact') {
+                // Stop polling when not on chat page
+                clearInterval(pollInterval);
+            }
+        }
+    </script>
+
+    <script>
+        function showPage(pageName) {
+            const homeDiv = document.getElementById('content-home');
+            const contactDiv = document.getElementById('content-contact');
+            const privacyDiv = document.getElementById('content-privacy');
+            const termsDiv = document.getElementById('content-terms');
+            const shopDiv = document.getElementById('content-shop');
+            const productPetPlantStakeDiv = document.getElementById('content-product-pet-plant-stake');
+            
+            // Hide all first
+            homeDiv.classList.add('hidden');
+            if(contactDiv) contactDiv.classList.add('hidden');
+            privacyDiv.classList.add('hidden');
+            termsDiv.classList.add('hidden');
+            if(shopDiv) shopDiv.classList.add('hidden');
+            if(productPetPlantStakeDiv) productPetPlantStakeDiv.classList.add('hidden');
+            
+            // Reset scroll to top when switching
+            window.scrollTo(0,0);
+
+            if (pageName === 'home') {
+                homeDiv.classList.remove('hidden');
+                reveal(); 
+            } else if (pageName === 'contact') {
+                contactDiv.classList.remove('hidden');
+                setTimeout(initChat, 100);
+            } else if (pageName === 'privacy') {
+                privacyDiv.classList.remove('hidden');
+            } else if (pageName === 'terms') {
+                termsDiv.classList.remove('hidden');
+            } else if (pageName === 'shop') {
+                shopDiv.classList.remove('hidden');
+            } else if (pageName === 'product-pet-plant-stake') {
+                productPetPlantStakeDiv.classList.remove('hidden');
+            }
+        }
+
+        // Scroll Animation Logic
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 150; 
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                } else {
+                    reveals[i].classList.remove("active");
+                }
+            }
+        }
+
+        window.addEventListener("scroll", reveal);
+        reveal();
+    </script>
+
+</body>
+</html>
