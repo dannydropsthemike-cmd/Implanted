@@ -1616,7 +1616,7 @@ let previousTab   = null;   // for back-navigation from product detail
 let chatStarted   = false;
 
 function switchTab(name) {
-    if (name === currentTab && name !== 'chat') return;
+    if (name === currentTab) return;  // already here — do nothing
 
     // Deactivate all pages & tabs
     document.querySelectorAll('.page').forEach(p => {
