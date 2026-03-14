@@ -674,10 +674,11 @@ html, body {
    PAGE: CHAT
    ============================================================ */
 #page-chat {
-    overflow: hidden;  /* override .page overflow-y:auto so flex pins the input */
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    height: 100%;
 }
 
 .chat-header {
@@ -1199,10 +1200,11 @@ html, body {
 
     /* ---- CHAT: tight column, input clears tabbar ---- */
     #page-chat {
+        position: absolute;
+        inset: 0;
         overflow: hidden;
         display: flex;
         flex-direction: column;
-        height: 100%;
     }
 
     .chat-header {
