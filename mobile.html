@@ -48,6 +48,9 @@ html, body {
     -webkit-user-select: none;
     overscroll-behavior: none;
     touch-action: manipulation;
+    /* Prevent iOS from auto-scaling fonts on orientation change */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
 }
 
 /* ============================================================
@@ -58,7 +61,6 @@ html, body {
     inset: 0;
     display: flex;
     flex-direction: column;
-    padding-bottom: calc(var(--tab-h) + var(--bottom-pad));
 }
 
 /* ============================================================
@@ -88,6 +90,8 @@ html, body {
     flex: 1;
     overflow: hidden;
     position: relative;
+    /* Reserve space for the fixed tabbar */
+    padding-bottom: calc(var(--tab-h) + var(--bottom-pad));
 }
 
 .page {
@@ -1035,6 +1039,8 @@ html, body {
     color: var(--text-mid);
     line-height: 1.65;
     margin-bottom: 8px;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
 }
 
 .subpage-body ul { padding-left: 16px; }
