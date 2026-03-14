@@ -72,14 +72,6 @@ html, body {
     z-index: 20;
 }
 
-#topbar .logo-text {
-    font-family: 'Dancing Script', cursive;
-    font-size: 1.7rem;
-    font-weight: 700;
-    color: var(--cream);
-    letter-spacing: 0.5px;
-}
-
 #topbar .topbar-right {
     display: flex;
     align-items: center;
@@ -297,15 +289,6 @@ html, body {
     box-shadow: 0 3px 16px rgba(141,110,99,0.09);
     border: 1px solid var(--border);
     margin-bottom: 10px;
-}
-
-.mission-card .brand {
-    font-family: 'Dancing Script', cursive;
-    font-size: 1.35rem;
-    color: var(--mocha);
-    font-weight: 700;
-    display: block;
-    margin-bottom: 8px;
 }
 
 .mission-card p {
@@ -1038,7 +1021,6 @@ html, body {
     :root { --tab-h: 52px; }
 
     #topbar { padding-top: 6px; padding-bottom: 6px; }
-    .logo-text { font-size: 1.4rem; }
 
     .carousel-slide .slide-img { aspect-ratio: 16/7; }
     .carousel-caption h1 { font-size: 1.3rem; }
@@ -1061,7 +1043,16 @@ html, body {
 
     <!-- Top bar -->
     <div id="topbar">
-        <span class="logo-text">implanted</span>
+        <svg width="160" height="52" viewBox="0 0 260 90" xmlns="http://www.w3.org/2000/svg" style="overflow:visible;filter:drop-shadow(0px 1px 2px rgba(0,0,0,0.1));">
+            <defs>
+                <path id="mTopCurve" d="M 20,65 Q 130,15 240,65" fill="transparent"/>
+            </defs>
+            <text font-family="'Dancing Script', cursive" font-size="42" fill="#FFF8E1" font-weight="bold">
+                <textPath href="#mTopCurve" startOffset="50%" text-anchor="middle">implanted</textPath>
+            </text>
+            <path d="M 50,70 Q 130,30 210,70" stroke="#A5D6A7" stroke-width="3" fill="transparent" stroke-linecap="round"
+                  style="stroke-dasharray:200;stroke-dashoffset:0;"/>
+        </svg>
         <div class="topbar-right">
             <!-- placeholder for future icons -->
         </div>
@@ -1106,7 +1097,16 @@ html, body {
 
                 <div class="section-label">Our Mission</div>
                 <div class="mission-card">
-                    <span class="brand">implanted</span>
+                    <svg width="130" height="42" viewBox="0 0 260 90" xmlns="http://www.w3.org/2000/svg" style="overflow:visible;display:block;margin-bottom:10px;">
+                        <defs>
+                            <path id="mMissionCurve" d="M 20,65 Q 130,15 240,65" fill="transparent"/>
+                        </defs>
+                        <text font-family="'Dancing Script', cursive" font-size="42" fill="#5D4037" font-weight="bold">
+                            <textPath href="#mMissionCurve" startOffset="50%" text-anchor="middle">implanted</textPath>
+                        </text>
+                        <path d="M 50,70 Q 130,30 210,70" stroke="#7CB342" stroke-width="3.5" fill="transparent" stroke-linecap="round"
+                              style="stroke-dasharray:200;stroke-dashoffset:0;"/>
+                    </svg>
                     <p>
                         serves those who love their pets, who want them to be
                         <em>forever planted</em> in their hearts, to be
