@@ -30,7 +30,8 @@
     --text-light:  #A1887F;
     --border:      #E0D8D0;
     --white:       #FFFFFF;
-    --tab-h:       64px;       /* bottom tab bar height */
+    --tab-h:       64px;
+    --topbar-h:    66px;
     --status-pad:  env(safe-area-inset-top, 0px);
     --bottom-pad:  env(safe-area-inset-bottom, 0px);
 }
@@ -187,10 +188,13 @@ html, body {
     width: 100%;
     overflow: hidden;
     touch-action: pan-y;
+    /* Fill exactly the visible page area so caption lands at the bottom */
+    height: calc(100vh - var(--topbar-h) - var(--tab-h) - var(--status-pad) - var(--bottom-pad) - 26px); /* 26px = dots row */
 }
 
 .carousel-track {
     display: flex;
+    height: 100%;
     transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
     will-change: transform;
 }
@@ -198,12 +202,12 @@ html, body {
 .carousel-slide {
     flex-shrink: 0;
     width: 100%;
+    height: 100%;
 }
 
-.carousel-slide img,
 .carousel-slide .slide-img {
     width: 100%;
-    aspect-ratio: 3/4;
+    height: 100%;
     object-fit: cover;
     display: block;
     background: var(--sand);
@@ -229,6 +233,22 @@ html, body {
     font-style: italic;
     line-height: 1.25;
     margin-bottom: 0.3rem;
+}
+
+.caption-furry {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.3em;
+    font-weight: 700;
+    color: #D7CCC8;
+    font-style: normal;
+}
+
+.caption-green {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.3em;
+    font-weight: 700;
+    color: #A5D6A7;
+    font-style: normal;
 }
 
 .carousel-caption p {
@@ -294,6 +314,21 @@ html, body {
     margin-bottom: 10px;
 }
 
+.mission-card .logo-svg-wrap {
+    width: 125px;
+    height: 38px;
+    overflow: hidden;
+    flex-shrink: 0;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.mission-card .logo-svg-wrap svg {
+    width: 125px;
+    height: 38px;
+    display: block;
+}
+
 .mission-card p {
     font-family: 'Playfair Display', serif;
     font-size: 0.95rem;
@@ -311,36 +346,31 @@ html, body {
 .process-row {
     display: flex;
     gap: 10px;
-    overflow-x: auto;
-    padding-bottom: 4px;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
     margin-bottom: 6px;
 }
-.process-row::-webkit-scrollbar { display: none; }
 
 .process-pill {
-    flex-shrink: 0;
+    flex: 1 1 0;
+    min-width: 0;
     background: var(--white);
     border-radius: 12px;
-    padding: 14px 14px;
-    width: 148px;
+    padding: 12px 10px;
     box-shadow: 0 2px 10px rgba(141,110,99,0.08);
     border: 1px solid var(--border);
 }
 
 .process-pill .pill-icon {
-    width: 38px; height: 38px;
+    width: 34px; height: 34px;
     background: rgba(124, 179, 66, 0.1);
-    border-radius: 10px;
+    border-radius: 9px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 .process-pill .pill-icon svg {
-    width: 20px; height: 20px;
+    width: 18px; height: 18px;
     stroke: var(--green);
     fill: none;
     stroke-width: 1.8;
@@ -350,7 +380,7 @@ html, body {
 
 .process-pill h4 {
     font-family: 'Playfair Display', serif;
-    font-size: 0.88rem;
+    font-size: 0.82rem;
     font-style: italic;
     color: var(--text);
     margin-bottom: 4px;
@@ -358,9 +388,9 @@ html, body {
 }
 
 .process-pill p {
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     color: var(--text-light);
-    line-height: 1.5;
+    line-height: 1.45;
 }
 
 /* ============================================================
@@ -1018,22 +1048,145 @@ html, body {
 .no-scroll { overflow: hidden; }
 
 /* ============================================================
-   LANDSCAPE — compact adjustments
+   LANDSCAPE — full redesign as side-by-side app layout
    ============================================================ */
 @media (orientation: landscape) and (max-height: 500px) {
-    :root { --tab-h: 52px; }
 
-    #topbar { padding-top: 6px; padding-bottom: 6px; }
+    /* Shrink chrome */
+    :root { --tab-h: 50px; --topbar-h: 48px; }
 
-    .carousel-slide .slide-img { aspect-ratio: 16/7; }
-    .carousel-caption h1 { font-size: 1.3rem; }
+    #topbar {
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
 
-    .tab svg  { width: 18px; height: 18px; }
-    .tab span { font-size: 0.55rem; }
+    #topbar svg { width: 120px; height: 36px; }
 
-    .detail-img-wrap { aspect-ratio: 16/7; }
+    .tab { gap: 2px; }
+    .tab svg   { width: 17px; height: 17px; }
+    .tab span  { font-size: 0.52rem; }
 
-    .product-item-img { aspect-ratio: 16/7; }
+    /* ---- HOME: side-by-side layout ---- */
+    #page-home {
+        display: flex;
+        flex-direction: row;
+        overflow: hidden;
+    }
+
+    /* Left: carousel takes ~45% width, full height */
+    .carousel-wrap {
+        width: 45%;
+        flex-shrink: 0;
+        height: 100%;
+    }
+
+    .carousel-caption h1 { font-size: 1.1rem; }
+    .carousel-caption p  { font-size: 0.65rem; }
+
+    /* Right: mission + process, scrollable */
+    .home-section {
+        flex: 1;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 10px 12px 12px 12px;
+    }
+
+    .carousel-dots {
+        position: absolute;
+        bottom: 8px;
+        left: 0;
+        width: 45%;
+        padding: 0;
+        z-index: 5;
+    }
+
+    .section-label { margin: 8px 0 8px 0; font-size: 0.6rem; }
+
+    .mission-card { padding: 12px 14px; margin-bottom: 8px; }
+    .mission-card .logo-svg-wrap { width: 100px; height: 30px; margin-bottom: 6px; }
+    .mission-card .logo-svg-wrap svg { width: 100px; height: 30px; }
+    .mission-card p { font-size: 0.78rem; line-height: 1.6; }
+
+    .process-row { gap: 7px; margin-bottom: 0; }
+    .process-pill { padding: 9px 8px; }
+    .process-pill .pill-icon { width: 28px; height: 28px; margin-bottom: 6px; }
+    .process-pill .pill-icon svg { width: 14px; height: 14px; }
+    .process-pill h4 { font-size: 0.72rem; margin-bottom: 2px; }
+    .process-pill p  { font-size: 0.62rem; line-height: 1.35; }
+
+    /* ---- SHOP landscape ---- */
+    #page-shop { display: flex; flex-direction: column; overflow: hidden; }
+
+    .shop-hero { padding: 10px 18px; }
+    .shop-hero h2 { font-size: 1.2rem; margin-bottom: 2px; }
+
+    .shop-list {
+        flex: 1;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        gap: 12px;
+        padding: 10px 12px;
+        align-items: flex-start;
+    }
+
+    .product-item { width: 260px; flex-shrink: 0; margin-bottom: 0; }
+    .product-item-img { aspect-ratio: 4/3; height: auto; }
+
+    /* ---- PRODUCT DETAIL landscape ---- */
+    #page-product { overflow-y: auto; }
+
+    .detail-back-bar { padding: 8px 14px 4px 14px; }
+
+    .detail-img-wrap {
+        float: left;
+        width: 42%;
+        aspect-ratio: 1/1;
+        border-bottom: none;
+        border-right: 1px solid var(--border);
+    }
+
+    .detail-body {
+        margin-left: 42%;
+        padding: 14px 16px 80px 16px;
+        overflow-y: auto;
+    }
+
+    .detail-title  { font-size: 1.4rem; }
+    .detail-price  { font-size: 1.3rem; margin: 8px 0 2px 0; }
+
+    /* ---- CHAT landscape ---- */
+    #page-chat { flex-direction: row; flex-wrap: nowrap; }
+
+    .chat-header { 
+        writing-mode: initial;
+        flex-direction: column;
+        justify-content: center;
+        width: 160px;
+        flex-shrink: 0;
+        border-right: 1px solid rgba(255,248,225,0.15);
+        padding: 14px 12px;
+    }
+
+    .chat-status-row { 
+        display: none; /* shown inline in chat area in landscape */
+    }
+
+    .chat-messages-area { flex: 1; }
+
+    .chat-input-area { 
+        position: absolute;
+        bottom: calc(var(--tab-h) + var(--bottom-pad));
+        left: 160px;
+        right: 0;
+    }
+
+    /* ---- MORE landscape ---- */
+    #page-more { overflow-y: auto; }
+    .more-header { padding: 12px 18px; }
+    .more-links  { padding: 8px 12px; }
+    .more-row    { padding: 11px 14px; margin-bottom: 7px; }
 }
 </style>
 </head>
@@ -1046,7 +1199,7 @@ html, body {
 
     <!-- Top bar -->
     <div id="topbar">
-        <svg width="152" height="46" viewBox="10 8 240 70" xmlns="http://www.w3.org/2000/svg" style="display:block;filter:drop-shadow(0px 1px 2px rgba(0,0,0,0.1));">
+        <svg width="152" height="46" viewBox="65 8 200 70" xmlns="http://www.w3.org/2000/svg" style="display:block;filter:drop-shadow(0px 1px 2px rgba(0,0,0,0.1));">
             <defs>
                 <path id="mTopCurve" d="M 20,65 Q 130,15 240,65" fill="transparent"/>
             </defs>
@@ -1082,7 +1235,7 @@ html, body {
                     </div>
                 </div>
                 <div class="carousel-caption">
-                    <h1>Your furry friend with your green one</h1>
+                    <h1>Your <span class="caption-furry">furry friend</span> with your <span class="caption-green">green one</span></h1>
                     <p>Custom 3D Pet Decor</p>
                 </div>
             </div>
@@ -1099,15 +1252,17 @@ html, body {
 
                 <div class="section-label">Our Mission</div>
                 <div class="mission-card">
-                    <svg width="125" height="38" viewBox="10 8 240 70" xmlns="http://www.w3.org/2000/svg" style="display:block;margin-bottom:10px;">
-                        <defs>
-                            <path id="mMissionCurve" d="M 20,65 Q 130,15 240,65" fill="transparent"/>
-                        </defs>
-                        <text font-family="'Dancing Script', cursive" font-size="42" fill="#5D4037" font-weight="bold">
-                            <textPath href="#mMissionCurve" startOffset="50%" text-anchor="middle">implanted</textPath>
-                        </text>
-                        <path d="M 50,70 Q 130,30 210,70" stroke="#7CB342" stroke-width="3.5" fill="transparent" stroke-linecap="round"/>
-                    </svg>
+                    <div class="logo-svg-wrap">
+                        <svg width="125" height="38" viewBox="65 8 200 70" xmlns="http://www.w3.org/2000/svg" style="display:block;">
+                            <defs>
+                                <path id="mMissionCurve" d="M 20,65 Q 130,15 240,65" fill="transparent"/>
+                            </defs>
+                            <text font-family="'Dancing Script', cursive" font-size="42" fill="#5D4037" font-weight="bold">
+                                <textPath href="#mMissionCurve" startOffset="50%" text-anchor="middle">implanted</textPath>
+                            </text>
+                            <path d="M 50,70 Q 130,30 210,70" stroke="#7CB342" stroke-width="3.5" fill="transparent" stroke-linecap="round"/>
+                        </svg>
+                    </div>
                     <p>
                         serves those who love their pets, who want them to be
                         <em>forever planted</em> in their hearts, to be
@@ -1664,6 +1819,18 @@ async function mSendMessage() {
         mEnableInput(true);
     }
 }
+
+// Force repaint on orientation change to prevent SVG font-size glitch
+window.addEventListener('orientationchange', function () {
+    setTimeout(function () {
+        var cards = document.querySelectorAll('.mission-card');
+        cards.forEach(function (el) {
+            el.style.display = 'none';
+            el.offsetHeight; // force reflow
+            el.style.display = '';
+        });
+    }, 300);
+});
 </script>
 
 </body>
