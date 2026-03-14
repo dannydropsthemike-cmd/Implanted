@@ -17,23 +17,24 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-    --mocha:       #8D6E63;
-    --mocha-dark:  #6D4C41;
-    --mocha-light: #D7CCC8;
-    --cream:       #FFF8E1;
-    --cream-soft:  #FFFCF9;
-    --sand:        #EFEBE7;
-    --green:       #7CB342;
-    --green-dark:  #558B2F;
-    --text:        #5D4037;
-    --text-mid:    #6D4C41;
-    --text-light:  #A1887F;
-    --border:      #E0D8D0;
-    --white:       #FFFFFF;
-    --tab-h:       64px;
-    --topbar-h:    66px;
-    --status-pad:  env(safe-area-inset-top, 0px);
-    --bottom-pad:  env(safe-area-inset-bottom, 0px);
+    --mocha:          #8D6E63;
+    --mocha-dark:     #6D4C41;
+    --mocha-light:    #D7CCC8;
+    --subheader-bg:   #A1887F;   /* lighter than topbar for page sub-headers */
+    --cream:          #FFF8E1;
+    --cream-soft:     #FFFCF9;
+    --sand:           #EFEBE7;
+    --green:          #7CB342;
+    --green-dark:     #558B2F;
+    --text:           #5D4037;
+    --text-mid:       #6D4C41;
+    --text-light:     #A1887F;
+    --border:         #E0D8D0;
+    --white:          #FFFFFF;
+    --tab-h:          64px;
+    --topbar-h:       66px;
+    --status-pad:     env(safe-area-inset-top, 0px);
+    --bottom-pad:     env(safe-area-inset-bottom, 0px);
 }
 
 html, body {
@@ -182,7 +183,6 @@ html, body {
 
 /* Bottom clearance so content doesn't hide under the fixed tabbar */
 .home-section    { padding-bottom: calc(var(--tab-h) + var(--bottom-pad) + 8px); }
-#page-shop       { padding-bottom: calc(var(--tab-h) + var(--bottom-pad)); }
 #page-product    { padding-bottom: calc(var(--tab-h) + var(--bottom-pad)); }
 #page-more       { padding-bottom: calc(var(--tab-h) + var(--bottom-pad)); }
 
@@ -405,10 +405,10 @@ html, body {
 /* ============================================================
    PAGE: SHOP
    ============================================================ */
-#page-shop { padding: 0 0 80px 0; }
+#page-shop { overflow-y: auto; -webkit-overflow-scrolling: touch; }
 
 .shop-hero {
-    background: var(--mocha);
+    background: var(--subheader-bg);
     padding: 22px 18px 18px 18px;
     text-align: center;
 }
@@ -427,7 +427,7 @@ html, body {
     letter-spacing: 0.5px;
 }
 
-.shop-list { padding: 14px 14px 0 14px; }
+.shop-list { padding: 14px 14px calc(var(--tab-h) + var(--bottom-pad) + 8px) 14px; }
 
 /* Product list item */
 .product-item {
@@ -682,7 +682,7 @@ html, body {
 
 .chat-header {
     flex-shrink: 0;
-    background: var(--mocha);
+    background: var(--subheader-bg);
     padding: 16px 18px;
     display: flex;
     align-items: center;
@@ -879,7 +879,7 @@ html, body {
 #page-more { padding: 0 0 80px 0; }
 
 .more-header {
-    background: var(--mocha);
+    background: var(--subheader-bg);
     padding: 18px 18px;
     text-align: center;
 }
@@ -1127,12 +1127,11 @@ html, body {
     .process-pill h4 { font-size: 0.7rem; margin-bottom: 2px; }
     .process-pill p  { font-size: 0.6rem; line-height: 1.3; }
 
-    /* ---- SHOP: header + horizontal scroll list ---- */
+    /* ---- SHOP: header + scrollable list ---- */
     #page-shop {
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        padding-bottom: 0;
     }
 
     .shop-hero { flex-shrink: 0; padding: 9px 16px; }
@@ -1141,48 +1140,34 @@ html, body {
 
     .shop-list {
         flex: 1;
-        overflow-x: auto;
-        overflow-y: hidden;
+        min-height: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
         -webkit-overflow-scrolling: touch;
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         gap: 10px;
         padding: 10px 12px calc(var(--tab-h) + var(--bottom-pad) + 4px) 12px;
-        align-items: flex-start;
     }
 
     .product-item {
-        width: 240px;
+        width: 100%;
         flex-shrink: 0;
         margin-bottom: 0;
-    }
-
-    .product-item-img { aspect-ratio: 4/3; height: auto; }
-
-    /* ---- PRODUCT DETAIL: image left, info right ---- */
-    #page-product {
         display: flex;
-        flex-direction: column;
-        overflow-y: auto;
-        padding-bottom: calc(var(--tab-h) + var(--bottom-pad) + 4px);
+        flex-direction: row;
     }
 
-    .detail-back-bar { padding: 7px 14px 4px 14px; flex-shrink: 0; }
-
-    .detail-img-wrap {
-        width: 100%;
-        aspect-ratio: 16/7;
+    .product-item-img {
+        width: 160px;
         flex-shrink: 0;
+        aspect-ratio: 1/1;
+        height: auto;
     }
 
-    .detail-body {
-        padding: 12px 16px calc(var(--tab-h) + var(--bottom-pad) + 4px) 16px;
-    }
+    .product-item-body { flex: 1; }
 
-    .detail-title { font-size: 1.4rem; }
-    .detail-price { font-size: 1.3rem; margin: 6px 0 2px 0; }
-
-    /* ---- CHAT: header top, messages fill, input docked ---- */
+    /* ---- CHAT: header + status + messages + input all in column ---- */
     #page-chat {
         display: flex;
         flex-direction: column;
@@ -1198,11 +1183,14 @@ html, body {
     .chat-header-info h3 { font-size: 0.9rem; }
     .chat-header-info p  { font-size: 0.62rem; }
 
-    .chat-status-row { flex-shrink: 0; }
+    .chat-status-row { flex-shrink: 0; padding: 4px 14px; }
 
-    .chat-messages-area { flex: 1; min-height: 0; }
+    .chat-messages-area { flex: 1; min-height: 0; padding: 8px 12px; }
 
-    .chat-input-area { flex-shrink: 0; }
+    .chat-input-area {
+        flex-shrink: 0;
+        padding: 6px 10px calc(var(--bottom-pad) + 4px) 10px;
+    }
 
     /* ---- MORE ---- */
     #page-more { overflow-y: auto; }
