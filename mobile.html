@@ -674,9 +674,9 @@ html, body {
    PAGE: CHAT
    ============================================================ */
 #page-chat {
+    overflow: hidden;  /* override .page overflow-y:auto so flex pins the input */
     display: flex;
     flex-direction: column;
-    overflow: hidden;       /* must be hidden - NOT auto - so flex children don't overflow */
     height: 100%;
 }
 
@@ -1199,9 +1199,10 @@ html, body {
 
     /* ---- CHAT: tight column, input clears tabbar ---- */
     #page-chat {
+        overflow: hidden;
         display: flex;
         flex-direction: column;
-        overflow: hidden;
+        height: 100%;
     }
 
     .chat-header {
