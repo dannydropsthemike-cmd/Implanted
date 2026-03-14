@@ -3,6 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- MOBILE REDIRECT — first in <head> so it fires before any render -->
+    <script>
+        (function () {
+            if (sessionStorage.getItem('forceDesktop')) return;
+            var isMobile = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+                        || (navigator.maxTouchPoints > 1 && window.innerWidth <= 1024);
+            if (isMobile) window.location.replace('mobile.html');
+        })();
+    </script>
     <title>implanted | Custom 3D Pet Decor</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Montserrat:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
