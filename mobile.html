@@ -95,13 +95,15 @@ html, body {
 
 .page {
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: calc(var(--tab-h) + var(--bottom-pad)); /* stop at tabbar, not behind it */
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     background: var(--cream-soft);
     touch-action: pan-y;
-    /* slide in/out */
     transform: translateX(100%);
     transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
     will-change: transform;
@@ -181,11 +183,6 @@ html, body {
 }
 .tab { position: relative; }
 
-/* Bottom clearance so content doesn't hide under the fixed tabbar */
-.home-section    { padding-bottom: calc(var(--tab-h) + var(--bottom-pad) + 8px); }
-#page-product    { padding-bottom: calc(var(--tab-h) + var(--bottom-pad)); }
-#page-more       { padding-bottom: calc(var(--tab-h) + var(--bottom-pad)); }
-
 /* ============================================================
    PAGE: HOME
    ============================================================ */
@@ -196,8 +193,7 @@ html, body {
     width: 100%;
     overflow: hidden;
     touch-action: pan-y;
-    /* Fill exactly the visible page area so caption lands at the bottom */
-    height: calc(100vh - var(--topbar-h) - var(--tab-h) - var(--status-pad) - var(--bottom-pad) - 26px); /* 26px = dots row */
+    height: calc(100% - 26px); /* 100% = page height (already excludes tabbar); 26px = dots row */
 }
 
 .carousel-track {
@@ -556,6 +552,9 @@ html, body {
     stroke-linecap: round;
     stroke-linejoin: round;
 }
+
+/* Portrait: container is a transparent passthrough */
+.detail-container-inner { display: contents; }
 
 .detail-img-wrap {
     width: 100%;
@@ -1075,11 +1074,6 @@ html, body {
     .tab svg  { width: 17px; height: 17px; }
     .tab span { font-size: 0.52rem; }
 
-    /* Reset portrait bottom clearances — landscape handles its own */
-    .home-section, #page-shop, #page-product, #page-more {
-        padding-bottom: calc(var(--tab-h) + var(--bottom-pad) + 4px);
-    }
-
     /* ---- HOME: left=carousel, right=content ---- */
     #page-home {
         display: flex;
@@ -1104,8 +1098,8 @@ html, body {
         z-index: 5;
     }
 
-    .carousel-caption { padding: 3rem 1rem 0.75rem 1rem; }
-    .carousel-caption h1 { font-size: 0.95rem; }
+    .carousel-caption { padding: 2.5rem 1rem 0.6rem 1rem; }
+    .carousel-caption h1 { font-size: 1.1rem; line-height: 1.2; }
     .carousel-caption p  { font-size: 0.62rem; }
 
     .home-section {
@@ -1149,7 +1143,7 @@ html, body {
         display: flex;
         flex-direction: column;
         gap: 10px;
-        padding: 10px 12px calc(var(--tab-h) + var(--bottom-pad) + 4px) 12px;
+        padding: 10px 12px;
     }
 
     .product-item {
@@ -1169,7 +1163,41 @@ html, body {
 
     .product-item-body { flex: 1; }
 
-    /* ---- CHAT: header + status + messages + input all in column ---- */
+    /* ---- PRODUCT DETAIL: image left, info right ---- */
+    #page-product {
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .detail-back-bar { padding: 6px 14px 4px 14px; }
+
+    .detail-container-inner {
+        display: flex;
+        flex-direction: row;
+        flex: 1;
+    }
+
+    .detail-img-wrap {
+        width: 42%;
+        flex-shrink: 0;
+        aspect-ratio: 1/1;
+        border-bottom: none;
+        border-right: 1px solid var(--border);
+    }
+
+    .detail-body {
+        flex: 1;
+        padding: 12px 16px 16px 16px;
+        overflow-y: auto;
+    }
+
+    .detail-title { font-size: 1.4rem; }
+    .detail-price { font-size: 1.3rem; margin: 6px 0 2px 0; }
+    .detail-features li { padding: 6px 0; font-size: 0.8rem; }
+
+    /* ---- CHAT: tight column, input clears tabbar ---- */
     #page-chat {
         display: flex;
         flex-direction: column;
@@ -1191,7 +1219,7 @@ html, body {
 
     .chat-input-area {
         flex-shrink: 0;
-        padding: 6px 10px calc(var(--bottom-pad) + 4px) 10px;
+        padding: 6px 10px 8px 10px;
     }
 
     /* ---- MORE ---- */
@@ -1369,6 +1397,7 @@ html, body {
                 <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
                 Back to Store
             </div>
+            <div class="detail-container-inner">
             <div class="detail-img-wrap">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 2C9 2 6.5 4 6.5 7c0 2.2 1.3 4.1 3.2 5H8v1h8v-1h-1.7c1.9-.9 3.2-2.8 3.2-5C17.5 4 15 2 12 2z"/>
@@ -1396,6 +1425,7 @@ html, body {
                 </ul>
                 <button class="btn-order">Order Now</button>
                 <p class="detail-note">Orders are made-to-order. Please allow 5–10 business days for production.</p>
+            </div>
             </div>
         </div>
 
