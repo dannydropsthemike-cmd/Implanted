@@ -1,0 +1,1666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>implanted | Custom 3D Pet Decor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   MOBILE INTERFACE — implanted
+   App-style: bottom tab nav, swipe carousel, slide transitions
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    --mocha:       #8D6E63;
+    --mocha-dark:  #6D4C41;
+    --mocha-light: #D7CCC8;
+    --cream:       #FFF8E1;
+    --cream-soft:  #FFFCF9;
+    --sand:        #EFEBE7;
+    --green:       #7CB342;
+    --green-dark:  #558B2F;
+    --text:        #5D4037;
+    --text-mid:    #6D4C41;
+    --text-light:  #A1887F;
+    --border:      #E0D8D0;
+    --white:       #FFFFFF;
+    --tab-h:       64px;       /* bottom tab bar height */
+    --status-pad:  env(safe-area-inset-top, 0px);
+    --bottom-pad:  env(safe-area-inset-bottom, 0px);
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--cream-soft);
+    font-family: 'Montserrat', sans-serif;
+    color: var(--text);
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* ============================================================
+   APP SHELL
+   ============================================================ */
+#app {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: calc(var(--tab-h) + var(--bottom-pad));
+}
+
+/* ============================================================
+   TOPBAR
+   ============================================================ */
+#topbar {
+    flex-shrink: 0;
+    background: var(--mocha);
+    padding: calc(var(--status-pad) + 10px) 18px 10px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 12px rgba(141,110,99,0.18);
+    z-index: 20;
+}
+
+#topbar .logo-text {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: var(--cream);
+    letter-spacing: 0.5px;
+}
+
+#topbar .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* ============================================================
+   PAGE CONTAINER — slides
+   ============================================================ */
+#pages {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+}
+
+.page {
+    position: absolute;
+    inset: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    background: var(--cream-soft);
+    /* slide in/out */
+    transform: translateX(100%);
+    transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+}
+
+.page.active  { transform: translateX(0); }
+.page.prev    { transform: translateX(-28%); }   /* parallax feel */
+
+/* ============================================================
+   BOTTOM TAB BAR
+   ============================================================ */
+#tabbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: calc(var(--tab-h) + var(--bottom-pad));
+    padding-bottom: var(--bottom-pad);
+    background: var(--white);
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: stretch;
+    z-index: 30;
+    box-shadow: 0 -4px 20px rgba(141,110,99,0.08);
+}
+
+.tab {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    cursor: pointer;
+    transition: background 0.15s;
+    border: none;
+    background: none;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.tab:active { background: rgba(141,110,99,0.06); }
+
+.tab svg {
+    width: 22px;
+    height: 22px;
+    stroke: var(--text-light);
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: stroke 0.2s;
+}
+
+.tab span {
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--text-light);
+    transition: color 0.2s;
+}
+
+.tab.active svg  { stroke: var(--green); }
+.tab.active span { color: var(--green); }
+
+/* Active tab indicator dot */
+.tab.active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 28px;
+    height: 2.5px;
+    background: var(--green);
+    border-radius: 0 0 3px 3px;
+    margin-top: calc(var(--status-pad, 0px));
+}
+.tab { position: relative; }
+
+/* ============================================================
+   PAGE: HOME
+   ============================================================ */
+
+/* Carousel */
+.carousel-wrap {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    touch-action: pan-y;
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+}
+
+.carousel-slide {
+    flex-shrink: 0;
+    width: 100%;
+}
+
+.carousel-slide img,
+.carousel-slide .slide-img {
+    width: 100%;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    display: block;
+    background: var(--sand);
+    background-size: cover;
+    background-position: center;
+}
+
+/* Carousel overlay text */
+.carousel-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    padding: 3.5rem 1.5rem 1.5rem 1.5rem;
+    background: linear-gradient(to top, rgba(93,64,55,0.72) 0%, transparent 100%);
+    color: var(--cream);
+    pointer-events: none;
+}
+
+.carousel-caption h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.7rem;
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.25;
+    margin-bottom: 0.3rem;
+}
+
+.carousel-caption p {
+    font-size: 0.78rem;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    opacity: 0.85;
+    font-weight: 500;
+}
+
+/* Carousel dots */
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 0 6px 0;
+}
+
+.dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--mocha-light);
+    transition: all 0.2s;
+}
+
+.dot.active {
+    background: var(--mocha);
+    width: 18px;
+    border-radius: 3px;
+}
+
+/* Home cards */
+.home-section {
+    padding: 0 16px 100px 16px;
+}
+
+.section-label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin: 22px 0 14px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+}
+
+/* Mission card */
+.mission-card {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 20px 18px;
+    box-shadow: 0 3px 16px rgba(141,110,99,0.09);
+    border: 1px solid var(--border);
+    margin-bottom: 10px;
+}
+
+.mission-card .brand {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.35rem;
+    color: var(--mocha);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.mission-card p {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--text-mid);
+}
+
+.mission-card p em {
+    color: var(--green);
+    font-style: italic;
+    font-weight: 600;
+}
+
+/* Process pills row */
+.process-row {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    margin-bottom: 6px;
+}
+.process-row::-webkit-scrollbar { display: none; }
+
+.process-pill {
+    flex-shrink: 0;
+    background: var(--white);
+    border-radius: 12px;
+    padding: 14px 14px;
+    width: 148px;
+    box-shadow: 0 2px 10px rgba(141,110,99,0.08);
+    border: 1px solid var(--border);
+}
+
+.process-pill .pill-icon {
+    width: 38px; height: 38px;
+    background: rgba(124, 179, 66, 0.1);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.process-pill .pill-icon svg {
+    width: 20px; height: 20px;
+    stroke: var(--green);
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.process-pill h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.88rem;
+    font-style: italic;
+    color: var(--text);
+    margin-bottom: 4px;
+    font-weight: 600;
+}
+
+.process-pill p {
+    font-size: 0.72rem;
+    color: var(--text-light);
+    line-height: 1.5;
+}
+
+/* ============================================================
+   PAGE: SHOP
+   ============================================================ */
+#page-shop { padding: 0 0 80px 0; }
+
+.shop-hero {
+    background: var(--mocha);
+    padding: 22px 18px 18px 18px;
+    text-align: center;
+}
+
+.shop-hero h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: var(--cream);
+    margin-bottom: 4px;
+}
+
+.shop-hero p {
+    font-size: 0.75rem;
+    color: rgba(255,248,225,0.7);
+    letter-spacing: 0.5px;
+}
+
+.shop-list { padding: 14px 14px 0 14px; }
+
+/* Product list item */
+.product-item {
+    background: var(--white);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 3px 14px rgba(141,110,99,0.09);
+    border: 1px solid var(--border);
+    margin-bottom: 14px;
+    display: flex;
+    gap: 0;
+    flex-direction: column;
+    cursor: pointer;
+    transition: transform 0.18s, box-shadow 0.18s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.product-item:active { transform: scale(0.985); box-shadow: 0 1px 6px rgba(141,110,99,0.1); }
+
+.product-item-img {
+    width: 100%;
+    aspect-ratio: 4/3;
+    background: var(--sand);
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.product-item-img svg {
+    width: 48px; height: 48px;
+    stroke: #C8A99A;
+    fill: none;
+    stroke-width: 1.2;
+}
+
+.product-item-img .coming-soon {
+    position: absolute;
+    bottom: 10px; left: 10px;
+    background: rgba(255,248,225,0.9);
+    color: var(--text-light);
+    font-size: 0.62rem;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.product-item-body {
+    padding: 14px 16px 16px 16px;
+}
+
+.product-item-tag {
+    font-size: 0.62rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 4px;
+}
+
+.product-item-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-style: italic;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 10px;
+}
+
+.product-item-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.product-item-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    color: var(--text);
+}
+
+.btn-view {
+    background: var(--mocha);
+    color: var(--cream);
+    border: none;
+    border-radius: 8px;
+    padding: 9px 18px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-view:active { background: var(--mocha-dark); }
+
+/* ============================================================
+   PAGE: PRODUCT DETAIL
+   ============================================================ */
+#page-product { background: var(--cream-soft); }
+
+.detail-back-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 16px 6px 16px;
+    color: var(--text-light);
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-weight: 600;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.detail-back-bar svg {
+    width: 16px; height: 16px;
+    stroke: var(--text-light);
+    fill: none;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.detail-img-wrap {
+    width: 100%;
+    aspect-ratio: 1/1;
+    background: var(--sand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.detail-img-wrap svg {
+    width: 64px; height: 64px;
+    stroke: #C8A99A;
+    fill: none;
+    stroke-width: 1.2;
+}
+
+.detail-body {
+    padding: 20px 18px 100px 18px;
+}
+
+.detail-tag {
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 6px;
+}
+
+.detail-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--text);
+    margin-bottom: 4px;
+    line-height: 1.2;
+}
+
+.detail-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    color: var(--text);
+    margin: 12px 0 4px 0;
+}
+
+.detail-shipping {
+    font-size: 0.75rem;
+    color: var(--text-light);
+    margin-bottom: 18px;
+}
+
+.detail-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 16px 0;
+}
+
+.detail-desc {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.98rem;
+    color: var(--text-mid);
+    line-height: 1.85;
+    margin-bottom: 18px;
+}
+
+.detail-features {
+    list-style: none;
+    margin-bottom: 24px;
+}
+
+.detail-features li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.85rem;
+    color: var(--text-mid);
+}
+
+.detail-features li::before {
+    content: '';
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    flex-shrink: 0;
+}
+
+.btn-order {
+    width: 100%;
+    background: var(--mocha);
+    color: var(--cream);
+    border: none;
+    border-radius: 12px;
+    padding: 16px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    margin-bottom: 10px;
+}
+
+.btn-order:active { background: var(--mocha-dark); transform: scale(0.99); }
+
+.detail-note {
+    text-align: center;
+    font-size: 0.74rem;
+    color: var(--text-light);
+}
+
+/* ============================================================
+   PAGE: CHAT
+   ============================================================ */
+#page-chat {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.chat-header {
+    flex-shrink: 0;
+    background: var(--mocha);
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.chat-avatar {
+    width: 40px; height: 40px;
+    background: rgba(255,248,225,0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.chat-avatar svg {
+    width: 20px; height: 20px;
+    stroke: var(--cream);
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.chat-header-info h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    color: var(--cream);
+    font-weight: 600;
+}
+
+.chat-header-info p {
+    font-size: 0.68rem;
+    color: rgba(255,248,225,0.65);
+    letter-spacing: 0.3px;
+    margin-top: 1px;
+}
+
+.chat-status-row {
+    flex-shrink: 0;
+    padding: 7px 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-bottom: 1px solid var(--border);
+    background: var(--white);
+    font-size: 0.72rem;
+}
+
+.status-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: background 0.3s;
+}
+.status-dot.connecting  { background: #FFA726; animation: pulse 1.2s infinite; }
+.status-dot.connected   { background: var(--green); }
+.status-dot.error       { background: #EF5350; }
+.status-dot.rate-limited{ background: var(--mocha); }
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.3; }
+}
+
+#chatStatusText { color: var(--text-light); font-style: italic; }
+
+.chat-messages-area {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 14px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: var(--cream-soft);
+}
+
+.chat-empty-state {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--mocha-light);
+    font-size: 0.82rem;
+    gap: 8px;
+    text-align: center;
+    padding: 2rem;
+}
+
+.chat-empty-state svg {
+    width: 40px; height: 40px;
+    stroke: var(--mocha-light);
+    fill: none;
+    stroke-width: 1.4;
+    opacity: 0.5;
+}
+
+.bubble {
+    max-width: 78%;
+    padding: 9px 13px;
+    border-radius: 16px;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    word-break: break-word;
+}
+
+.bubble-customer {
+    background: var(--mocha);
+    color: var(--cream);
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+}
+
+.bubble-admin {
+    background: var(--white);
+    color: var(--text);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+    border: 1px solid var(--border);
+}
+
+.bubble-meta {
+    font-size: 0.6rem;
+    opacity: 0.55;
+    margin-top: 4px;
+    text-align: right;
+}
+
+.bubble-admin .bubble-meta { text-align: left; }
+
+.chat-input-area {
+    flex-shrink: 0;
+    display: flex;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--white);
+    border-top: 1px solid var(--border);
+    align-items: flex-end;
+}
+
+.chat-input {
+    flex: 1;
+    border: 1.5px solid var(--border);
+    border-radius: 22px;
+    padding: 10px 16px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.95rem;       /* 16px prevents iOS zoom */
+    background: var(--cream-soft);
+    resize: none;
+    line-height: 1.4;
+    max-height: 100px;
+    min-height: 42px;
+    color: var(--text);
+    transition: border-color 0.2s;
+    outline: none;
+}
+
+.chat-input:focus    { border-color: var(--green); }
+.chat-input::placeholder { color: var(--mocha-light); }
+.chat-input:disabled { opacity: 0.45; }
+
+.chat-send {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    background: var(--green);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.2s, transform 0.15s;
+}
+
+.chat-send:active:not(:disabled) { background: var(--green-dark); transform: scale(0.93); }
+.chat-send:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.chat-send svg {
+    width: 18px; height: 18px;
+    stroke: white;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    margin-left: 2px; /* optical center for send arrow */
+}
+
+/* ============================================================
+   PAGE: MORE (Privacy / Terms / About)
+   ============================================================ */
+#page-more { padding: 0 0 80px 0; }
+
+.more-header {
+    background: var(--mocha);
+    padding: 18px 18px;
+    text-align: center;
+}
+
+.more-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--cream);
+}
+
+.more-links {
+    padding: 12px 14px;
+}
+
+.more-row {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 8px rgba(141,110,99,0.07);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.15s;
+}
+
+.more-row:active { background: var(--sand); }
+
+.more-row-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.more-row-icon {
+    width: 38px; height: 38px;
+    background: rgba(141,110,99,0.08);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.more-row-icon svg {
+    width: 18px; height: 18px;
+    stroke: var(--mocha);
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.more-row-title {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.more-row-sub {
+    font-size: 0.72rem;
+    color: var(--text-light);
+    margin-top: 1px;
+}
+
+.more-row-chevron svg {
+    width: 16px; height: 16px;
+    stroke: var(--mocha-light);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.more-footer {
+    padding: 10px 18px 0 18px;
+    text-align: center;
+    font-size: 0.7rem;
+    color: var(--text-light);
+    line-height: 1.7;
+}
+
+/* ============================================================
+   SUB-PAGES (Privacy / Terms) — slide over from More
+   ============================================================ */
+.subpage {
+    position: absolute;
+    inset: 0;
+    background: var(--cream-soft);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+    z-index: 10;
+    padding-bottom: 80px;
+}
+
+.subpage.open { transform: translateX(0); }
+
+.subpage-topbar {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+
+.subpage-back {
+    width: 34px; height: 34px;
+    background: var(--sand);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.subpage-back svg {
+    width: 16px; height: 16px;
+    stroke: var(--text);
+    fill: none;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.subpage-topbar h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--text);
+    font-weight: 600;
+}
+
+.subpage-body {
+    padding: 20px 18px;
+}
+
+.subpage-body h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    color: var(--mocha);
+    margin: 20px 0 8px 0;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+}
+
+.subpage-body h3:first-of-type { margin-top: 0; }
+
+.subpage-body p, .subpage-body li {
+    font-size: 0.88rem;
+    color: var(--text-mid);
+    line-height: 1.75;
+    margin-bottom: 10px;
+}
+
+.subpage-body ul { padding-left: 18px; }
+.subpage-body li { margin-bottom: 6px; }
+
+.subpage-body .hi { color: var(--green); font-weight: 500; }
+
+/* ============================================================
+   UTILITY: no-bounce prevention on non-scroll elements
+   ============================================================ */
+.no-scroll { overflow: hidden; }
+
+/* ============================================================
+   LANDSCAPE — compact adjustments
+   ============================================================ */
+@media (orientation: landscape) and (max-height: 500px) {
+    :root { --tab-h: 52px; }
+
+    #topbar { padding-top: 6px; padding-bottom: 6px; }
+    .logo-text { font-size: 1.4rem; }
+
+    .carousel-slide .slide-img { aspect-ratio: 16/7; }
+    .carousel-caption h1 { font-size: 1.3rem; }
+
+    .tab svg  { width: 18px; height: 18px; }
+    .tab span { font-size: 0.55rem; }
+
+    .detail-img-wrap { aspect-ratio: 16/7; }
+
+    .product-item-img { aspect-ratio: 16/7; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     APP SHELL
+============================================================ -->
+<div id="app">
+
+    <!-- Top bar -->
+    <div id="topbar">
+        <span class="logo-text">implanted</span>
+        <div class="topbar-right">
+            <!-- placeholder for future icons -->
+        </div>
+    </div>
+
+    <!-- Page container -->
+    <div id="pages">
+
+        <!-- ======================================================
+             HOME PAGE
+        ====================================================== -->
+        <div class="page active" id="page-home">
+
+            <!-- Swipeable carousel -->
+            <div class="carousel-wrap" id="carouselWrap">
+                <div class="carousel-track" id="carouselTrack">
+                    <div class="carousel-slide">
+                        <div class="slide-img" style="background-image:url('https://res.cloudinary.com/daa6tizgt/image/upload/v1771214526/Small_Plant_With_Scout_zicju2.png');"></div>
+                    </div>
+                    <div class="carousel-slide">
+                        <div class="slide-img" style="background-image:url('https://res.cloudinary.com/daa6tizgt/image/upload/v1771215765/Anthurium_Plant_With_Scout_tm4mo8.png');"></div>
+                    </div>
+                    <div class="carousel-slide">
+                        <div class="slide-img" style="background-image:url('https://res.cloudinary.com/daa6tizgt/image/upload/v1771216226/Medium_Plant_With_Scout_usuotl.png');"></div>
+                    </div>
+                </div>
+                <div class="carousel-caption">
+                    <h1>Your furry friend,<br>forever planted.</h1>
+                    <p>Custom 3D Pet Decor</p>
+                </div>
+            </div>
+
+            <!-- Dots -->
+            <div class="carousel-dots" id="carouselDots">
+                <div class="dot active"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+
+            <!-- Home sections -->
+            <div class="home-section">
+
+                <div class="section-label">Our Mission</div>
+                <div class="mission-card">
+                    <span class="brand">implanted</span>
+                    <p>
+                        We serve those who love their pets — who want them
+                        <em>forever planted</em> in their hearts, <em>forever remembered</em>.
+                        Every piece is <em>custom, human-made</em>, sculpted from the photo you send.
+                        Whether you just got that perfect shot, or they've passed on — we're here for you.
+                    </p>
+                </div>
+
+                <div class="section-label">The Process</div>
+                <div class="process-row">
+                    <div class="process-pill">
+                        <div class="pill-icon">
+                            <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                        </div>
+                        <h4>Ships in 1–7 Days</h4>
+                        <p>Made and shipped fast, unless told otherwise.</p>
+                    </div>
+                    <div class="process-pill">
+                        <div class="pill-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M6 16V11a1.2 1.2 0 0 1 2.4 0V15"/>
+                                <path d="M8.4 15V7.5a1.2 1.2 0 0 1 2.4 0V14.5"/>
+                                <path d="M10.8 14.5V6a1.2 1.2 0 0 1 2.4 0V14.5"/>
+                                <path d="M13.2 14.5V7.5a1.2 1.2 0 0 1 2.4 0V14.5"/>
+                                <path d="M15.6 14.5V10a1.2 1.2 0 0 1 2.4 0V15"/>
+                                <path d="M6 16 C6 16 5.5 18 6.5 19.2 C7.5 20.4 16 20.4 17 19.2 C18 18 18 15 18 15"/>
+                            </svg>
+                        </div>
+                        <h4>Human Made</h4>
+                        <p>A real artist sculpts your pet — not an AI.</p>
+                    </div>
+                    <div class="process-pill">
+                        <div class="pill-icon">
+                            <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                        </div>
+                        <h4>True to Life</h4>
+                        <p>Based on your photo — lifelike accuracy.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ======================================================
+             SHOP PAGE
+        ====================================================== -->
+        <div class="page" id="page-shop">
+            <div class="shop-hero">
+                <h2>Our Collection</h2>
+                <p>Human drawn · Custom made · One-of-a-kind</p>
+            </div>
+            <div class="shop-list">
+                <div class="product-item" onclick="openProductDetail()">
+                    <div class="product-item-img">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2C9 2 6.5 4 6.5 7c0 2.2 1.3 4.1 3.2 5H8v1h8v-1h-1.7c1.9-.9 3.2-2.8 3.2-5C17.5 4 15 2 12 2z"/>
+                            <rect x="9" y="14" width="6" height="1" rx="0.5"/>
+                            <path d="M10 15v5M14 15v5"/>
+                            <rect x="8" y="20" width="8" height="2" rx="1"/>
+                        </svg>
+                        <span class="coming-soon">Photo coming soon</span>
+                    </div>
+                    <div class="product-item-body">
+                        <div class="product-item-tag">Custom · Hand-Made · 3D Printed</div>
+                        <div class="product-item-name">Implanted Pet Stake</div>
+                        <div class="product-item-footer">
+                            <span class="product-item-price">$34.99</span>
+                            <button class="btn-view" onclick="event.stopPropagation(); openProductDetail()">View</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================================
+             PRODUCT DETAIL (sub-view of Shop)
+        ====================================================== -->
+        <div class="page" id="page-product">
+            <div class="detail-back-bar" onclick="goBack()">
+                <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+                Back to Store
+            </div>
+            <div class="detail-img-wrap">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C9 2 6.5 4 6.5 7c0 2.2 1.3 4.1 3.2 5H8v1h8v-1h-1.7c1.9-.9 3.2-2.8 3.2-5C17.5 4 15 2 12 2z"/>
+                    <rect x="9" y="14" width="6" height="1" rx="0.5"/>
+                    <path d="M10 15v5M14 15v5"/>
+                    <rect x="8" y="20" width="8" height="2" rx="1"/>
+                </svg>
+            </div>
+            <div class="detail-body">
+                <div class="detail-tag">Custom · Hand-Made</div>
+                <h1 class="detail-title">Implanted Pet Stake</h1>
+                <div class="detail-price">$34.99</div>
+                <div class="detail-shipping">Free shipping on orders over $50</div>
+                <div class="detail-divider"></div>
+                <p class="detail-desc">
+                    What's better than a cute plant stake? One with your favourite pet on it.
+                    Upload a photo — we sculpt it by hand and put it onto a 3D model just for you.
+                </p>
+                <ul class="detail-features">
+                    <li>Custom 3D-sculpted from your photo</li>
+                    <li>Human-drawn — not AI generated</li>
+                    <li>Durable, plant-based PLA material</li>
+                    <li>Fits standard pots and garden soil</li>
+                    <li>Memorial keepsakes or everyday decor</li>
+                </ul>
+                <button class="btn-order">Order Now</button>
+                <p class="detail-note">Made-to-order · Allow 5–10 business days</p>
+            </div>
+        </div>
+
+        <!-- ======================================================
+             CHAT PAGE
+        ====================================================== -->
+        <div class="page" id="page-chat">
+            <div class="chat-header">
+                <div class="chat-avatar">
+                    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                </div>
+                <div class="chat-header-info">
+                    <h3>Support Chat</h3>
+                    <p>implanted · Usually replies same day</p>
+                </div>
+            </div>
+
+            <div class="chat-status-row">
+                <span class="status-dot connecting" id="mStatusDot"></span>
+                <span id="mStatusText" style="color:var(--text-light);font-style:italic;font-size:0.72rem;">Connecting…</span>
+            </div>
+
+            <div class="chat-messages-area" id="mChatMessages">
+                <div class="chat-empty-state" id="mChatEmpty">
+                    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    <span>No messages yet —<br>say hello!</span>
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <textarea
+                    id="mChatInput"
+                    class="chat-input"
+                    placeholder="Message…"
+                    rows="1"
+                    disabled
+                    oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,100)+'px'"
+                    onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();mSendMessage();}"></textarea>
+                <button class="chat-send" id="mSendBtn" onclick="mSendMessage()" disabled>
+                    <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- ======================================================
+             MORE PAGE
+        ====================================================== -->
+        <div class="page" id="page-more">
+            <div class="more-header"><h2>More</h2></div>
+            <div class="more-links">
+
+                <div class="more-row" onclick="openSubpage('privacy')">
+                    <div class="more-row-left">
+                        <div class="more-row-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        </div>
+                        <div>
+                            <div class="more-row-title">Privacy Policy</div>
+                            <div class="more-row-sub">How we handle your data</div>
+                        </div>
+                    </div>
+                    <div class="more-row-chevron"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+                </div>
+
+                <div class="more-row" onclick="openSubpage('terms')">
+                    <div class="more-row-left">
+                        <div class="more-row-icon">
+                            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                        </div>
+                        <div>
+                            <div class="more-row-title">Terms of Service</div>
+                            <div class="more-row-sub">Photo requirements, returns & care</div>
+                        </div>
+                    </div>
+                    <div class="more-row-chevron"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+                </div>
+
+                <div class="more-row" onclick="switchTab('chat')">
+                    <div class="more-row-left">
+                        <div class="more-row-icon">
+                            <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        </div>
+                        <div>
+                            <div class="more-row-title">Contact Support</div>
+                            <div class="more-row-sub">Live chat · One message per 30 min</div>
+                        </div>
+                    </div>
+                    <div class="more-row-chevron"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+                </div>
+
+            </div>
+            <div class="more-footer">
+                <p>Copyright implanted 2026</p>
+                <p style="margin-top:6px;font-size:0.64rem;opacity:0.7;">
+                    This website was built with the assistance of AI.<br>
+                    Some images are AI-enhanced for visualization.
+                </p>
+                <p style="margin-top:12px;">
+                    <a href="index.html" onclick="sessionStorage.setItem('forceDesktop','1')"
+                       style="color:var(--text-light);font-size:0.7rem;text-decoration:underline;text-underline-offset:3px;">
+                        Switch to desktop site →
+                    </a>
+                </p>
+            </div>
+
+            <!-- Privacy sub-page -->
+            <div class="subpage" id="subpage-privacy">
+                <div class="subpage-topbar">
+                    <div class="subpage-back" onclick="closeSubpage('privacy')">
+                        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+                    </div>
+                    <h2>Privacy Policy</h2>
+                </div>
+                <div class="subpage-body">
+                    <p>At <strong>implanted</strong>, we care about your privacy just as much as creating beautiful keepsakes. We believe in being transparent about what we collect and how we use it.</p>
+                    <h3>What We Collect</h3>
+                    <ul>
+                        <li><strong>Names &amp; Addresses:</strong> Used only to ship your order.</li>
+                        <li><strong>Email:</strong> Order confirmations and tracking updates.</li>
+                        <li><strong>Pet Photos:</strong> Used to design your custom piece.</li>
+                    </ul>
+                    <h3>How We Use Your Photos</h3>
+                    <p>Your pet's photo is used strictly as a reference to sculpt your plant stake. We may post the <span class="hi">finished product</span> on social media to showcase our work — but never any personal info about you.</p>
+                    <h3>Secure Payments</h3>
+                    <p>We use <span class="hi">Stripe</span> for secure payments. We do not store card details on our servers.</p>
+                    <h3>Our Promise</h3>
+                    <p>We <strong>do not sell, trade, or rent</strong> your information. Ever.</p>
+                    <h3>Questions?</h3>
+                    <p>Reach us through the Support Chat on the Chat tab.</p>
+                </div>
+            </div>
+
+            <!-- Terms sub-page -->
+            <div class="subpage" id="subpage-terms">
+                <div class="subpage-topbar">
+                    <div class="subpage-back" onclick="closeSubpage('terms')">
+                        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+                    </div>
+                    <h2>Terms of Service</h2>
+                </div>
+                <div class="subpage-body">
+                    <p>By ordering from <strong>implanted</strong>, you agree to these terms. We keep things simple because we believe in trust.</p>
+                    <h3>1. Your Photos &amp; Copyright</h3>
+                    <p>You confirm the photo you upload is yours or you have permission to use it.</p>
+                    <h3>2. Photo Requirements</h3>
+                    <ul>
+                        <li><strong>Fully in Frame:</strong> Entire body visible, ears to paws.</li>
+                        <li><strong>No Obstructions:</strong> No bars, toys, or objects blocking the face.</li>
+                        <li><strong>Good Lighting:</strong> Bright, clear lighting — no heavy shadows or blur.</li>
+                    </ul>
+                    <h3>3. Data Deletion</h3>
+                    <p>Once your product ships, we <strong>permanently delete</strong> your original photo. We keep no database of customer pet photos.</p>
+                    <h3>4. Returns</h3>
+                    <p>No returns for change of mind on custom items. If your item arrives broken, contact us within 48 hours and we'll make it right.</p>
+                    <h3>5. Product Care</h3>
+                    <p>PLA plastic — do not dishwash or leave in a hot car. <strong>Not a toy.</strong> Keep away from small children.</p>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /pages -->
+
+    <!-- Bottom tab bar -->
+    <div id="tabbar">
+        <button class="tab active" id="tab-home" onclick="switchTab('home')">
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span>Home</span>
+        </button>
+        <button class="tab" id="tab-shop" onclick="switchTab('shop')">
+            <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            <span>Shop</span>
+        </button>
+        <button class="tab" id="tab-chat" onclick="switchTab('chat')">
+            <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <span>Chat</span>
+        </button>
+        <button class="tab" id="tab-more" onclick="switchTab('more')">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+            <span>More</span>
+        </button>
+    </div>
+
+</div><!-- /app -->
+
+<script>
+// ============================================================
+// NAVIGATION
+// ============================================================
+
+const TABS = ['home', 'shop', 'chat', 'more'];
+let currentTab    = 'home';
+let previousTab   = null;   // for back-navigation from product detail
+let chatStarted   = false;
+
+function switchTab(name) {
+    if (name === currentTab && name !== 'chat') return;
+
+    // Deactivate all pages & tabs
+    document.querySelectorAll('.page').forEach(p => {
+        p.classList.remove('active', 'prev');
+    });
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+
+    // Mark previous as "prev" for parallax exit
+    const prevPage = document.getElementById('page-' + currentTab);
+    if (prevPage) prevPage.classList.add('prev');
+
+    previousTab = currentTab;
+    currentTab  = name;
+
+    const nextPage = document.getElementById('page-' + name);
+    if (nextPage) {
+        // Force reflow so transition fires
+        nextPage.offsetWidth;
+        nextPage.classList.add('active');
+    }
+
+    const tab = document.getElementById('tab-' + name);
+    if (tab) tab.classList.add('active');
+
+    // Start chat when navigating to it
+    if (name === 'chat' && !chatStarted) {
+        chatStarted = true;
+        setTimeout(mInitChat, 150);
+    }
+}
+
+function openProductDetail() {
+    previousTab = currentTab;
+
+    document.querySelectorAll('.page').forEach(p => {
+        p.classList.remove('active', 'prev');
+    });
+
+    const prev = document.getElementById('page-' + previousTab);
+    if (prev) prev.classList.add('prev');
+
+    const detail = document.getElementById('page-product');
+    detail.offsetWidth;
+    detail.classList.add('active');
+
+    // Don't change the tab highlight — stays on Shop
+}
+
+function goBack() {
+    document.querySelectorAll('.page').forEach(p => {
+        p.classList.remove('active', 'prev');
+    });
+
+    const back = document.getElementById('page-' + (previousTab || 'shop'));
+    if (back) {
+        back.offsetWidth;
+        back.classList.add('active');
+    }
+
+    currentTab = previousTab || 'shop';
+}
+
+// Sub-pages (privacy / terms)
+function openSubpage(name) {
+    document.getElementById('subpage-' + name).classList.add('open');
+}
+
+function closeSubpage(name) {
+    document.getElementById('subpage-' + name).classList.remove('open');
+}
+
+// ============================================================
+// CAROUSEL
+// ============================================================
+(function () {
+    const track  = document.getElementById('carouselTrack');
+    const wrap   = document.getElementById('carouselWrap');
+    const dots   = document.querySelectorAll('#carouselDots .dot');
+    const total  = dots.length;
+    let current  = 0;
+    let startX   = 0;
+    let isDragging = false;
+
+    function goTo(idx) {
+        current = (idx + total) % total;
+        track.style.transform = `translateX(-${current * 100}%)`;
+        dots.forEach((d, i) => d.classList.toggle('active', i === current));
+    }
+
+    // Touch swipe
+    wrap.addEventListener('touchstart', e => {
+        startX = e.touches[0].clientX;
+        isDragging = true;
+    }, { passive: true });
+
+    wrap.addEventListener('touchend', e => {
+        if (!isDragging) return;
+        isDragging = false;
+        const dx = e.changedTouches[0].clientX - startX;
+        if (Math.abs(dx) > 40) goTo(dx < 0 ? current + 1 : current - 1);
+    }, { passive: true });
+
+    // Auto-advance every 4s
+    setInterval(() => goTo(current + 1), 4000);
+})();
+
+// ============================================================
+// CHAT — identical logic to chat.js, scoped to mobile IDs
+// ============================================================
+const CHAT_SERVER = "https://uninterdicted-karissa-vulpecular.ngrok-free.dev";
+
+let mUserId           = null;
+let mPollInterval     = null;
+let mCountdownInterval = null;
+let mConnected        = false;
+
+function mSetStatus(type, text) {
+    const dot   = document.getElementById('mStatusDot');
+    const label = document.getElementById('mStatusText');
+    dot.className   = 'status-dot ' + type;
+    label.textContent = text;
+}
+
+function mEnableInput(enabled) {
+    document.getElementById('mChatInput').disabled = !enabled;
+    document.getElementById('mSendBtn').disabled   = !enabled;
+}
+
+function mRenderMessages(messages) {
+    const area  = document.getElementById('mChatMessages');
+    const empty = document.getElementById('mChatEmpty');
+
+    if (!messages || messages.length === 0) {
+        empty.style.display = 'flex';
+        return;
+    }
+    empty.style.display = 'none';
+
+    const newHash = JSON.stringify(messages.map(m => m.timestamp + m.message));
+    if (area.dataset.lastHash === newHash) return;
+    area.dataset.lastHash = newHash;
+
+    const wasAtBottom = area.scrollHeight - area.scrollTop - area.clientHeight < 60;
+
+    Array.from(area.querySelectorAll('.bubble')).forEach(el => el.remove());
+
+    messages.forEach(msg => {
+        const isAdmin = msg.sender === 'admin';
+        const bubble  = document.createElement('div');
+        bubble.className = 'bubble ' + (isAdmin ? 'bubble-admin' : 'bubble-customer');
+        const time  = msg.timestamp ? msg.timestamp.split(' ')[1].substring(0, 5) : '';
+        const label = isAdmin ? 'Support' : 'You';
+        bubble.innerHTML = `<div>${mEscape(msg.message)}</div><div class="bubble-meta">${label} · ${time}</div>`;
+        area.appendChild(bubble);
+    });
+
+    if (wasAtBottom) area.scrollTop = area.scrollHeight;
+}
+
+function mEscape(text) {
+    return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+
+function mStartCountdown(seconds) {
+    clearInterval(mCountdownInterval);
+    mEnableInput(false);
+    let remaining = seconds;
+    function tick() {
+        const m = Math.floor(remaining / 60);
+        const s = remaining % 60;
+        mSetStatus('rate-limited', `Next message in ${m}:${String(s).padStart(2,'0')}`);
+        if (remaining <= 0) {
+            clearInterval(mCountdownInterval);
+            mSetStatus('connected', 'Connected · Reply anytime');
+            mEnableInput(true);
+        }
+        remaining--;
+    }
+    tick();
+    mCountdownInterval = setInterval(tick, 1000);
+}
+
+async function mPollMessages() {
+    if (!mUserId) return;
+    try {
+        const res = await fetch(`${CHAT_SERVER}/chat/get/me`, { cache: 'no-store' });
+        if (!res.ok) return;
+        mRenderMessages(await res.json());
+    } catch (e) {}
+}
+
+async function mInitChat() {
+    mSetStatus('connecting', 'Connecting…');
+    mEnableInput(false);
+    try {
+        const ipRes  = await fetch(`${CHAT_SERVER}/chat/my_ip`);
+        if (!ipRes.ok) throw new Error('unreachable');
+        mUserId = (await ipRes.json()).ip;
+
+        const rateData = await (await fetch(`${CHAT_SERVER}/chat/rate_status`)).json();
+        await mPollMessages();
+        mConnected = true;
+
+        if (rateData.can_send) {
+            mSetStatus('connected', 'Connected · Send us a message!');
+            mEnableInput(true);
+        } else {
+            mStartCountdown(rateData.seconds_remaining);
+        }
+
+        clearInterval(mPollInterval);
+        mPollInterval = setInterval(mPollMessages, 4000);
+    } catch (err) {
+        mSetStatus('error', 'Could not connect.');
+    }
+}
+
+async function mSendMessage() {
+    const input = document.getElementById('mChatInput');
+    const text  = input.value.trim();
+    if (!text || !mConnected) return;
+
+    mEnableInput(false);
+    input.value = '';
+    input.style.height = 'auto';
+
+    try {
+        const res  = await fetch(`${CHAT_SERVER}/chat/send`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sender: 'customer', message: text })
+        });
+        const data = await res.json();
+
+        if (data.status === 'rate_limited') {
+            mStartCountdown(data.seconds_remaining);
+        } else if (data.status === 'success') {
+            await mPollMessages();
+            mStartCountdown(30 * 60);
+        } else {
+            mSetStatus('error', 'Could not send. Try again.');
+            mEnableInput(true);
+        }
+    } catch (err) {
+        mSetStatus('error', 'Network error. Try again.');
+        mEnableInput(true);
+    }
+}
+</script>
+
+</body>
+</html>
