@@ -1446,7 +1446,7 @@ html, body {
             <div class="chat-messages-area" id="mChatMessages">
                 <div class="chat-empty-state" id="mChatEmpty">
                     <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                    <span>No Support Chats —<br>have an issue?</span>
+                    <span>No Support Chats —<br>Have an Issue?</span>
                 </div>
             </div>
 
@@ -1706,10 +1706,28 @@ function closeSubpage(name) {
         dots.forEach((d, i) => d.classList.toggle('active', i === current));
     }
 
+    // Auto-advance state
+    let autoInterval  = null;
+    let resumeTimeout = null;
+
+    function startAuto() {
+        if (autoInterval) return;
+        autoInterval = setInterval(() => goTo(current + 1), 4000);
+    }
+
+    function pauseAuto() {
+        clearInterval(autoInterval);
+        autoInterval = null;
+        // Cancel any pending resume and schedule a fresh one after 30s
+        clearTimeout(resumeTimeout);
+        resumeTimeout = setTimeout(startAuto, 30000);
+    }
+
     // Touch swipe
     wrap.addEventListener('touchstart', e => {
         startX = e.touches[0].clientX;
         isDragging = true;
+        pauseAuto(); // user touched — pause immediately
     }, { passive: true });
 
     wrap.addEventListener('touchend', e => {
@@ -1717,10 +1735,11 @@ function closeSubpage(name) {
         isDragging = false;
         const dx = e.changedTouches[0].clientX - startX;
         if (Math.abs(dx) > 40) goTo(dx < 0 ? current + 1 : current - 1);
+        // resume timer already set by touchstart pauseAuto()
     }, { passive: true });
 
-    // Auto-advance every 4s
-    setInterval(() => goTo(current + 1), 4000);
+    // Kick off auto-advance on load
+    startAuto();
 })();
 
 // ============================================================
