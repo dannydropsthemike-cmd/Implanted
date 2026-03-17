@@ -195,16 +195,14 @@ html, body {
     flex-direction: column;
 }
 
-/* Carousel */
+/* Carousel — 4:3 = iPhone landscape photo aspect ratio */
 .carousel-wrap {
     position: relative;
     width: 100%;
     overflow: hidden;
     touch-action: pan-y;
     flex-shrink: 0;
-    height: 56vw;
-    min-height: 240px;
-    max-height: 420px;
+    aspect-ratio: 4 / 3;
 }
 
 .carousel-track {
@@ -299,6 +297,7 @@ html, body {
 
 /* Home cards */
 .home-section {
+    flex: 1;
     padding: 0 16px calc(var(--tab-h) + var(--bottom-pad) + 20px) 16px;
 }
 
@@ -1098,6 +1097,7 @@ html, body {
     .carousel-wrap {
         width: 44%;
         flex-shrink: 0;
+        aspect-ratio: unset;
         height: 100%;
     }
 
