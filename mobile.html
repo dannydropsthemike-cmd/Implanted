@@ -103,6 +103,7 @@ html, body {
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: none;
+    scroll-behavior: smooth;
     background: var(--cream-soft);
     touch-action: pan-y;
     transform: translateX(100%);
@@ -194,7 +195,9 @@ html, body {
     width: 100%;
     overflow: hidden;
     touch-action: pan-y;
-    height: calc(100% - 26px); /* 100% = page height (already excludes tabbar); 26px = dots row */
+    height: 52vw;
+    min-height: 220px;
+    max-height: 360px;
 }
 
 .carousel-track {
@@ -288,7 +291,7 @@ html, body {
 
 /* Home cards */
 .home-section {
-    padding: 0 16px 100px 16px;
+    padding: 0 16px calc(var(--tab-h) + var(--bottom-pad) + 20px) 16px;
 }
 
 .section-label {
@@ -575,7 +578,7 @@ html, body {
 }
 
 .detail-body {
-    padding: 20px 18px 100px 18px;
+    padding: 20px 18px 20px 18px;
 }
 
 .detail-tag {
@@ -877,7 +880,7 @@ html, body {
 /* ============================================================
    PAGE: MORE (Privacy / Terms / About)
    ============================================================ */
-#page-more { padding: 0 0 80px 0; }
+#page-more { padding: 0 0 20px 0; overscroll-behavior: none; }
 
 .more-header {
     background: var(--subheader-bg);
@@ -978,10 +981,11 @@ html, body {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: none;
+    scroll-behavior: smooth;
     transform: translateX(100%);
     transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
     z-index: 10;
-    padding-bottom: 80px;
+    padding-bottom: 20px;
 }
 
 .subpage.open { transform: translateX(0); }
