@@ -102,6 +102,7 @@ html, body {
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior: none;
     background: var(--cream-soft);
     touch-action: pan-y;
     transform: translateX(100%);
@@ -401,7 +402,7 @@ html, body {
 /* ============================================================
    PAGE: SHOP
    ============================================================ */
-#page-shop { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+#page-shop { overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: none; }
 
 .shop-hero {
     background: var(--subheader-bg);
@@ -677,6 +678,7 @@ html, body {
     display: block;
     overflow-y: auto !important;
     overflow-x: hidden !important;
+    overscroll-behavior: none;
 }
 
 .chat-header {
@@ -975,6 +977,7 @@ html, body {
     background: var(--cream-soft);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior: none;
     transform: translateX(100%);
     transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
     z-index: 10;
@@ -1104,6 +1107,7 @@ html, body {
         flex: 1;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+        overscroll-behavior: none;
         padding: 8px 12px calc(var(--tab-h) + var(--bottom-pad) + 4px) 12px;
     }
 
@@ -1138,6 +1142,7 @@ html, body {
         overflow-y: auto;
         overflow-x: hidden;
         -webkit-overflow-scrolling: touch;
+        overscroll-behavior: none;
         display: flex;
         flex-direction: column;
         gap: 10px;
@@ -1167,6 +1172,7 @@ html, body {
         flex-direction: column;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+        overscroll-behavior: none;
     }
 
     .detail-back-bar { padding: 6px 14px 4px 14px; }
@@ -1189,6 +1195,7 @@ html, body {
         flex: 1;
         padding: 12px 16px 16px 16px;
         overflow-y: auto;
+        overscroll-behavior: none;
     }
 
     .detail-title { font-size: 1.4rem; }
@@ -1199,6 +1206,7 @@ html, body {
     #page-chat {
         display: block;
         overflow-y: auto !important;
+        overscroll-behavior: none;
     }
 
     .chat-header {
@@ -1219,7 +1227,7 @@ html, body {
     }
 
     /* ---- MORE ---- */
-    #page-more { overflow-y: auto; }
+    #page-more { overflow-y: auto; overscroll-behavior: none; }
     .more-header { padding: 10px 16px; }
     .more-header h2 { font-size: 1.15rem; }
     .more-links  { padding: 7px 12px; }
