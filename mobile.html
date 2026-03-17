@@ -189,15 +189,22 @@ html, body {
    PAGE: HOME
    ============================================================ */
 
+/* Home page — flex column so carousel + dots stack above scrollable content */
+#page-home {
+    display: flex;
+    flex-direction: column;
+}
+
 /* Carousel */
 .carousel-wrap {
     position: relative;
     width: 100%;
     overflow: hidden;
     touch-action: pan-y;
-    height: 52vw;
-    min-height: 220px;
-    max-height: 360px;
+    flex-shrink: 0;
+    height: 56vw;
+    min-height: 240px;
+    max-height: 420px;
 }
 
 .carousel-track {
@@ -274,6 +281,7 @@ html, body {
     justify-content: center;
     gap: 6px;
     padding: 10px 0 6px 0;
+    flex-shrink: 0;
 }
 
 .dot {
