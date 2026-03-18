@@ -189,19 +189,12 @@ html, body {
    PAGE: HOME
    ============================================================ */
 
-/* Home page — flex column so carousel + dots stack above scrollable content */
-#page-home {
-    display: flex;
-    flex-direction: column;
-}
-
 /* Carousel — 4:3 = iPhone landscape photo aspect ratio */
 .carousel-wrap {
     position: relative;
     width: 100%;
     overflow: hidden;
     touch-action: pan-y;
-    flex-shrink: 0;
     aspect-ratio: 4 / 3;
 }
 
@@ -297,8 +290,7 @@ html, body {
 
 /* Home cards */
 .home-section {
-    flex: 1;
-    padding: 0 16px calc(var(--tab-h) + var(--bottom-pad) + 20px) 16px;
+    padding: 0 16px 20px 16px;
 }
 
 .section-label {
@@ -569,7 +561,7 @@ html, body {
 
 .detail-img-wrap {
     width: 100%;
-    aspect-ratio: 1/1;
+    aspect-ratio: 3 / 4;
     background: var(--sand);
     display: flex;
     align-items: center;
@@ -1198,7 +1190,7 @@ html, body {
     .detail-img-wrap {
         width: 42%;
         flex-shrink: 0;
-        aspect-ratio: 1/1;
+        aspect-ratio: 3 / 4;
         border-bottom: none;
         border-right: 1px solid var(--border);
     }
