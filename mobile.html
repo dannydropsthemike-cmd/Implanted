@@ -531,7 +531,7 @@ html, body {
 /* ============================================================
    PAGE: PRODUCT DETAIL
    ============================================================ */
-#page-product-stake, #page-product-pot { background: var(--cream-soft); }
+#page-product-stake { background: var(--cream-soft); }
 
 .detail-back-bar {
     display: flex;
@@ -1171,7 +1171,7 @@ html, body {
     .product-item-body { flex: 1; }
 
     /* ---- PRODUCT DETAIL: image left, info right ---- */
-    #page-product-stake, #page-product-pot {
+    #page-product-stake {
         display: flex;
         flex-direction: column;
         overflow-y: auto;
@@ -1395,25 +1395,6 @@ html, body {
                     </div>
                 </div>
 
-                <div class="product-item" onclick="openProductDetail('pot')">
-                    <div class="product-item-img">
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M6 9 Q5 9 5 11 L6 19 Q6 20 8 20 L16 20 Q18 20 18 19 L19 11 Q19 9 18 9 Z"/>
-                            <path d="M4 9 L20 9"/>
-                            <path d="M9 9 Q9 6 12 6 Q15 6 15 9"/>
-                            <ellipse cx="12" cy="14" rx="2.5" ry="3"/>
-                        </svg>
-                        <span class="coming-soon">Photo coming soon</span>
-                    </div>
-                    <div class="product-item-body">
-                        <div class="product-item-tag">Made by You · 3D Printed · PETG/PLA Material</div>
-                        <div class="product-item-name"><span style="font-size:0.7em;font-style:normal;opacity:0.6;">the</span> Custom Pet Pot</div>
-                        <div class="product-item-footer">
-                            <span class="product-item-price">$Custom</span>
-                            <button class="btn-view" onclick="event.stopPropagation(); openProductDetail('pot')">View</button>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -1449,47 +1430,6 @@ html, body {
                     <li>Printed in durable, plant-based PLA material</li>
                     <li>Fits most standard plant pots</li>
                     <li>Great for memorial keepsakes or everyday decor</li>
-                </ul>
-                <button class="btn-order">Order Now</button>
-                <p class="detail-note">Orders are made-to-order. Please allow 1-7 days for production.</p>
-            </div>
-            </div>
-        </div>
-
-        <!-- ======================================================
-             PRODUCT DETAIL — Custom Pet Pot
-        ====================================================== -->
-        <div class="page" id="page-product-pot">
-            <div class="detail-back-bar" onclick="goBack()">
-                <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-                Back to Store
-            </div>
-            <div class="detail-container-inner">
-            <div class="detail-img-wrap">
-                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6 9 Q5 9 5 11 L6 19 Q6 20 8 20 L16 20 Q18 20 18 19 L19 11 Q19 9 18 9 Z"/>
-                    <path d="M4 9 L20 9"/>
-                    <path d="M9 9 Q9 6 12 6 Q15 6 15 9"/>
-                    <ellipse cx="12" cy="14" rx="2.5" ry="3"/>
-                </svg>
-            </div>
-            <div class="detail-body">
-                <div class="detail-tag">Custom · Made by You</div>
-                <h1 class="detail-title">Custom Pet Pot</h1>
-                <div class="detail-price">$Custom</div>
-                <div class="detail-divider"></div>
-                <p class="detail-desc">
-                    Ever wanted to make your very own plant pot, but didn't want to learn modelling software?
-                    Well here's YOUR solution! The Implanted Pet Pot is a product custom built by you, in the
-                    website with our custom, easy-to-use CAD software that anyone can use. You upload a picture
-                    of your pet as well, and we will model your pet onto the centerpiece of the pot.
-                </p>
-                <ul class="detail-features">
-                    <li>Custom 3D-sculpted by you, and from your photo</li>
-                    <li>Human-drawn pet — not AI generated</li>
-                    <li>Part PETG, part PLA material</li>
-                    <li>Sized by you, under our limits</li>
-                    <li>Perfect for gifts, or home decor</li>
                 </ul>
                 <button class="btn-order">Order Now</button>
                 <p class="detail-note">Orders are made-to-order. Please allow 1-7 days for production.</p>
@@ -1731,7 +1671,7 @@ function openProductDetail(product) {
     const prev = document.getElementById('page-' + previousTab);
     if (prev) prev.classList.add('prev');
 
-    const pageId = product === 'pot' ? 'page-product-pot' : 'page-product-stake';
+    const pageId = 'page-product-stake';
     const detail = document.getElementById(pageId);
     detail.offsetWidth;
     detail.classList.add('active');

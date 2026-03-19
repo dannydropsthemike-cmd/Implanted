@@ -15,8 +15,7 @@ function showPage(pageName) {
         'content-privacy',
         'content-terms',
         'content-shop',
-        'content-product-pet-plant-stake',
-        'content-product-pet-pot'
+        'content-product-pet-plant-stake'
     ];
 
     // Hide all pages
@@ -35,8 +34,7 @@ function showPage(pageName) {
         'privacy':                'content-privacy',
         'terms':                  'content-terms',
         'shop':                   'content-shop',
-        'product-pet-plant-stake':'content-product-pet-plant-stake',
-        'product-pet-pot':        'content-product-pet-pot'
+        'product-pet-plant-stake':'content-product-pet-plant-stake'
     };
 
     const targetId = targetMap[pageName];
