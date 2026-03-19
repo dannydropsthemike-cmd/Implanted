@@ -281,6 +281,32 @@
                     </div>
                 </div>
             </div>
+
+            <div class="product-card" onclick="showPage('product-pet-pot')" style="cursor:pointer;">
+                <div class="product-badge" style="display:none;"></div>
+
+                <div class="product-image-wrap">
+                    <div class="product-image-placeholder">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7 8h10l-1 10H8L7 8z"/>
+                            <path d="M5 8h14"/>
+                            <path d="M9 8V6a3 3 0 0 1 6 0v2"/>
+                            <path d="M10 13c.5 1 1.5 1 2 0s1.5-1 2 0"/>
+                        </svg>
+                        <span>Photo coming soon</span>
+                    </div>
+                </div>
+
+                <div class="product-info">
+                    <h3 class="product-name"><span class="product-name-the">the</span>Custom Pet Pot</h3>
+                    <p class="product-subtitle">Made by You · 3D Printed · PETG/PLA Material</p>
+                    <div class="product-footer">
+                        <div class="product-price">Variable</div>
+                        <button class="shop-btn"
+                                onclick="event.stopPropagation(); showPage('product-pet-pot')">View Item</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -342,6 +368,73 @@
                     <li>Printed in durable, plant-based PLA material</li>
                     <li>Fits most standard plant pots</li>
                     <li>Great for memorial keepsakes or everyday decor</li>
+                </ul>
+
+                <button class="product-detail-order-btn">Order Now</button>
+                <p class="product-detail-note">Orders are made-to-order. Please allow 1-7 days for production.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         PRODUCT DETAIL — Custom Pet Pot
+    ============================================================ -->
+    <div id="content-product-pet-pot" class="hidden fade-in">
+        <div class="product-detail-back" onclick="showPage('shop')">
+            ← Back to Store
+        </div>
+
+        <div class="product-detail-container">
+            <!-- Images -->
+            <div class="product-detail-images">
+                <div class="product-detail-main-img" id="mainProductImgPot">
+                    <div class="product-image-placeholder">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7 8h10l-1 10H8L7 8z"/>
+                            <path d="M5 8h14"/>
+                            <path d="M9 8V6a3 3 0 0 1 6 0v2"/>
+                            <path d="M10 13c.5 1 1.5 1 2 0s1.5-1 2 0"/>
+                        </svg>
+                        <span>Photo coming soon</span>
+                    </div>
+                </div>
+                <div class="product-detail-thumb-row">
+                    <div class="product-detail-thumb active">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7 8h10l-1 10H8L7 8z"/>
+                            <path d="M5 8h14"/>
+                            <path d="M9 8V6a3 3 0 0 1 6 0v2"/>
+                            <path d="M10 13c.5 1 1.5 1 2 0s1.5-1 2 0"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info -->
+            <div class="product-detail-info">
+                <p class="product-detail-tag">Custom · Made by You</p>
+                <h1 class="product-detail-title">Custom Pet Pot</h1>
+                <p class="product-detail-sale" style="display:none;"></p>
+
+                <div class="product-detail-price-row">
+                    <span class="product-detail-price">Variable</span>
+                </div>
+
+                <div class="product-detail-divider"></div>
+
+                <p class="product-detail-desc">
+                    Ever wanted to make your very own plant pot, but didn't want to learn modelling software?
+                    Well here's YOUR solution! The Implanted Pet Pot is a product custom built by you, in the
+                    website with our custom, easy-to-use CAD software that anyone can use. You upload a picture
+                    of your pet as well, and we will model your pet onto the centerpiece of the pot.
+                </p>
+
+                <ul class="product-detail-features">
+                    <li>Custom 3D-sculpted by you, and from your photo</li>
+                    <li>Human-drawn pet — not AI generated</li>
+                    <li>Part PETG, part PLA material</li>
+                    <li>Sized by you, under our limits</li>
+                    <li>Perfect for gifts, or home decor</li>
                 </ul>
 
                 <button class="product-detail-order-btn">Order Now</button>
