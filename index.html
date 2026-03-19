@@ -437,8 +437,137 @@
                     <li>Perfect for gifts, or home decor</li>
                 </ul>
 
-                <button class="product-detail-order-btn">Order Now</button>
+                <button class="product-detail-order-btn" onclick="showPage('vase-cad')">Design Your Vase →</button>
                 <p class="product-detail-note">Orders are made-to-order. Please allow 1-7 days for production.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         VASE CAD TOOL
+    ============================================================ -->
+    <div id="content-vase-cad" class="hidden fade-in">
+        <div class="product-detail-back" onclick="showPage('product-pet-pot')">← Back to Product</div>
+
+        <div class="cad-shell">
+
+            <div class="cad-header">
+                <h1 class="cad-title">Vase Designer</h1>
+                <p class="cad-subtitle">Shape your custom pot — we'll 3D print it with your pet on the front.</p>
+            </div>
+
+            <div class="cad-layout">
+
+                <!-- LEFT: Preview canvas -->
+                <div class="cad-preview-col">
+                    <div class="cad-canvas-wrap">
+                        <canvas id="vaseCanvas" width="340" height="425"></canvas>
+                    </div>
+                    <div class="cad-spec-bar">
+                        <div class="cad-spec-item">
+                            <span class="cad-spec-label">Est. Weight</span>
+                            <span class="cad-spec-val" id="vaseMass">— g</span>
+                        </div>
+                        <div class="cad-spec-divider"></div>
+                        <div class="cad-spec-item">
+                            <span class="cad-spec-label">Material</span>
+                            <span class="cad-spec-val">PETG</span>
+                        </div>
+                        <div class="cad-spec-divider"></div>
+                        <div class="cad-spec-item">
+                            <span class="cad-spec-label">Est. Price</span>
+                            <span class="cad-spec-val" id="vasePrice">—</span>
+                        </div>
+                    </div>
+                    <p class="cad-spec-note">Walls &amp; bottom: 0.25″ thick · 3″ dog centerpiece zone included</p>
+                </div>
+
+                <!-- RIGHT: Controls -->
+                <div class="cad-controls-col">
+
+                    <!-- Diameter -->
+                    <div class="cad-control-group">
+                        <div class="cad-control-header">
+                            <span class="cad-control-label">Diameter</span>
+                            <span class="cad-control-val" id="labelDiam">5.0″</span>
+                        </div>
+                        <div class="cad-slider-track">
+                            <input type="range" id="sliderDiam" class="cad-slider" min="3.5" max="8" step="0.1" value="5">
+                            <div class="cad-slider-limits">
+                                <span>3.5″ min</span><span>8.0″ max</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Height -->
+                    <div class="cad-control-group">
+                        <div class="cad-control-header">
+                            <span class="cad-control-label">Height</span>
+                            <span class="cad-control-val" id="labelH">6.0″</span>
+                        </div>
+                        <div class="cad-slider-track">
+                            <input type="range" id="sliderH" class="cad-slider" min="4" max="8" step="0.1" value="6">
+                            <div class="cad-slider-limits">
+                                <span>4.0″ min</span><span>8.0″ max</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Shape -->
+                    <div class="cad-control-group">
+                        <div class="cad-control-header">
+                            <span class="cad-control-label">Body Shape</span>
+                        </div>
+                        <div class="cad-pills">
+                            <button class="cad-pill active" data-shape="straight">Straight</button>
+                            <button class="cad-pill" data-shape="bulge">Bulge</button>
+                            <button class="cad-pill" data-shape="taper">Taper</button>
+                            <button class="cad-pill" data-shape="hourglass">Hourglass</button>
+                        </div>
+                    </div>
+
+                    <!-- Lip -->
+                    <div class="cad-control-group">
+                        <div class="cad-control-header">
+                            <span class="cad-control-label">Lip Style</span>
+                        </div>
+                        <div class="cad-pills">
+                            <button class="cad-pill active" data-lip="flat">Flat</button>
+                            <button class="cad-pill" data-lip="rolled">Rolled</button>
+                            <button class="cad-pill" data-lip="flared">Flared</button>
+                        </div>
+                    </div>
+
+                    <!-- Base -->
+                    <div class="cad-control-group">
+                        <div class="cad-control-header">
+                            <span class="cad-control-label">Base Style</span>
+                        </div>
+                        <div class="cad-pills">
+                            <button class="cad-pill active" data-base="flat">Flat</button>
+                            <button class="cad-pill" data-base="footed">Footed</button>
+                        </div>
+                    </div>
+
+                    <!-- Price card -->
+                    <div class="cad-price-card">
+                        <div class="cad-price-label">Your Estimate</div>
+                        <div class="cad-price-big" id="vaseCost">—</div>
+                        <div class="cad-price-note">Final price confirmed at checkout · based on filament weight at $20/1000g</div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="cad-actions">
+                        <button id="btnDownloadStep" class="cad-btn-secondary">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            Download STEP File
+                        </button>
+                        <button id="btnPlaceOrder" class="cad-btn-primary">
+                            Place Order →
+                        </button>
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>
@@ -462,9 +591,10 @@
         </div>
     </footer>
 
-    <!-- Scripts — order matters: chat.js first, then app.js -->
+    <!-- Scripts — order matters: chat.js first, then app.js, then vase-cad.js -->
     <script src="chat.js"></script>
     <script src="app.js"></script>
+    <script src="vase-cad.js"></script>
 
 </body>
 </html>

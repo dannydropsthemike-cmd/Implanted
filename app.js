@@ -16,7 +16,8 @@ function showPage(pageName) {
         'content-terms',
         'content-shop',
         'content-product-pet-plant-stake',
-        'content-product-pet-pot'
+        'content-product-pet-pot',
+        'content-vase-cad'
     ];
 
     // Hide all pages
@@ -36,7 +37,8 @@ function showPage(pageName) {
         'terms':                  'content-terms',
         'shop':                   'content-shop',
         'product-pet-plant-stake':'content-product-pet-plant-stake',
-        'product-pet-pot':        'content-product-pet-pot'
+        'product-pet-pot':        'content-product-pet-pot',
+        'vase-cad':               'content-vase-cad'
     };
 
     const targetId = targetMap[pageName];
@@ -51,6 +53,11 @@ function showPage(pageName) {
     } else if (pageName === 'contact') {
         // Small delay so the DOM is visible before chat initialises
         setTimeout(initChat, 100);
+    } else if (pageName === 'vase-cad') {
+        // Init the vase CAD tool
+        setTimeout(function() {
+            if (typeof initVaseCad === 'function') initVaseCad();
+        }, 80);
     } else {
         // Stop chat polling when navigating away from contact
         if (typeof pollInterval !== 'undefined') clearInterval(pollInterval);
