@@ -100,7 +100,7 @@ html, body {
     top: 0;
     left: 0;
     right: 0;
-    bottom: calc(var(--tab-h) + var(--bottom-pad)); /* stop at tabbar, not behind it */
+    bottom: calc(var(--tab-h) + var(--bottom-pad));
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
@@ -111,9 +111,6 @@ html, body {
     transform: translateX(100%);
     transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
     will-change: transform;
-    /* Pad content away from curved edges; background still fills corner zones */
-    padding-left: var(--left-pad);
-    padding-right: var(--right-pad);
 }
 
 .page.active  { transform: translateX(0); }
@@ -193,8 +190,71 @@ html, body {
 .tab { position: relative; }
 
 /* ============================================================
-   PAGE: HOME
+   SAFE AREA — landscape curved screen edges
+   max() keeps existing padding OR the safe-area inset,
+   whichever is larger, so backgrounds fill edge-to-edge
+   but content never hides behind rounded corners.
    ============================================================ */
+@supports (padding: max(0px, env(safe-area-inset-left))) {
+    .home-section {
+        padding-left:  max(16px, env(safe-area-inset-left));
+        padding-right: max(16px, env(safe-area-inset-right));
+    }
+    .shop-hero {
+        padding-left:  max(18px, env(safe-area-inset-left));
+        padding-right: max(18px, env(safe-area-inset-right));
+    }
+    .shop-list {
+        padding-left:  max(14px, env(safe-area-inset-left));
+        padding-right: max(14px, env(safe-area-inset-right));
+    }
+    .detail-back-bar {
+        padding-left:  max(14px, env(safe-area-inset-left));
+        padding-right: max(14px, env(safe-area-inset-right));
+    }
+    .detail-body {
+        padding-left:  max(16px, env(safe-area-inset-left));
+        padding-right: max(16px, env(safe-area-inset-right));
+    }
+    .chat-header {
+        padding-left:  max(18px, env(safe-area-inset-left));
+        padding-right: max(18px, env(safe-area-inset-right));
+    }
+    .chat-status-row {
+        padding-left:  max(18px, env(safe-area-inset-left));
+        padding-right: max(18px, env(safe-area-inset-right));
+    }
+    .chat-messages-area {
+        padding-left:  max(12px, env(safe-area-inset-left));
+        padding-right: max(12px, env(safe-area-inset-right));
+    }
+    .chat-input-area {
+        padding-left:  max(10px, env(safe-area-inset-left));
+        padding-right: max(10px, env(safe-area-inset-right));
+    }
+    .more-header {
+        padding-left:  max(18px, env(safe-area-inset-left));
+        padding-right: max(18px, env(safe-area-inset-right));
+    }
+    .more-links {
+        padding-left:  max(14px, env(safe-area-inset-left));
+        padding-right: max(14px, env(safe-area-inset-right));
+    }
+    .subpage-topbar {
+        padding-left:  max(18px, env(safe-area-inset-left));
+        padding-right: max(18px, env(safe-area-inset-right));
+    }
+    .subpage-body {
+        padding-left:  max(16px, env(safe-area-inset-left));
+        padding-right: max(16px, env(safe-area-inset-right));
+    }
+    .carousel-caption {
+        padding-left:  max(1.25rem, env(safe-area-inset-left));
+        padding-right: max(1.25rem, env(safe-area-inset-right));
+    }
+}
+
+
 
 /* Carousel — 4:3 = iPhone landscape photo aspect ratio */
 .carousel-wrap {
