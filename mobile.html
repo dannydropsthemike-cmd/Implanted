@@ -72,7 +72,7 @@ html, body {
 #topbar {
     flex-shrink: 0;
     background: var(--mocha);
-    padding: calc(var(--status-pad) + 10px) calc(18px + var(--right-pad)) 10px calc(18px + var(--left-pad));
+    padding: calc(var(--status-pad) + 10px) max(18px, env(safe-area-inset-right)) 10px max(18px, env(safe-area-inset-left));
     display: flex;
     align-items: center;
     justify-content: space-between;
