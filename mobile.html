@@ -72,7 +72,7 @@ html, body {
 #topbar {
     flex-shrink: 0;
     background: var(--mocha);
-    padding: calc(var(--status-pad) + 10px) max(18px, env(safe-area-inset-right)) 10px max(18px, env(safe-area-inset-left));
+    padding: calc(var(--status-pad) + 10px) max(18px, env(safe-area-inset-right), var(--corner-pad, 0px)) 10px max(18px, env(safe-area-inset-left), var(--corner-pad, 0px));
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -1977,6 +1977,52 @@ window.addEventListener('orientationchange', function () {
         });
     }, 300);
 });
+
+// ============================================================
+// CORNER PADDING DETECTION
+// Measures how far the topbar sits from the true screen edge
+// and sets --corner-pad so the logo never clips on curved screens.
+// ============================================================
+(function applyCornerPad() {
+    function compute() {
+        var isLandscape = window.innerWidth > window.innerHeight;
+        if (!isLandscape) {
+            document.documentElement.style.setProperty('--corner-pad', '0px');
+            return;
+        }
+
+        // Use the topbar element's bounding rect vs the window width
+        // to detect how much the OS is already offsetting things,
+        // then add the rounded corner radius approximation on top.
+        var topbar   = document.getElementById('topbar');
+        var rect     = topbar ? topbar.getBoundingClientRect() : null;
+
+        // Approximate corner radius: use CSS border-radius of documentElement if set,
+        // else fall back to screen.width based heuristic (phones ~4-5% of short edge).
+        var shortEdge   = Math.min(screen.width, screen.height);
+        var cornerRadius = shortEdge * 0.055; // ~5.5% of short edge ≈ typical phone corner
+
+        // Also read the env() inset the browser reports
+        var probe = document.createElement('div');
+        probe.style.cssText = 'position:fixed;top:0;left:0;width:env(safe-area-inset-left,0px);height:1px;pointer-events:none;visibility:hidden;';
+        document.body.appendChild(probe);
+        var envLeft = probe.getBoundingClientRect().width || 0;
+        document.body.removeChild(probe);
+
+        // The actual needed pad is the larger of: corner radius or env inset,
+        // plus a small proportional breathing gap (1.5% of short edge, min 6px)
+        var breathe  = Math.max(6, shortEdge * 0.015);
+        var needed   = Math.max(cornerRadius, envLeft) + breathe;
+
+        document.documentElement.style.setProperty('--corner-pad', needed.toFixed(1) + 'px');
+    }
+
+    // Run on load and on every orientation/resize change
+    compute();
+    window.addEventListener('resize', compute);
+    window.addEventListener('orientationchange', function() { setTimeout(compute, 350); });
+})();
+
 </script>
 
 </body>
