@@ -41,7 +41,7 @@
         <nav>
             <a onclick="showPage('home')">Home</a>
             <a onclick="showPage('shop')">Store</a>
-            <a onclick="showPage('contact')">Contact</a>
+            <a style="opacity:0.4;cursor:default;pointer-events:none;">Contact <span style="font-size:0.65em;font-style:italic;letter-spacing:0.5px;">Coming soon!</span></a>
         </nav>
     </header>
 
@@ -56,11 +56,11 @@
 
             <div class="image-gallery">
                 <div class="img-placeholder"
-                     style="background-image: url('https://res.cloudinary.com/daa6tizgt/image/upload/v1771214526/Small_Plant_With_Scout_zicju2.png');"></div>
+                     style="background-image: url('https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0048_1_dnknin.jpg');"></div>
                 <div class="img-placeholder"
-                     style="background-image: url('https://res.cloudinary.com/daa6tizgt/image/upload/v1771215765/Anthurium_Plant_With_Scout_tm4mo8.png');"></div>
+                     style="background-image: url('https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0044_1_jrao4p.jpg');"></div>
                 <div class="img-placeholder"
-                     style="background-image: url('https://res.cloudinary.com/daa6tizgt/image/upload/v1771216226/Medium_Plant_With_Scout_usuotl.png');"></div>
+                     style="background-image: url('https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0056_r2qeh1.jpg');"></div>
             </div>
         </section>
 
@@ -240,7 +240,7 @@
             <p>Because every plant stake is custom-made specifically for your pet, we cannot accept returns for "change of mind." However, if your item arrives broken or defective, please contact us within 48 hours of delivery, and we will make it right.</p>
 
             <h2>5. Product Care &amp; Safety</h2>
-            <p>Our plant stakes are 3D printed from PLA (a plant-based plastic). While durable, they can warp in extreme heat. Please do not put them in the dishwasher or leave them in a hot car. Keep out of direct sunlight for prolonged periods, and keep away from excessive weathering or water exposure.</p>
+            <p>Our plant stakes are 3D printed from PETG (a durable, weathering resistant plastic). While tough, they can warp in extreme heat. Please do not put them in the dishwasher or leave them in a hot car. Keep out of direct sunlight for prolonged periods, and keep away from excessive weathering or water exposure.</p>
             <p><strong>Safety Warning:</strong> These are decorative items, not toys. They have pointed ends for inserting into soil. Please keep them out of reach of small children.</p>
         </div>
     </div>
@@ -273,9 +273,9 @@
 
                 <div class="product-info">
                     <h3 class="product-name"><span class="product-name-the">the</span>Implanted Pet Stake</h3>
-                    <p class="product-subtitle">Human Made · 3D Printed · PLA Material</p>
+                    <p class="product-subtitle">Human Made · 3D Printed · PETG Material</p>
                     <div class="product-footer">
-                        <div class="product-price">$34.99</div>
+                        <div class="product-price">$27.35</div>
                         <button class="shop-btn"
                                 onclick="event.stopPropagation(); showPage('product-pet-plant-stake')">View Item</button>
                     </div>
@@ -297,25 +297,8 @@
             <!-- Images -->
             <div class="product-detail-images">
                 <div class="product-detail-main-img" id="mainProductImg">
-                    <div class="product-image-placeholder">
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 2C9 2 6.5 4 6.5 7c0 2.2 1.3 4.1 3.2 5H8v1h8v-1h-1.7c1.9-.9 3.2-2.8 3.2-5C17.5 4 15 2 12 2z"/>
-                            <rect x="9" y="14" width="6" height="1" rx="0.5"/>
-                            <path d="M10 15v5M14 15v5"/>
-                            <rect x="8" y="20" width="8" height="2" rx="1"/>
-                        </svg>
-                        <span>Photo coming soon</span>
-                    </div>
                 </div>
-                <div class="product-detail-thumb-row">
-                    <div class="product-detail-thumb active">
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 2C9 2 6.5 4 6.5 7c0 2.2 1.3 4.1 3.2 5H8v1h8v-1h-1.7c1.9-.9 3.2-2.8 3.2-5C17.5 4 15 2 12 2z"/>
-                            <rect x="9" y="14" width="6" height="1" rx="0.5"/>
-                            <path d="M10 15v5M14 15v5"/>
-                            <rect x="8" y="20" width="8" height="2" rx="1"/>
-                        </svg>
-                    </div>
+                <div class="product-detail-thumb-row" id="thumbRow">
                 </div>
             </div>
 
@@ -326,7 +309,7 @@
                 <p class="product-detail-sale" style="display:none;">25% Off</p>
 
                 <div class="product-detail-price-row">
-                    <span class="product-detail-price">$34.99</span>
+                    <span class="product-detail-price">$27.35</span>
                     <span class="product-detail-price-orig" style="display:none;">$46.65</span>
                 </div>
 
@@ -335,14 +318,16 @@
                 <p class="product-detail-desc">
                     What's better than a cute plant stake? A plant stake with your FAVORITE pet on it!
                     Meet the Implanted Pet Stake — upload a photo, we process it, and put it onto a 3D model.
+                    <br><br>
+                    <strong>🚚 Free shipping — for a limited time only!</strong>
                 </p>
 
                 <ul class="product-detail-features">
-                    <li>Custom 3D-sculpted from your photo</li>
-                    <li>Human-drawn digital model — not AI generated</li>
-                    <li>Printed in durable, plant-based PLA material</li>
-                    <li>Fits most standard plant pots</li>
-                    <li>Great for memorial keepsakes or everyday decor</li>
+                    <li>Medium sized.</li>
+                    <li>Perfect memorial keepsake.</li>
+                    <li>Hand made.</li>
+                    <li>Printed in weathering resistant PETG.</li>
+                    <li>Sculpted from YOUR photo.</li>
                 </ul>
 
                 <button class="product-detail-order-btn">Order Now</button>
@@ -350,6 +335,47 @@
             </div>
         </div>
     </div>
+
+    <script>
+    // Product detail image gallery
+    (function() {
+        const frontImages = [
+            'https://res.cloudinary.com/daa6tizgt/image/upload/v1776380717/IMG_0182_fg52pz.jpg',
+            'https://res.cloudinary.com/daa6tizgt/image/upload/v1776380717/IMG_0185_nzknkl.jpg'
+        ];
+        const allImages = [
+            'https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0044_1_jrao4p.jpg',
+            'https://res.cloudinary.com/daa6tizgt/image/upload/v1776380717/IMG_0182_fg52pz.jpg',
+            'https://res.cloudinary.com/daa6tizgt/image/upload/v1776380717/IMG_0185_nzknkl.jpg',
+            'https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0048_1_dnknin.jpg',
+            'https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0056_r2qeh1.jpg'
+        ];
+
+        // Pick random front image
+        const startFront = frontImages[Math.floor(Math.random() * frontImages.length)];
+
+        const mainImg = document.getElementById('mainProductImg');
+        mainImg.style.backgroundImage = "url('" + startFront + "')";
+        mainImg.style.backgroundSize = 'cover';
+        mainImg.style.backgroundPosition = 'center top';
+
+        // Build thumbnail row — starting thumb is IMG_0044
+        const thumbRow = document.getElementById('thumbRow');
+        allImages.forEach(function(url, i) {
+            const thumb = document.createElement('div');
+            thumb.className = 'product-detail-thumb' + (i === 0 ? ' active' : '');
+            thumb.style.backgroundImage = "url('" + url + "')";
+            thumb.style.backgroundSize = 'cover';
+            thumb.style.backgroundPosition = 'center top';
+            thumb.onclick = function() {
+                mainImg.style.backgroundImage = "url('" + url + "')";
+                thumbRow.querySelectorAll('.product-detail-thumb').forEach(function(t) { t.classList.remove('active'); });
+                thumb.classList.add('active');
+            };
+            thumbRow.appendChild(thumb);
+        });
+    })();
+    </script>
 
     <!-- ============================================================
          FOOTER
