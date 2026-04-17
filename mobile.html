@@ -1842,10 +1842,11 @@ function mCloseLightbox() {
 
 // Email Modal
 function openMobileEmailModal() {
-    var m = document.getElementById('mEmailModal');
-    if (!m) {
-        m = document.createElement('div');
-        m.id = 'mEmailModal';
+    var existing = document.getElementById('mEmailModal');
+    if (existing) existing.remove();
+    var m = document.createElement('div');
+    m.id = 'mEmailModal';
+    {
         m.style.cssText = 'position:fixed;inset:0;z-index:9998;background:rgba(93,64,55,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:16px;overflow-y:auto;';
         m.innerHTML = `
 <div style="background:#FFFCF9;border-radius:22px;max-width:440px;width:100%;box-shadow:0 12px 50px rgba(93,64,55,0.25);overflow:hidden;font-family:'Montserrat',sans-serif;margin:auto;">
