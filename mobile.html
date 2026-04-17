@@ -1454,7 +1454,7 @@ html, body {
             </div>
             <div class="shop-list">
                 <div class="product-item" onclick="openProductDetail('stake')">
-                    <div class="product-item-img" id="mShopThumb" style="background-size:cover;background-position:center top;">
+                    <div class="product-item-img" id="mShopThumb" style="background-size:cover;background-position:center top;cursor:zoom-in;">
                     </div>
                     <div class="product-item-body">
                         <div class="product-item-tag">Human Made · 3D Printed · PETG Material</div>
@@ -1492,15 +1492,14 @@ html, body {
                     <strong>🚚 Free shipping — for a limited time only!</strong>
                 </p>
                 <ul class="detail-features">
-                    <li>Medium sized.</li>
-                    <li>Perfect memorial keepsake.</li>
-                    <li>Hand made.</li>
+                    <li>Medium sized design, perfect for all plants.</li>
+                    <li>Nostalgia perfected design.</li>
+                    <li>Hand crafted by a 3D artist, from your photo.</li>
                     <li>Printed in weathering resistant PETG.</li>
-                    <li>Sculpted from YOUR photo.</li>
                 </ul>
                 <!-- Thumbnail strip -->
                 <div id="mThumbRow" style="display:flex;gap:8px;margin-bottom:20px;overflow-x:auto;"></div>
-                <button class="btn-order">Order Now</button>
+                <button class="btn-order" onclick="openMobileEmailModal()">Email Us!</button>
                 <p class="detail-note">Orders are made-to-order. Please allow 1-7 days for production.</p>
             </div>
             </div>
@@ -1777,8 +1776,8 @@ function closeSubpage(name) {
 // ============================================================
 (function() {
     const frontImages = [
-        'https://res.cloudinary.com/daa6tizgt/image/upload/v1776380717/IMG_0182_fg52pz.jpg',
-        'https://res.cloudinary.com/daa6tizgt/image/upload/v1776380717/IMG_0185_nzknkl.jpg'
+        'https://res.cloudinary.com/daa6tizgt/image/upload/v1776380717/IMG_0185_nzknkl.jpg',
+        'https://res.cloudinary.com/daa6tizgt/image/upload/v1776380717/IMG_0182_fg52pz.jpg'
     ];
     const allImages = [
         'https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0044_1_jrao4p.jpg',
@@ -1788,31 +1787,119 @@ function closeSubpage(name) {
         'https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0056_r2qeh1.jpg'
     ];
 
-    // Random front image for shop card
-    var randFront = frontImages[Math.floor(Math.random() * frontImages.length)];
+    // Alternating shop card
+    var shopIdx = 0;
     var shopThumb = document.getElementById('mShopThumb');
-    if (shopThumb) shopThumb.style.backgroundImage = "url('" + randFront + "')";
+    function setShopCard() { if(shopThumb) shopThumb.style.backgroundImage = "url('" + frontImages[shopIdx % frontImages.length] + "')"; }
+    setShopCard();
+    setInterval(function(){ shopIdx++; setShopCard(); }, 3000);
 
     // Detail main image — starts with IMG_0044
     var detailImg = document.getElementById('mDetailImg');
-    if (detailImg) detailImg.style.backgroundImage = "url('" + allImages[0] + "')";
+    if (detailImg) {
+        detailImg.style.backgroundImage = "url('" + allImages[0] + "')";
+        detailImg.style.aspectRatio = '4 / 3';
+        detailImg.style.cursor = 'zoom-in';
+        var curUrl = allImages[0];
+        detailImg.addEventListener('dblclick', function(){ mOpenLightbox(curUrl); });
+    }
 
-    // Build thumb strip
+    // Build thumb strip — 4:3 aspect
     var thumbRow = document.getElementById('mThumbRow');
     if (thumbRow) {
         allImages.forEach(function(url, i) {
             var t = document.createElement('div');
-            t.style.cssText = 'width:60px;height:80px;flex-shrink:0;border-radius:8px;background-size:cover;background-position:center top;border:2px solid ' + (i===0?'var(--mocha)':'var(--border)') + ';cursor:pointer;';
+            t.style.cssText = 'width:72px;aspect-ratio:4/3;flex-shrink:0;border-radius:8px;background-size:cover;background-position:center top;border:2px solid ' + (i===0?'var(--mocha)':'var(--border)') + ';cursor:zoom-in;';
             t.style.backgroundImage = "url('" + url + "')";
             t.onclick = function() {
-                if (detailImg) detailImg.style.backgroundImage = "url('" + url + "')";
+                if (detailImg) { detailImg.style.backgroundImage = "url('" + url + "')"; curUrl = url; }
                 thumbRow.querySelectorAll('div').forEach(function(el) { el.style.borderColor = 'var(--border)'; });
                 t.style.borderColor = 'var(--mocha)';
             };
+            t.addEventListener('dblclick', function(e){ e.stopPropagation(); mOpenLightbox(url); });
             thumbRow.appendChild(t);
         });
     }
 })();
+
+// Lightbox
+function mOpenLightbox(url) {
+    var lb = document.getElementById('mLightbox');
+    if (!lb) {
+        lb = document.createElement('div');
+        lb.id = 'mLightbox';
+        lb.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.88);display:flex;align-items:center;justify-content:center;cursor:zoom-out;';
+        lb.innerHTML = '<img id="mLbImg" style="max-width:92vw;max-height:85vh;border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,0.6);object-fit:contain;"/>'
+                     + '<button onclick="event.stopPropagation();mCloseLightbox()" style="position:absolute;top:18px;right:18px;background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:1.4rem;width:40px;height:40px;border-radius:50%;cursor:pointer;">✕</button>';
+        lb.addEventListener('click', mCloseLightbox);
+        document.body.appendChild(lb);
+    }
+    document.getElementById('mLbImg').src = url;
+    lb.style.display = 'flex';
+}
+function mCloseLightbox() {
+    var lb = document.getElementById('mLightbox');
+    if (lb) lb.style.display = 'none';
+}
+
+// Email Modal
+function openMobileEmailModal() {
+    var m = document.getElementById('mEmailModal');
+    if (!m) {
+        m = document.createElement('div');
+        m.id = 'mEmailModal';
+        m.style.cssText = 'position:fixed;inset:0;z-index:9998;background:rgba(93,64,55,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:16px;overflow-y:auto;';
+        m.innerHTML = `
+<div style="background:#FFFCF9;border-radius:22px;max-width:440px;width:100%;box-shadow:0 12px 50px rgba(93,64,55,0.25);overflow:hidden;font-family:'Montserrat',sans-serif;margin:auto;">
+  <div style="background:#8D6E63;padding:18px 22px 14px;text-align:center;position:relative;">
+    <svg width="130" height="42" viewBox="0 0 260 90" xmlns="http://www.w3.org/2000/svg">
+      <defs><path id="mEmCurve" d="M 20,65 Q 130,15 240,65" fill="transparent"/></defs>
+      <text font-family="'Dancing Script',cursive" font-size="42" fill="#FFF8E1" font-weight="bold">
+        <textPath href="#mEmCurve" startOffset="50%" text-anchor="middle">implanted</textPath>
+      </text>
+      <path d="M 50,70 Q 130,30 210,70" stroke="#A5D6A7" stroke-width="3" fill="transparent" stroke-linecap="round"/>
+    </svg>
+    <button onclick="closeMobileEmailModal()" style="position:absolute;top:12px;right:14px;background:rgba(255,255,255,0.15);border:none;color:#FFF8E1;font-size:1.2rem;width:34px;height:34px;border-radius:50%;cursor:pointer;">✕</button>
+  </div>
+  <div style="padding:22px 22px 20px;">
+    <p style="font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:600;color:#5D4037;margin-bottom:4px;">my product purchase</p>
+    <p style="font-size:0.75rem;color:#8D6E63;margin-bottom:16px;">
+      to: <span style="color:#7CB342;font-weight:600;cursor:pointer;border-bottom:1px dashed #7CB342;" onclick="mCopyEmail()">dannydropsthemike@gmail.com</span>
+      <span id="mCopiedTag" style="display:none;margin-left:6px;font-size:0.68rem;color:#7CB342;font-style:italic;">✓ Copied!</span>
+    </p>
+    <p style="font-family:'Playfair Display',serif;font-size:0.95rem;color:#5D4037;margin-bottom:14px;">Dear <span style="font-family:'Dancing Script',cursive;font-size:1.1rem;color:#7CB342;text-decoration:underline;text-decoration-color:#A5D6A7;">implanted</span>,</p>
+    <p style="font-size:0.82rem;color:#6D4C41;line-height:1.72;margin-bottom:18px;">I am planning on purchasing my very own plant stake. I hope you can accentuate my pet's qualities, and make a one of one keepsake. I will provide the image I want you to use for the product below.</p>
+    <div style="border:2px dashed #D7CCC8;border-radius:12px;padding:16px;text-align:center;background:#EFEBE7;position:relative;">
+      <span style="position:absolute;top:-9px;left:14px;background:#FFFCF9;padding:0 6px;font-size:0.65rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#A1887F;">Your Pet Photo</span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="#EF5350" style="vertical-align:middle;margin-right:4px;"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+      <span style="font-size:0.76rem;color:#8D6E63;font-weight:500;">Attach your pet photo here</span>
+      <p style="font-size:0.65rem;color:#A1887F;margin-top:5px;">(★ = required)</p>
+    </div>
+    <div style="margin-top:18px;padding-top:14px;border-top:1px solid #E0D8D0;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+      <p style="font-size:0.68rem;color:#A1887F;flex:1;line-height:1.5;min-width:160px;">Copy the address, open your email app, and send with your pet photo!</p>
+      <button onclick="mCopyEmail()" style="background:#8D6E63;color:#FFF8E1;border:none;border-radius:10px;padding:9px 18px;font-family:'Montserrat',sans-serif;font-size:0.74rem;font-weight:600;letter-spacing:1px;cursor:pointer;white-space:nowrap;">Copy Email</button>
+    </div>
+  </div>
+</div>`;
+        m.addEventListener('click', function(e){ if(e.target===m) closeMobileEmailModal(); });
+        document.body.appendChild(m);
+    }
+    m.style.display = 'flex';
+}
+function closeMobileEmailModal() {
+    var m = document.getElementById('mEmailModal');
+    if (m) m.style.display = 'none';
+}
+function mCopyEmail() {
+    navigator.clipboard.writeText('dannydropsthemike@gmail.com').catch(function(){
+        var ta = document.createElement('textarea');
+        ta.value = 'dannydropsthemike@gmail.com';
+        document.body.appendChild(ta); ta.select();
+        document.execCommand('copy'); document.body.removeChild(ta);
+    });
+    var tag = document.getElementById('mCopiedTag');
+    if (tag) { tag.style.display='inline'; setTimeout(function(){ tag.style.display='none'; }, 2000); }
+}
 
 // ============================================================
 // CAROUSEL

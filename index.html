@@ -260,15 +260,7 @@
                 <div class="product-badge" style="display:none;">25% Off</div>
 
                 <div class="product-image-wrap">
-                    <div class="product-image-placeholder">
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 2C9 2 6.5 4 6.5 7c0 2.2 1.3 4.1 3.2 5H8v1h8v-1h-1.7c1.9-.9 3.2-2.8 3.2-5C17.5 4 15 2 12 2z"/>
-                            <rect x="9" y="14" width="6" height="1" rx="0.5"/>
-                            <path d="M10 15v5M14 15v5"/>
-                            <rect x="8" y="20" width="8" height="2" rx="1"/>
-                        </svg>
-                        <span>Photo coming soon</span>
-                    </div>
+                    <div id="shopCardImg" style="width:100%;height:100%;background-size:cover;background-position:center top;border-radius:inherit;"></div>
                 </div>
 
                 <div class="product-info">
@@ -323,21 +315,33 @@
                 </p>
 
                 <ul class="product-detail-features">
-                    <li>Medium sized.</li>
-                    <li>Perfect memorial keepsake.</li>
-                    <li>Hand made.</li>
+                    <li>Medium sized design, perfect for all plants.</li>
+                    <li>Nostalgia perfected design.</li>
+                    <li>Hand crafted by a 3D artist, from your photo.</li>
                     <li>Printed in weathering resistant PETG.</li>
-                    <li>Sculpted from YOUR photo.</li>
                 </ul>
 
-                <button class="product-detail-order-btn">Order Now</button>
+                <button class="product-detail-order-btn" onclick="openEmailModal()">Email Us!</button>
                 <p class="product-detail-note">Orders are made-to-order. Please allow 1-7 days for production.</p>
             </div>
         </div>
     </div>
 
     <script>
-    // Product detail image gallery
+    // ── Shop card alternating images ──────────────────────────────
+    (function() {
+        var shopImgs = [
+            'https://res.cloudinary.com/daa6tizgt/image/upload/v1776380717/IMG_0185_nzknkl.jpg',
+            'https://res.cloudinary.com/daa6tizgt/image/upload/v1776380717/IMG_0182_fg52pz.jpg'
+        ];
+        var idx = 0;
+        var el = document.getElementById('shopCardImg');
+        function setShop() { if(el) el.style.backgroundImage = "url('" + shopImgs[idx % shopImgs.length] + "')"; }
+        setShop();
+        setInterval(function(){ idx++; setShop(); }, 3000);
+    })();
+
+    // ── Product detail image gallery ──────────────────────────────
     (function() {
         const frontImages = [
             'https://res.cloudinary.com/daa6tizgt/image/upload/v1776380717/IMG_0182_fg52pz.jpg',
@@ -351,15 +355,16 @@
             'https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0056_r2qeh1.jpg'
         ];
 
-        // Pick random front image
         const startFront = frontImages[Math.floor(Math.random() * frontImages.length)];
-
         const mainImg = document.getElementById('mainProductImg');
         mainImg.style.backgroundImage = "url('" + startFront + "')";
         mainImg.style.backgroundSize = 'cover';
         mainImg.style.backgroundPosition = 'center top';
+        mainImg.style.aspectRatio = '4 / 3';
+        mainImg.style.cursor = 'zoom-in';
+        let currentUrl = startFront;
+        mainImg.addEventListener('dblclick', function() { openLightbox(currentUrl); });
 
-        // Build thumbnail row — starting thumb is IMG_0044
         const thumbRow = document.getElementById('thumbRow');
         allImages.forEach(function(url, i) {
             const thumb = document.createElement('div');
@@ -367,14 +372,106 @@
             thumb.style.backgroundImage = "url('" + url + "')";
             thumb.style.backgroundSize = 'cover';
             thumb.style.backgroundPosition = 'center top';
+            thumb.style.aspectRatio = '4 / 3';
+            thumb.style.cursor = 'zoom-in';
+            thumb.addEventListener('dblclick', function(e) { e.stopPropagation(); openLightbox(url); });
             thumb.onclick = function() {
                 mainImg.style.backgroundImage = "url('" + url + "')";
+                currentUrl = url;
                 thumbRow.querySelectorAll('.product-detail-thumb').forEach(function(t) { t.classList.remove('active'); });
                 thumb.classList.add('active');
             };
             thumbRow.appendChild(thumb);
         });
     })();
+
+    // ── Lightbox ──────────────────────────────────────────────────
+    function openLightbox(url) {
+        var lb = document.getElementById('imgLightbox');
+        if (!lb) {
+            lb = document.createElement('div');
+            lb.id = 'imgLightbox';
+            lb.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;cursor:zoom-out;';
+            lb.innerHTML = '<img id="lbImg" style="max-width:90vw;max-height:88vh;border-radius:16px;box-shadow:0 8px 48px rgba(0,0,0,0.7);object-fit:contain;" />'
+                         + '<button onclick="event.stopPropagation();closeLightbox()" style="position:absolute;top:20px;right:24px;background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:1.6rem;width:42px;height:42px;border-radius:50%;cursor:pointer;line-height:1;">✕</button>';
+            lb.addEventListener('click', closeLightbox);
+            document.body.appendChild(lb);
+        }
+        document.getElementById('lbImg').src = url;
+        lb.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+        var lb = document.getElementById('imgLightbox');
+        if (lb) lb.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeLightbox(); });
+
+    // ── Email Modal ───────────────────────────────────────────────
+    function openEmailModal() {
+        var m = document.getElementById('emailModal');
+        if (!m) {
+            m = document.createElement('div');
+            m.id = 'emailModal';
+            m.style.cssText = 'position:fixed;inset:0;z-index:9998;background:rgba(93,64,55,0.55);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px;';
+            m.innerHTML = `
+<div style="background:#FFFCF9;border-radius:24px;max-width:560px;width:100%;box-shadow:0 12px 60px rgba(93,64,55,0.22);overflow:hidden;font-family:'Montserrat',sans-serif;">
+  <!-- Header -->
+  <div style="background:#8D6E63;padding:22px 28px 18px 28px;text-align:center;position:relative;">
+    <svg width="160" height="52" viewBox="0 0 260 90" xmlns="http://www.w3.org/2000/svg">
+      <defs><path id="emCurve" d="M 20,65 Q 130,15 240,65" fill="transparent"/></defs>
+      <text font-family="'Dancing Script',cursive" font-size="42" fill="#FFF8E1" font-weight="bold">
+        <textPath href="#emCurve" startOffset="50%" text-anchor="middle">implanted</textPath>
+      </text>
+      <path d="M 50,70 Q 130,30 210,70" stroke="#A5D6A7" stroke-width="3" fill="transparent" stroke-linecap="round"/>
+    </svg>
+    <button onclick="closeEmailModal()" style="position:absolute;top:14px;right:18px;background:rgba(255,255,255,0.15);border:none;color:#FFF8E1;font-size:1.3rem;width:36px;height:36px;border-radius:50%;cursor:pointer;">✕</button>
+  </div>
+  <!-- Body -->
+  <div style="padding:28px 30px 24px 30px;">
+    <p style="font-family:'Playfair Display',serif;font-size:1.45rem;font-weight:600;color:#5D4037;margin-bottom:4px;">my product purchase</p>
+    <p style="font-size:0.8rem;color:#8D6E63;margin-bottom:20px;">
+      to: <span id="emailAddr" style="color:#7CB342;font-weight:600;cursor:pointer;border-bottom:1px dashed #7CB342;" title="Click to copy" onclick="copyEmail()">dannydropsthemike@gmail.com</span>
+      <span id="copiedTag" style="display:none;margin-left:8px;font-size:0.7rem;color:#7CB342;font-style:italic;">✓ Copied!</span>
+    </p>
+    <p style="font-family:'Playfair Display',serif;font-size:1rem;color:#5D4037;margin-bottom:16px;">Dear <span style="font-family:'Dancing Script',cursive;font-size:1.15rem;color:#7CB342;text-decoration:underline;text-decoration-color:#A5D6A7;">implanted</span>,</p>
+    <p style="font-size:0.88rem;color:#6D4C41;line-height:1.75;margin-bottom:22px;">I am planning on purchasing my very own plant stake. I hope you can accentuate my pet's qualities, and make a one of one keepsake. I will provide the image I want you to use for the product below.</p>
+    <!-- Required image box -->
+    <div style="border:2px dashed #D7CCC8;border-radius:14px;padding:20px;text-align:center;background:#EFEBE7;position:relative;">
+      <span style="position:absolute;top:-10px;left:16px;background:#FFFCF9;padding:0 8px;font-size:0.7rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#A1887F;">Your Pet Photo</span>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="#EF5350" style="vertical-align:middle;margin-right:4px;"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+      <span style="font-size:0.8rem;color:#8D6E63;font-weight:500;">Attach your pet photo here</span>
+      <p style="font-size:0.7rem;color:#A1887F;margin-top:6px;">(The red ★ means this is required — don't forget it!)</p>
+    </div>
+    <div style="margin-top:22px;padding-top:18px;border-top:1px solid #E0D8D0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+      <p style="font-size:0.72rem;color:#A1887F;max-width:300px;line-height:1.5;">Copy the email address above, open your email app, paste it, and send this message with your pet photo attached!</p>
+      <button onclick="copyEmail()" style="background:#8D6E63;color:#FFF8E1;border:none;border-radius:10px;padding:10px 20px;font-family:'Montserrat',sans-serif;font-size:0.78rem;font-weight:600;letter-spacing:1px;cursor:pointer;">Copy Email</button>
+    </div>
+  </div>
+</div>`;
+            m.addEventListener('click', function(e){ if(e.target===m) closeEmailModal(); });
+            document.body.appendChild(m);
+        }
+        m.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+    function closeEmailModal() {
+        var m = document.getElementById('emailModal');
+        if (m) m.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+    function copyEmail() {
+        navigator.clipboard.writeText('dannydropsthemike@gmail.com').catch(function(){
+            var ta = document.createElement('textarea');
+            ta.value = 'dannydropsthemike@gmail.com';
+            document.body.appendChild(ta); ta.select();
+            document.execCommand('copy'); document.body.removeChild(ta);
+        });
+        var tag = document.getElementById('copiedTag');
+        if (tag) { tag.style.display='inline'; setTimeout(function(){ tag.style.display='none'; }, 2000); }
+    }
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeLightbox(); closeEmailModal(); } });
     </script>
 
     <!-- ============================================================
