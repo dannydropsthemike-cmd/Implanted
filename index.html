@@ -354,15 +354,21 @@
             'https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0056_r2qeh1.jpg'
         ];
 
+        window._deskGallery = allImages;
+        window._deskGalleryIdx = 0;
+
         const startFront = frontImages[Math.floor(Math.random() * frontImages.length)];
+        window._deskGalleryIdx = allImages.indexOf(startFront);
+        if (window._deskGalleryIdx < 0) window._deskGalleryIdx = 0;
+
         const mainImg = document.getElementById('mainProductImg');
         mainImg.style.backgroundImage = "url('" + startFront + "')";
         mainImg.style.backgroundSize = 'cover';
         mainImg.style.backgroundPosition = 'center top';
         mainImg.style.aspectRatio = '3 / 4';
-        mainImg.style.cursor = 'zoom-in';
-        let currentUrl = startFront;
-        mainImg.addEventListener('dblclick', function() { openLightbox(currentUrl); });
+        mainImg.style.cursor = 'pointer';
+        mainImg.title = 'Click to view gallery';
+        mainImg.addEventListener('click', function() { openDesktopGallery(window._deskGalleryIdx); });
 
         const thumbRow = document.getElementById('thumbRow');
         allImages.forEach(function(url, i) {
@@ -372,40 +378,83 @@
             thumb.style.backgroundSize = 'cover';
             thumb.style.backgroundPosition = 'center top';
             thumb.style.aspectRatio = '3 / 4';
-            thumb.style.cursor = 'zoom-in';
-            thumb.addEventListener('dblclick', function(e) { e.stopPropagation(); openLightbox(url); });
+            thumb.style.cursor = 'pointer';
             thumb.onclick = function() {
+                window._deskGalleryIdx = i;
                 mainImg.style.backgroundImage = "url('" + url + "')";
-                currentUrl = url;
                 thumbRow.querySelectorAll('.product-detail-thumb').forEach(function(t) { t.classList.remove('active'); });
                 thumb.classList.add('active');
             };
+            thumb.addEventListener('dblclick', function(e) { e.stopPropagation(); openDesktopGallery(i); });
             thumbRow.appendChild(thumb);
         });
     })();
 
-    // ── Lightbox ──────────────────────────────────────────────────
-    function openLightbox(url) {
-        var lb = document.getElementById('imgLightbox');
+    // ── Gallery Lightbox with arrows ──────────────────────────────
+    function openDesktopGallery(startIdx) {
+        var imgs = window._deskGallery || [];
+        window._deskGalleryIdx = ((startIdx || 0) + imgs.length) % imgs.length;
+        var lb = document.getElementById('desktopGalleryLb');
         if (!lb) {
             lb = document.createElement('div');
-            lb.id = 'imgLightbox';
-            lb.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;cursor:zoom-out;';
-            lb.innerHTML = '<img id="lbImg" style="max-width:90vw;max-height:88vh;border-radius:16px;box-shadow:0 8px 48px rgba(0,0,0,0.7);object-fit:contain;" />'
-                         + '<button onclick="event.stopPropagation();closeLightbox()" style="position:absolute;top:20px;right:24px;background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:1.6rem;width:42px;height:42px;border-radius:50%;cursor:pointer;line-height:1;">✕</button>';
-            lb.addEventListener('click', closeLightbox);
+            lb.id = 'desktopGalleryLb';
+            lb.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.88);display:flex;align-items:center;justify-content:center;';
+            lb.innerHTML =
+                '<img id="deskLbImg" style="max-width:80vw;max-height:88vh;border-radius:16px;box-shadow:0 8px 48px rgba(0,0,0,0.7);object-fit:contain;user-select:none;pointer-events:none;" />'
+              + '<div id="deskLbCounter" style="position:absolute;top:22px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,0.12);backdrop-filter:blur(4px);color:#fff;font-family:Montserrat,sans-serif;font-size:0.75rem;padding:5px 14px;border-radius:20px;letter-spacing:1px;"></div>'
+              + '<button onclick="event.stopPropagation();deskGalleryNav(-1)" style="position:absolute;left:22px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:2rem;width:52px;height:52px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s;" onmouseover="this.style.background=\'rgba(255,255,255,0.28)\'" onmouseout="this.style.background=\'rgba(255,255,255,0.15)\'">&#8249;</button>'
+              + '<button onclick="event.stopPropagation();deskGalleryNav(1)"  style="position:absolute;right:22px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:2rem;width:52px;height:52px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s;" onmouseover="this.style.background=\'rgba(255,255,255,0.28)\'" onmouseout="this.style.background=\'rgba(255,255,255,0.15)\'">&#8250;</button>'
+              + '<button onclick="event.stopPropagation();closeDesktopGallery()" style="position:absolute;top:20px;right:24px;background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:1.6rem;width:44px;height:44px;border-radius:50%;cursor:pointer;line-height:1;">✕</button>';
+            lb.addEventListener('click', function(e){ if(e.target===lb) closeDesktopGallery(); });
             document.body.appendChild(lb);
         }
-        document.getElementById('lbImg').src = url;
+        deskGalleryRender();
         lb.style.display = 'flex';
         document.body.style.overflow = 'hidden';
     }
-    function closeLightbox() {
-        var lb = document.getElementById('imgLightbox');
+
+    function deskGalleryRender() {
+        var imgs = window._deskGallery || [];
+        var idx  = window._deskGalleryIdx;
+        var img  = document.getElementById('deskLbImg');
+        var ctr  = document.getElementById('deskLbCounter');
+        if (img) img.src = imgs[idx];
+        if (ctr) ctr.textContent = (idx + 1) + ' / ' + imgs.length;
+        // Sync main product image
+        var mainImg = document.getElementById('mainProductImg');
+        if (mainImg) {
+            mainImg.style.backgroundImage = "url('" + imgs[idx] + "')";
+            var thumbRow = document.getElementById('thumbRow');
+            if (thumbRow) {
+                thumbRow.querySelectorAll('.product-detail-thumb').forEach(function(t, i) {
+                    t.classList.toggle('active', i === idx);
+                });
+            }
+        }
+    }
+
+    function deskGalleryNav(dir) {
+        var imgs = window._deskGallery || [];
+        window._deskGalleryIdx = (window._deskGalleryIdx + dir + imgs.length) % imgs.length;
+        deskGalleryRender();
+    }
+
+    function closeDesktopGallery() {
+        var lb = document.getElementById('desktopGalleryLb');
         if (lb) lb.style.display = 'none';
         document.body.style.overflow = '';
     }
-    document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeLightbox(); });
+
+    document.addEventListener('keydown', function(e){
+        var lb = document.getElementById('desktopGalleryLb');
+        if (lb && lb.style.display !== 'none') {
+            if (e.key === 'ArrowLeft')  deskGalleryNav(-1);
+            if (e.key === 'ArrowRight') deskGalleryNav(1);
+            if (e.key === 'Escape')     closeDesktopGallery();
+            return;
+        }
+        if (e.key === 'Escape') closeEmailModal();
+    });
 
     // ── Email Modal ───────────────────────────────────────────────
     function openEmailModal() {
@@ -485,7 +534,7 @@
         var tag = document.getElementById('copiedTag');
         if (tag) { tag.style.display='inline'; setTimeout(function(){ tag.style.display='none'; }, 2000); }
     }
-    document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeLightbox(); closeEmailModal(); } });
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeDesktopGallery(); closeEmailModal(); } });
     </script>
 
     <!-- ============================================================

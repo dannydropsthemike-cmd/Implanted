@@ -495,27 +495,29 @@ html, body {
 
 .shop-list { padding: 14px 14px calc(var(--tab-h) + var(--bottom-pad) + 8px) 14px; }
 
-/* Product list item */
+/* Product list item — always row layout, compact */
 .product-item {
     background: var(--white);
     border-radius: 14px;
     overflow: hidden;
     box-shadow: 0 3px 14px rgba(141,110,99,0.09);
     border: 1px solid var(--border);
-    margin-bottom: 14px;
+    margin-bottom: 12px;
     display: flex;
-    gap: 0;
-    flex-direction: column;
+    flex-direction: row;
     cursor: pointer;
     transition: transform 0.18s, box-shadow 0.18s;
     -webkit-tap-highlight-color: transparent;
+    max-height: 130px;
 }
 
 .product-item:active { transform: scale(0.985); box-shadow: 0 1px 6px rgba(141,110,99,0.1); }
 
 .product-item-img {
-    width: 100%;
+    width: 98px;
+    flex-shrink: 0;
     aspect-ratio: 3 / 4;
+    height: 100%;
     background: var(--sand);
     background-size: cover;
     background-position: center top;
@@ -523,11 +525,11 @@ html, body {
     align-items: center;
     justify-content: center;
     position: relative;
-    border-radius: 14px 14px 0 0;
+    border-radius: 14px 0 0 14px;
 }
 
 .product-item-img svg {
-    width: 48px; height: 48px;
+    width: 32px; height: 32px;
     stroke: #C8A99A;
     fill: none;
     stroke-width: 1.2;
@@ -535,19 +537,24 @@ html, body {
 
 .product-item-img .coming-soon {
     position: absolute;
-    bottom: 10px; left: 10px;
+    bottom: 6px; left: 6px;
     background: rgba(255,248,225,0.9);
     color: var(--text-light);
-    font-size: 0.62rem;
-    letter-spacing: 1.2px;
+    font-size: 0.55rem;
+    letter-spacing: 1px;
     text-transform: uppercase;
-    padding: 3px 9px;
+    padding: 2px 6px;
     border-radius: 20px;
     font-weight: 600;
 }
 
 .product-item-body {
-    padding: 14px 16px 16px 16px;
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 12px 14px;
 }
 
 .product-item-tag {
@@ -1149,7 +1156,7 @@ html, body {
     .tab svg  { width: 17px; height: 17px; }
     .tab span { font-size: 0.52rem; }
 
-    /* ---- HOME: left=carousel, right=content ---- */
+    /* ---- HOME: left=carousel (aspect-ratio preserved), right=content ---- */
     #page-home {
         display: flex;
         flex-direction: row;
@@ -1158,18 +1165,23 @@ html, body {
     }
 
     .carousel-wrap {
-        width: 44%;
         flex-shrink: 0;
-        aspect-ratio: unset;
+        aspect-ratio: 3 / 4;
         height: 100%;
+        width: auto;
+        max-width: 44%;
     }
+
+    .carousel-track { height: 100%; }
+    .carousel-slide { height: 100%; }
 
     /* Dots sit inside carousel bottom */
     .carousel-dots {
         position: absolute;
         bottom: 6px;
         left: 0;
-        width: 44%;
+        width: auto;
+        max-width: 44%;
         padding: 0;
         z-index: 5;
     }
@@ -1224,29 +1236,8 @@ html, body {
         padding: 10px 12px;
     }
 
-    .product-item {
-        width: 100%;
-        flex-shrink: 0;
-        margin-bottom: 0;
-        display: flex;
-        flex-direction: row;
-    }
-
-    .product-item-img {
-        width: 140px;
-        flex-shrink: 0;
-        aspect-ratio: 3 / 4;
-        height: auto;
-        border-radius: 14px 0 0 14px;
-    }
-
-    .product-item-body {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        padding: 16px 18px;
-    }
+    .product-item { margin-bottom: 0; }
+    .product-item-img { width: 110px; }
 
     /* ---- PRODUCT DETAIL: image left, info right ---- */
     #page-product-stake {
@@ -1266,11 +1257,14 @@ html, body {
     }
 
     .detail-img-wrap {
-        width: 42%;
         flex-shrink: 0;
         aspect-ratio: 3 / 4;
+        height: 100%;
+        width: auto;
+        max-width: 42%;
         border-bottom: none;
         border-right: 1px solid var(--border);
+        cursor: pointer;
     }
 
     .detail-body {
@@ -1478,7 +1472,11 @@ html, body {
                 Back to Store
             </div>
             <div class="detail-container-inner">
-            <div class="detail-img-wrap" id="mDetailImg" style="background-size:cover;background-position:center top;">
+            <div class="detail-img-wrap" id="mDetailImg" style="background-size:cover;background-position:center top;cursor:pointer;" onclick="mOpenGalleryLightbox(0)">
+                <div style="position:absolute;bottom:10px;right:10px;background:rgba(93,64,55,0.55);backdrop-filter:blur(3px);border-radius:20px;padding:5px 11px;display:flex;align-items:center;gap:5px;pointer-events:none;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFF8E1" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                    <span style="font-size:0.6rem;color:#FFF8E1;font-family:'Montserrat',sans-serif;font-weight:600;letter-spacing:0.5px;">Tap to view all</span>
+                </div>
             </div>
             <div class="detail-body">
                 <div class="detail-tag">Custom · Hand-Made</div>
@@ -1497,8 +1495,6 @@ html, body {
                     <li>Hand crafted by a 3D artist, from your photo.</li>
                     <li>Printed in weathering resistant PETG.</li>
                 </ul>
-                <!-- Thumbnail strip -->
-                <div id="mThumbRow" style="display:flex;gap:8px;margin-bottom:20px;overflow-x:auto;"></div>
                 <button class="btn-order" onclick="openMobileEmailModal()">Email Us!</button>
                 <p class="detail-note">Orders are made-to-order. Please allow 1-7 days for production.</p>
             </div>
@@ -1579,13 +1575,13 @@ html, body {
                     <div class="more-row-chevron"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
                 </div>
 
-                <div class="more-row" onclick="switchTab('chat')">
+                <div class="more-row" style="opacity:0.4;pointer-events:none;cursor:default;">
                     <div class="more-row-left">
                         <div class="more-row-icon">
                             <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                         </div>
                         <div>
-                            <div class="more-row-title">Contact Support</div>
+                            <div class="more-row-title">Contact Support <span style="font-size:0.65em;font-style:italic;letter-spacing:0.3px;color:var(--text-light);">Coming soon!</span></div>
                             <div class="more-row-sub">Live chat · One message per 30 min</div>
                         </div>
                     </div>
@@ -1771,7 +1767,7 @@ function closeSubpage(name) {
 }
 
 // ============================================================
-// PRODUCT IMAGES — shop thumb + detail gallery
+// PRODUCT IMAGES — shop thumb + detail gallery with lightbox
 // ============================================================
 (function() {
     const frontImages = [
@@ -1785,6 +1781,10 @@ function closeSubpage(name) {
         'https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0056_r2qeh1.jpg'
     ];
 
+    // Expose allImages globally for the lightbox
+    window._galleryImages = allImages;
+    window._galleryIndex  = 0;
+
     // Alternating shop card
     var shopIdx = 0;
     var shopThumb = document.getElementById('mShopThumb');
@@ -1792,53 +1792,75 @@ function closeSubpage(name) {
     setShopCard();
     setInterval(function(){ shopIdx++; setShopCard(); }, 3000);
 
-    // Detail main image — starts with IMG_0044
+    // Detail main image — starts with first image
     var detailImg = document.getElementById('mDetailImg');
     if (detailImg) {
         detailImg.style.backgroundImage = "url('" + allImages[0] + "')";
-        detailImg.style.aspectRatio = '3 / 4';
-        detailImg.style.cursor = 'zoom-in';
-        var curUrl = allImages[0];
-        detailImg.addEventListener('dblclick', function(){ mOpenLightbox(curUrl); });
-    }
-
-    // Build thumb strip — 4:3 aspect
-    var thumbRow = document.getElementById('mThumbRow');
-    if (thumbRow) {
-        allImages.forEach(function(url, i) {
-            var t = document.createElement('div');
-            t.style.cssText = 'width:72px;aspect-ratio:3/4;flex-shrink:0;border-radius:8px;background-size:cover;background-position:center top;border:2px solid ' + (i===0?'var(--mocha)':'var(--border)') + ';cursor:zoom-in;';
-            t.style.backgroundImage = "url('" + url + "')";
-            t.onclick = function() {
-                if (detailImg) { detailImg.style.backgroundImage = "url('" + url + "')"; curUrl = url; }
-                thumbRow.querySelectorAll('div').forEach(function(el) { el.style.borderColor = 'var(--border)'; });
-                t.style.borderColor = 'var(--mocha)';
-            };
-            t.addEventListener('dblclick', function(e){ e.stopPropagation(); mOpenLightbox(url); });
-            thumbRow.appendChild(t);
-        });
     }
 })();
 
-// Lightbox
-function mOpenLightbox(url) {
-    var lb = document.getElementById('mLightbox');
+// Gallery lightbox with arrows
+function mOpenGalleryLightbox(startIdx) {
+    var imgs = window._galleryImages || [];
+    if (!imgs.length) return;
+    window._galleryIndex = ((startIdx || 0) + imgs.length) % imgs.length;
+
+    var lb = document.getElementById('mGalleryLightbox');
     if (!lb) {
         lb = document.createElement('div');
-        lb.id = 'mLightbox';
-        lb.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.88);display:flex;align-items:center;justify-content:center;cursor:zoom-out;';
-        lb.innerHTML = '<img id="mLbImg" style="max-width:92vw;max-height:85vh;border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,0.6);object-fit:contain;"/>'
-                     + '<button onclick="event.stopPropagation();mCloseLightbox()" style="position:absolute;top:18px;right:18px;background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:1.4rem;width:40px;height:40px;border-radius:50%;cursor:pointer;">✕</button>';
-        lb.addEventListener('click', mCloseLightbox);
+        lb.id = 'mGalleryLightbox';
+        lb.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;touch-action:none;';
+        lb.innerHTML = `
+          <img id="mGlbImg" style="max-width:86vw;max-height:82vh;border-radius:14px;object-fit:contain;box-shadow:0 8px 40px rgba(0,0,0,0.6);user-select:none;pointer-events:none;"/>
+          <div id="mGlbCounter" style="position:absolute;top:18px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,0.12);backdrop-filter:blur(4px);color:#fff;font-family:'Montserrat',sans-serif;font-size:0.7rem;padding:4px 12px;border-radius:20px;letter-spacing:1px;"></div>
+          <button onclick="event.stopPropagation();mGalleryNav(-1)" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:1.5rem;width:44px;height:44px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;">&#8249;</button>
+          <button onclick="event.stopPropagation();mGalleryNav(1)"  style="position:absolute;right:14px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:1.5rem;width:44px;height:44px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;">&#8250;</button>
+          <button onclick="event.stopPropagation();mCloseGalleryLightbox()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:1.3rem;width:38px;height:38px;border-radius:50%;cursor:pointer;">✕</button>`;
+
+        // Swipe support
+        var sx = 0;
+        lb.addEventListener('touchstart', function(e){ sx = e.touches[0].clientX; }, {passive:true});
+        lb.addEventListener('touchend',   function(e){ var dx = e.changedTouches[0].clientX - sx; if(Math.abs(dx)>40) mGalleryNav(dx<0?1:-1); }, {passive:true});
+        lb.addEventListener('click', function(e){ if(e.target===lb) mCloseGalleryLightbox(); });
         document.body.appendChild(lb);
     }
-    document.getElementById('mLbImg').src = url;
+    mGalleryRender();
     lb.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
 }
-function mCloseLightbox() {
-    var lb = document.getElementById('mLightbox');
+
+function mGalleryRender() {
+    var imgs = window._galleryImages || [];
+    var idx  = window._galleryIndex;
+    var img  = document.getElementById('mGlbImg');
+    var ctr  = document.getElementById('mGlbCounter');
+    if (img) img.src = imgs[idx];
+    if (ctr) ctr.textContent = (idx + 1) + ' / ' + imgs.length;
+    // Also update the detail background to match current
+    var detailImg = document.getElementById('mDetailImg');
+    if (detailImg) detailImg.style.backgroundImage = "url('" + imgs[idx] + "')";
+}
+
+function mGalleryNav(dir) {
+    var imgs = window._galleryImages || [];
+    window._galleryIndex = (window._galleryIndex + dir + imgs.length) % imgs.length;
+    mGalleryRender();
+}
+
+function mCloseGalleryLightbox() {
+    var lb = document.getElementById('mGalleryLightbox');
     if (lb) lb.style.display = 'none';
+    document.body.style.overflow = '';
 }
+
+// Keyboard nav for gallery
+document.addEventListener('keydown', function(e){
+    var lb = document.getElementById('mGalleryLightbox');
+    if (!lb || lb.style.display === 'none') return;
+    if (e.key === 'ArrowLeft')  mGalleryNav(-1);
+    if (e.key === 'ArrowRight') mGalleryNav(1);
+    if (e.key === 'Escape')     mCloseGalleryLightbox();
+});
 
 // Email Modal
 function openMobileEmailModal() {
