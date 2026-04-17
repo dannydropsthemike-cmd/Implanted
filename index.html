@@ -259,7 +259,7 @@
             <div class="product-card" onclick="showPage('product-pet-plant-stake')" style="cursor:pointer;">
                 <div class="product-badge" style="display:none;">25% Off</div>
 
-                <div class="product-image-wrap">
+                <div class="product-image-wrap" style="aspect-ratio: 3 / 4; overflow: hidden;">
                     <div id="shopCardImg" style="width:100%;height:100%;background-size:cover;background-position:center top;border-radius:inherit;"></div>
                 </div>
 
@@ -360,7 +360,7 @@
         mainImg.style.backgroundImage = "url('" + startFront + "')";
         mainImg.style.backgroundSize = 'cover';
         mainImg.style.backgroundPosition = 'center top';
-        mainImg.style.aspectRatio = '4 / 3';
+        mainImg.style.aspectRatio = '3 / 4';
         mainImg.style.cursor = 'zoom-in';
         let currentUrl = startFront;
         mainImg.addEventListener('dblclick', function() { openLightbox(currentUrl); });
@@ -372,7 +372,7 @@
             thumb.style.backgroundImage = "url('" + url + "')";
             thumb.style.backgroundSize = 'cover';
             thumb.style.backgroundPosition = 'center top';
-            thumb.style.aspectRatio = '4 / 3';
+            thumb.style.aspectRatio = '3 / 4';
             thumb.style.cursor = 'zoom-in';
             thumb.addEventListener('dblclick', function(e) { e.stopPropagation(); openLightbox(url); });
             thumb.onclick = function() {
@@ -483,7 +483,7 @@
         <div style="margin-top: 15px; font-size: 0.75rem; opacity: 0.6; max-width: 600px;
                     margin-left: auto; margin-right: auto; line-height: 1.5;">
             <p>Transparency: This website was coded with the assistance of Artificial Intelligence.
-               Some image scenarios are AI-enhanced for visualization.</p>
+               .</p>
         </div>
 
         <div style="margin-top: 25px;">

@@ -1597,7 +1597,6 @@ html, body {
                 <p>Copyright implanted 2026</p>
                 <p style="margin-top:6px;font-size:0.64rem;opacity:0.7;">
                         Transparency: This website was coded with the assistance of Artificial Intelligence.
-                        Some image scenarios are AI-enhanced for visualization.
                     </p>
             </div>
 
@@ -1798,7 +1797,7 @@ function closeSubpage(name) {
     var detailImg = document.getElementById('mDetailImg');
     if (detailImg) {
         detailImg.style.backgroundImage = "url('" + allImages[0] + "')";
-        detailImg.style.aspectRatio = '4 / 3';
+        detailImg.style.aspectRatio = '3 / 4';
         detailImg.style.cursor = 'zoom-in';
         var curUrl = allImages[0];
         detailImg.addEventListener('dblclick', function(){ mOpenLightbox(curUrl); });
@@ -1809,7 +1808,7 @@ function closeSubpage(name) {
     if (thumbRow) {
         allImages.forEach(function(url, i) {
             var t = document.createElement('div');
-            t.style.cssText = 'width:72px;aspect-ratio:4/3;flex-shrink:0;border-radius:8px;background-size:cover;background-position:center top;border:2px solid ' + (i===0?'var(--mocha)':'var(--border)') + ';cursor:zoom-in;';
+            t.style.cssText = 'width:72px;aspect-ratio:3/4;flex-shrink:0;border-radius:8px;background-size:cover;background-position:center top;border:2px solid ' + (i===0?'var(--mocha)':'var(--border)') + ';cursor:zoom-in;';
             t.style.backgroundImage = "url('" + url + "')";
             t.onclick = function() {
                 if (detailImg) { detailImg.style.backgroundImage = "url('" + url + "')"; curUrl = url; }
