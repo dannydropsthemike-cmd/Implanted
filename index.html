@@ -455,8 +455,77 @@
         if (e.key === 'Escape') closeEmailModal();
     });
 
-    // ── Email Modal ───────────────────────────────────────────────
+    // ── Terms of Service Agreement Popup ─────────────────────────
     function openEmailModal() {
+        var t = document.getElementById('tosModal');
+        if (!t) {
+            t = document.createElement('div');
+            t.id = 'tosModal';
+            t.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(93,64,55,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px;';
+            t.innerHTML = `
+<div style="background:#FFFCF9;border-radius:20px;max-width:480px;width:100%;box-shadow:0 12px 60px rgba(93,64,55,0.28);overflow:hidden;font-family:'Montserrat',sans-serif;">
+  <div style="background:#8D6E63;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-family:'Playfair Display',serif;font-size:1.1rem;color:#FFF8E1;font-weight:600;">Terms of Service</span>
+    <button onclick="closeTosModal()" style="background:rgba(255,255,255,0.15);border:none;color:#FFF8E1;font-size:1.2rem;width:32px;height:32px;border-radius:50%;cursor:pointer;line-height:1;">✕</button>
+  </div>
+  <div style="padding:22px 24px 20px 24px;max-height:52vh;overflow-y:auto;">
+    <p style="font-size:0.82rem;color:#6D4C41;line-height:1.7;margin-bottom:12px;">By clicking &ldquo;Continue&rdquo; you agree to our <strong>Terms of Service</strong>, including:</p>
+    <ul style="font-size:0.78rem;color:#6D4C41;line-height:1.8;padding-left:18px;margin-bottom:14px;">
+      <li>You own or have rights to the photo you submit.</li>
+      <li>Your pet must be fully in frame, unobstructed, well-lit, and not wearing accessories.</li>
+      <li>Custom orders are non-refundable except for defective/damaged items (contact us within 48 hours of delivery).</li>
+      <li>Your photo will be deleted from our systems once your product is shipped.</li>
+      <li>Keep product out of extreme heat, direct sunlight, and away from small children.</li>
+    </ul>
+    <p style="font-size:0.74rem;color:#A1887F;margin-bottom:18px;">Read the full <a onclick="closeTosModal();showPage('terms')" style="color:#7CB342;cursor:pointer;text-decoration:underline;">Terms of Service here</a>.</p>
+    <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;padding:12px 14px;background:#EFEBE7;border-radius:10px;border:2px solid transparent;" id="tosAgreeLbl">
+      <input type="checkbox" id="tosCheck" onchange="updateTosBtn()" style="margin-top:2px;accent-color:#7CB342;width:16px;height:16px;flex-shrink:0;cursor:pointer;">
+      <span style="font-size:0.8rem;color:#5D4037;line-height:1.5;">I have read and agree to the <strong>Terms of Service</strong> and understand this is a custom, non-refundable order.</span>
+    </label>
+  </div>
+  <div style="padding:16px 24px 20px 24px;display:flex;justify-content:flex-end;gap:10px;border-top:1px solid #E0D8D0;">
+    <button onclick="closeTosModal()" style="background:transparent;border:1.5px solid #D7CCC8;color:#8D6E63;border-radius:10px;padding:9px 18px;font-family:'Montserrat',sans-serif;font-size:0.78rem;font-weight:600;cursor:pointer;">Cancel</button>
+    <button id="tosAgreeBtn" onclick="onTosAgree()" disabled style="background:#C8C8C8;color:#fff;border:none;border-radius:10px;padding:9px 20px;font-family:'Montserrat',sans-serif;font-size:0.78rem;font-weight:600;cursor:not-allowed;transition:background 0.2s;">Continue \u2192</button>
+  </div>
+</div>`;
+            t.addEventListener('click', function(e){ if(e.target===t) closeTosModal(); });
+            document.body.appendChild(t);
+        }
+        var cb = document.getElementById('tosCheck');
+        if (cb) cb.checked = false;
+        updateTosBtn();
+        t.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+    function updateTosBtn() {
+        var cb  = document.getElementById('tosCheck');
+        var btn = document.getElementById('tosAgreeBtn');
+        var lbl = document.getElementById('tosAgreeLbl');
+        if (!btn || !cb) return;
+        if (cb.checked) {
+            btn.disabled = false;
+            btn.style.background = '#8D6E63';
+            btn.style.cursor = 'pointer';
+            if (lbl) lbl.style.borderColor = '#A5D6A7';
+        } else {
+            btn.disabled = true;
+            btn.style.background = '#C8C8C8';
+            btn.style.cursor = 'not-allowed';
+            if (lbl) lbl.style.borderColor = 'transparent';
+        }
+    }
+    function closeTosModal() {
+        var t = document.getElementById('tosModal');
+        if (t) t.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+    function onTosAgree() {
+        closeTosModal();
+        openEmailModalDirect();
+    }
+
+    // ── Email Modal ───────────────────────────────────────────────
+    function openEmailModalDirect() {
         var m = document.getElementById('emailModal');
         if (!m) {
             m = document.createElement('div');
@@ -500,7 +569,7 @@
       <p style="font-size:0.7rem;color:#A1887F;margin-top:6px;font-style:italic;">(e.g. front door, mailbox, back porch, with neighbor, etc.)</p>
     </div>
     <!-- Required image box -->
-    <div style="border:2px dashed #D7CCC8;border-radius:14px;padding:20px;text-align:center;background:#EFEBE7;position:relative;">
+    <div style="border:2px dashed #D7CCC8;border-radius:14px;padding:20px;text-align:left;background:#EFEBE7;position:relative;">
       <span style="position:absolute;top:-10px;left:16px;background:#FFFCF9;padding:0 8px;font-size:0.7rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#A1887F;">Your Pet Photo</span>
       <svg width="18" height="18" viewBox="0 0 24 24" fill="#EF5350" style="vertical-align:middle;margin-right:4px;"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
       <span style="font-size:0.8rem;color:#8D6E63;font-weight:500;">Attach your pet photo here</span>
@@ -533,7 +602,7 @@
         var tag = document.getElementById('copiedTag');
         if (tag) { tag.style.display='inline'; setTimeout(function(){ tag.style.display='none'; }, 2000); }
     }
-    document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeDesktopGallery(); closeEmailModal(); } });
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeDesktopGallery(); closeTosModal(); closeEmailModal(); } });
     </script>
 
     <!-- ============================================================
