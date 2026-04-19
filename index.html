@@ -15,6 +15,25 @@
     <title>implanted | Custom 3D Pet Decor</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Montserrat:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <style>
+    /* ── Silky animation keyframes ── */
+    @keyframes _overlayIn  { from{opacity:0}                              to{opacity:1} }
+    @keyframes _overlayOut { from{opacity:1}                              to{opacity:0} }
+    @keyframes _cardIn     { from{opacity:0;transform:scale(0.88) translateY(32px)} to{opacity:1;transform:scale(1) translateY(0)} }
+    @keyframes _cardOut    { from{opacity:1;transform:scale(1) translateY(0)}       to{opacity:0;transform:scale(0.93) translateY(18px)} }
+    @keyframes _pageIn     { from{opacity:0;transform:translateY(24px)}             to{opacity:1;transform:translateY(0)} }
+    @keyframes _pageOut    { from{opacity:1;transform:translateY(0)}                to{opacity:0;transform:translateY(-16px)} }
+    @keyframes _lbSwap     { from{opacity:0;transform:scale(0.96)}                  to{opacity:1;transform:scale(1)} }
+
+    .page-leaving  { animation:_pageOut 0.2s  cubic-bezier(.4,0,.6,1)  forwards; pointer-events:none; }
+    .page-entering { animation:_pageIn  0.34s cubic-bezier(.22,1,.36,1) forwards; }
+
+    ._modal-overlay-in  { animation:_overlayIn  0.22s ease forwards; }
+    ._modal-overlay-out { animation:_overlayOut 0.18s ease forwards; }
+    ._modal-card-in     { animation:_cardIn     0.38s cubic-bezier(.22,1,.36,1) forwards; }
+    ._modal-card-out    { animation:_cardOut    0.2s  cubic-bezier(.4,0,1,1)    forwards; }
+    ._lb-img-swap       { animation:_lbSwap     0.24s ease forwards; }
+    </style>
 </head>
 <body>
 
@@ -328,6 +347,66 @@
     </div>
 
     <script>
+    // ── Animated page transitions (wraps app.js showPage) ────────
+    // app.js loads after this block, so we intercept after load
+    window.addEventListener('load', function() {
+        if (typeof showPage === 'function') {
+            var _origShowPage = showPage;
+            window.showPage = function(name) {
+                var current = document.querySelector('[id^="content-"]:not(.hidden)');
+                if (current && !current.classList.contains('hidden')) {
+                    current.classList.add('page-leaving');
+                    setTimeout(function() {
+                        current.classList.remove('page-leaving');
+                        _origShowPage(name);
+                        var next = document.getElementById('content-' + name);
+                        if (next) {
+                            next.classList.add('page-entering');
+                            setTimeout(function(){ next.classList.remove('page-entering'); }, 380);
+                        }
+                    }, 200);
+                } else {
+                    _origShowPage(name);
+                    var next = document.getElementById('content-' + name);
+                    if (next) {
+                        next.classList.add('page-entering');
+                        setTimeout(function(){ next.classList.remove('page-entering'); }, 380);
+                    }
+                }
+            };
+        }
+    });
+
+    // ── Animated modal helpers ────────────────────────────────────
+    function _animModalOpen(overlayEl, cardEl) {
+        overlayEl.style.opacity = '0';
+        overlayEl.style.display = 'flex';
+        overlayEl.classList.add('_modal-overlay-in');
+        if (cardEl) {
+            cardEl.style.opacity = '0';
+            cardEl.classList.add('_modal-card-in');
+        }
+        overlayEl.addEventListener('animationend', function h(){ overlayEl.classList.remove('_modal-overlay-in'); overlayEl.style.opacity=''; overlayEl.removeEventListener('animationend',h); }, { once:true });
+        if (cardEl) cardEl.addEventListener('animationend', function h(){ cardEl.classList.remove('_modal-card-in'); cardEl.style.opacity=''; cardEl.removeEventListener('animationend',h); }, { once:true });
+        document.body.style.overflow = 'hidden';
+    }
+    function _animModalClose(overlayEl, cb) {
+        if (!overlayEl || overlayEl.style.display === 'none') { if(cb)cb(); return; }
+        var card = overlayEl.querySelector('div');
+        overlayEl.classList.add('_modal-overlay-out');
+        if (card) card.classList.add('_modal-card-out');
+        overlayEl.addEventListener('animationend', function h(){
+            overlayEl.classList.remove('_modal-overlay-out');
+            if (card) card.classList.remove('_modal-card-out');
+            overlayEl.style.display = 'none';
+            overlayEl.removeEventListener('animationend', h);
+            document.body.style.overflow = '';
+            if (cb) cb();
+        }, { once:true });
+    }
+    </script>
+
+    <script>
     // ── Shop card alternating images ──────────────────────────────
     (function() {
         var shopImgs = [
@@ -409,7 +488,10 @@
             document.body.appendChild(lb);
         }
         deskGalleryRender();
+        lb.style.opacity = '0';
+        lb.classList.add('_modal-overlay-in');
         lb.style.display = 'flex';
+        lb.addEventListener('animationend', function h(){ lb.classList.remove('_modal-overlay-in'); lb.style.opacity=''; lb.removeEventListener('animationend',h); }, { once:true });
         document.body.style.overflow = 'hidden';
     }
 
@@ -418,7 +500,12 @@
         var idx  = window._deskGalleryIdx;
         var img  = document.getElementById('deskLbImg');
         var ctr  = document.getElementById('deskLbCounter');
-        if (img) img.src = imgs[idx];
+        if (img) {
+            img.classList.remove('_lb-img-swap');
+            void img.offsetWidth; // reflow to restart animation
+            img.src = imgs[idx];
+            img.classList.add('_lb-img-swap');
+        }
         if (ctr) ctr.textContent = (idx + 1) + ' / ' + imgs.length;
         // Sync main product image
         var mainImg = document.getElementById('mainProductImg');
@@ -441,8 +528,14 @@
 
     function closeDesktopGallery() {
         var lb = document.getElementById('desktopGalleryLb');
-        if (lb) lb.style.display = 'none';
-        document.body.style.overflow = '';
+        if (!lb || lb.style.display === 'none') return;
+        lb.classList.add('_modal-overlay-out');
+        lb.addEventListener('animationend', function h(){
+            lb.classList.remove('_modal-overlay-out');
+            lb.style.display = 'none';
+            lb.removeEventListener('animationend', h);
+            document.body.style.overflow = '';
+        }, { once:true });
     }
 
     document.addEventListener('keydown', function(e){
@@ -495,8 +588,8 @@
         var cb = document.getElementById('tosCheck');
         if (cb) cb.checked = false;
         updateTosBtn();
-        t.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
+        var card = t.querySelector('div');
+        _animModalOpen(t, card);
     }
     function updateTosBtn() {
         var cb  = document.getElementById('tosCheck');
@@ -517,12 +610,11 @@
     }
     function closeTosModal() {
         var t = document.getElementById('tosModal');
-        if (t) t.style.display = 'none';
-        document.body.style.overflow = '';
+        _animModalClose(t);
     }
     function onTosAgree() {
-        closeTosModal();
-        openEmailModalDirect();
+        var t = document.getElementById('tosModal');
+        _animModalClose(t, function(){ openEmailModalDirect(); });
     }
 
     // ── Email Modal ───────────────────────────────────────────────
@@ -585,13 +677,12 @@
             m.addEventListener('click', function(e){ if(e.target===m) closeEmailModal(); });
             document.body.appendChild(m);
         }
-        m.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
+        var card = m.querySelector('div');
+        _animModalOpen(m, card);
     }
     function closeEmailModal() {
         var m = document.getElementById('emailModal');
-        if (m) m.style.display = 'none';
-        document.body.style.overflow = '';
+        _animModalClose(m);
     }
     function copyEmail() {
         navigator.clipboard.writeText('dannydropsthemike@gmail.com').catch(function(){

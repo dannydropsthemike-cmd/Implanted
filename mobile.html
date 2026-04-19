@@ -1089,12 +1089,13 @@ html, body {
     overscroll-behavior: none;
     scroll-behavior: smooth;
     transform: translateX(100%);
-    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+    transition: transform 0.38s cubic-bezier(.22,1,.36,1), opacity 0.28s ease;
+    opacity: 0;
     z-index: 10;
     padding-bottom: 20px;
 }
 
-.subpage.open { transform: translateX(0); }
+.subpage.open { transform: translateX(0); opacity: 1; }
 
 .subpage-topbar {
     background: var(--white);
@@ -1341,6 +1342,23 @@ html, body {
     .subpage-body p,
     .subpage-body li { font-size: 0.73rem; line-height: 1.55; }
 }
+
+/* ── Silky animation keyframes ── */
+@keyframes _overlayIn  { from{opacity:0}                              to{opacity:1} }
+@keyframes _overlayOut { from{opacity:1}                              to{opacity:0} }
+@keyframes _cardIn     { from{opacity:0;transform:scale(0.88) translateY(32px)} to{opacity:1;transform:scale(1) translateY(0)} }
+@keyframes _cardOut    { from{opacity:1;transform:scale(1) translateY(0)}       to{opacity:0;transform:scale(0.93) translateY(18px)} }
+@keyframes _pageIn     { from{opacity:0;transform:translateY(20px)}             to{opacity:1;transform:translateY(0)} }
+@keyframes _pageOut    { from{opacity:1;transform:translateY(0)}                to{opacity:0;transform:translateY(-14px)} }
+@keyframes _lbSwap     { from{opacity:0;transform:scale(0.96)}                  to{opacity:1;transform:scale(1)} }
+
+._modal-overlay-in  { animation:_overlayIn  0.22s ease forwards; }
+._modal-overlay-out { animation:_overlayOut 0.18s ease forwards; }
+._modal-card-in     { animation:_cardIn     0.38s cubic-bezier(.22,1,.36,1) forwards; }
+._modal-card-out    { animation:_cardOut    0.2s  cubic-bezier(.4,0,1,1)    forwards; }
+._lb-img-swap       { animation:_lbSwap     0.24s ease forwards; }
+.page-leaving       { animation:_pageOut    0.2s  cubic-bezier(.4,0,.6,1)   forwards; pointer-events:none; }
+.page-entering      { animation:_pageIn     0.34s cubic-bezier(.22,1,.36,1) forwards; }
 </style>
 </head>
 <body>
@@ -1823,6 +1841,34 @@ function closeSubpage(name) {
     }
 })();
 
+// ── Animated modal helpers ────────────────────────────────────
+function _animModalOpen(overlayEl, cardEl) {
+    overlayEl.style.opacity = '0';
+    overlayEl.style.display = 'flex';
+    overlayEl.classList.add('_modal-overlay-in');
+    if (cardEl) {
+        cardEl.style.opacity = '0';
+        cardEl.classList.add('_modal-card-in');
+    }
+    overlayEl.addEventListener('animationend', function h(){ overlayEl.classList.remove('_modal-overlay-in'); overlayEl.style.opacity=''; overlayEl.removeEventListener('animationend',h); }, {once:true});
+    if (cardEl) cardEl.addEventListener('animationend', function h(){ cardEl.classList.remove('_modal-card-in'); cardEl.style.opacity=''; cardEl.removeEventListener('animationend',h); }, {once:true});
+    document.body.style.overflow = 'hidden';
+}
+function _animModalClose(overlayEl, cb) {
+    if (!overlayEl || overlayEl.style.display === 'none') { if(cb)cb(); return; }
+    var card = overlayEl.querySelector('div');
+    overlayEl.classList.add('_modal-overlay-out');
+    if (card) card.classList.add('_modal-card-out');
+    overlayEl.addEventListener('animationend', function h(){
+        overlayEl.classList.remove('_modal-overlay-out');
+        if (card) card.classList.remove('_modal-card-out');
+        overlayEl.style.display = 'none';
+        overlayEl.removeEventListener('animationend', h);
+        document.body.style.overflow = '';
+        if (cb) cb();
+    }, {once:true});
+}
+
 // Gallery lightbox with arrows
 function mOpenGalleryLightbox(startIdx) {
     var imgs = window._galleryImages || [];
@@ -1849,7 +1895,10 @@ function mOpenGalleryLightbox(startIdx) {
         document.body.appendChild(lb);
     }
     mGalleryRender();
+    lb.style.opacity = '0';
+    lb.classList.add('_modal-overlay-in');
     lb.style.display = 'flex';
+    lb.addEventListener('animationend', function h(){ lb.classList.remove('_modal-overlay-in'); lb.style.opacity=''; lb.removeEventListener('animationend',h); }, {once:true});
     document.body.style.overflow = 'hidden';
 }
 
@@ -1858,9 +1907,13 @@ function mGalleryRender() {
     var idx  = window._galleryIndex;
     var img  = document.getElementById('mGlbImg');
     var ctr  = document.getElementById('mGlbCounter');
-    if (img) img.src = imgs[idx];
+    if (img) {
+        img.classList.remove('_lb-img-swap');
+        void img.offsetWidth;
+        img.src = imgs[idx];
+        img.classList.add('_lb-img-swap');
+    }
     if (ctr) ctr.textContent = (idx + 1) + ' / ' + imgs.length;
-    // Also update the detail background to match current
     var detailImg = document.getElementById('mDetailImg');
     if (detailImg) detailImg.style.backgroundImage = "url('" + imgs[idx] + "')";
 }
@@ -1873,8 +1926,7 @@ function mGalleryNav(dir) {
 
 function mCloseGalleryLightbox() {
     var lb = document.getElementById('mGalleryLightbox');
-    if (lb) lb.style.display = 'none';
-    document.body.style.overflow = '';
+    _animModalClose(lb);
 }
 
 // Keyboard nav for gallery
@@ -1925,7 +1977,8 @@ function openMobileEmailModal() {
     var cb = document.getElementById('mTosCheck');
     if (cb) cb.checked = false;
     updateMTosBtn();
-    t.style.display = 'flex';
+    var card = t.querySelector('div');
+    _animModalOpen(t, card);
 }
 function updateMTosBtn() {
     var cb  = document.getElementById('mTosCheck');
@@ -1946,11 +1999,11 @@ function updateMTosBtn() {
 }
 function closeMTosModal() {
     var t = document.getElementById('mTosModal');
-    if (t) t.style.display = 'none';
+    _animModalClose(t);
 }
 function onMTosAgree() {
-    closeMTosModal();
-    openMobileEmailModalDirect();
+    var t = document.getElementById('mTosModal');
+    _animModalClose(t, function(){ openMobileEmailModalDirect(); });
 }
 
 // Email Modal
@@ -2011,11 +2064,12 @@ function openMobileEmailModalDirect() {
         m.addEventListener('click', function(e){ if(e.target===m) closeMobileEmailModal(); });
         document.body.appendChild(m);
     }
-    m.style.display = 'flex';
+    var card = m.querySelector('div');
+    _animModalOpen(m, card);
 }
 function closeMobileEmailModal() {
     var m = document.getElementById('mEmailModal');
-    if (m) m.style.display = 'none';
+    _animModalClose(m);
 }
 function mCopyEmail() {
     navigator.clipboard.writeText('dannydropsthemike@gmail.com').catch(function(){
