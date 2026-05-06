@@ -672,14 +672,31 @@
         _animModalClose(m);
     }
     function copyEmail() {
-        navigator.clipboard.writeText('implantedemailing@gmail.com').catch(function(){
-            var ta = document.createElement('textarea');
-            ta.value = 'implantedemailing@gmail.com';
-            document.body.appendChild(ta); ta.select();
-            document.execCommand('copy'); document.body.removeChild(ta);
-        });
+        var email = 'implantedemailing@gmail.com';
         var tag = document.getElementById('copiedTag');
-        if (tag) { tag.style.display='inline'; setTimeout(function(){ tag.style.display='none'; }, 2000); }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(email).then(function() {
+                if (tag) { tag.style.display='inline'; setTimeout(function(){ tag.style.display='none'; }, 2000); }
+            }).catch(function() {
+                fallbackCopy(email, tag);
+            });
+        } else {
+            fallbackCopy(email, tag);
+        }
+    }
+    function fallbackCopy(text, tag) {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        ta.setSelectionRange(0, 99999);
+        try {
+            document.execCommand('copy');
+            if (tag) { tag.style.display='inline'; setTimeout(function(){ tag.style.display='none'; }, 2000); }
+        } catch(e) { /* silent */ }
+        document.body.removeChild(ta);
     }
     document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeDesktopGallery(); closeTosModal(); closeEmailModal(); } });
     </script>
