@@ -2059,18 +2059,17 @@ function closeMobileEmailModal() {
 }
 function mCopyEmail() {
     var email = 'implantedemailing@gmail.com';
-    var tag = document.getElementById('mCopiedTag');
     if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(email).then(function() {
-            if (tag) { tag.style.display='inline'; setTimeout(function(){ tag.style.display='none'; }, 2000); }
+            showCopiedToast();
         }).catch(function() {
-            mFallbackCopy(email, tag);
+            mFallbackCopy(email);
         });
     } else {
-        mFallbackCopy(email, tag);
+        mFallbackCopy(email);
     }
 }
-function mFallbackCopy(text, tag) {
+function mFallbackCopy(text) {
     var ta = document.createElement('textarea');
     ta.value = text;
     ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;';
@@ -2078,11 +2077,64 @@ function mFallbackCopy(text, tag) {
     ta.focus();
     ta.select();
     ta.setSelectionRange(0, 99999);
-    try {
-        document.execCommand('copy');
-        if (tag) { tag.style.display='inline'; setTimeout(function(){ tag.style.display='none'; }, 2000); }
-    } catch(e) { /* silent */ }
+    try { document.execCommand('copy'); showCopiedToast(); } catch(e) {}
     document.body.removeChild(ta);
+}
+function showCopiedToast() {
+    var existing = document.getElementById('copiedToast');
+    if (existing) existing.remove();
+
+    var toast = document.createElement('div');
+    toast.id = 'copiedToast';
+    toast.style.cssText = [
+        'position:fixed;inset:0;z-index:99999;',
+        'display:flex;align-items:center;justify-content:center;',
+        'background:rgba(93,64,55,0.45);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);',
+        'animation:_overlayIn 0.28s cubic-bezier(.22,1,.36,1) both;',
+        'cursor:pointer;'
+    ].join('');
+
+    toast.innerHTML = [
+        '<div style="',
+            'background:#FFFCF9;border-radius:28px;padding:40px 44px;',
+            'display:flex;flex-direction:column;align-items:center;gap:18px;',
+            'box-shadow:0 20px 70px rgba(93,64,55,0.28);',
+            'max-width:300px;width:85%;text-align:center;',
+            'animation:_cardIn 0.38s cubic-bezier(.22,1,.36,1) both;',
+        '">',
+            '<div style="',
+                'width:64px;height:64px;border-radius:50%;',
+                'background:linear-gradient(135deg,#7CB342,#A5D6A7);',
+                'display:flex;align-items:center;justify-content:center;',
+                'box-shadow:0 6px 24px rgba(124,179,66,0.35);',
+            '">',
+                '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">',
+                    '<polyline points="20 6 9 17 4 12"></polyline>',
+                '</svg>',
+            '</div>',
+            '<div>',
+                '<p style="font-family:\'Playfair Display\',serif;font-size:1.15rem;font-weight:600;color:#5D4037;margin-bottom:6px;">Copied!</p>',
+                '<p style="font-family:\'Montserrat\',sans-serif;font-size:0.78rem;color:#8D6E63;line-height:1.55;">Email address copied<br>to your clipboard.</p>',
+            '</div>',
+            '<p style="font-family:\'Montserrat\',sans-serif;font-size:0.65rem;color:#A1887F;letter-spacing:0.5px;">Tap anywhere to dismiss</p>',
+        '</div>'
+    ].join('');
+
+    document.body.appendChild(toast);
+
+    function dismissToast() {
+        if (!document.getElementById('copiedToast')) return;
+        toast.style.animation = '_overlayOut 0.22s ease both';
+        var card = toast.querySelector('div');
+        if (card) card.style.animation = '_cardOut 0.22s cubic-bezier(.4,0,1,1) both';
+        toast.addEventListener('animationend', function onDone() {
+            toast.removeEventListener('animationend', onDone);
+            toast.remove();
+        }, { once: true });
+    }
+
+    toast.addEventListener('click', dismissToast);
+    setTimeout(dismissToast, 2200);
 }
 
 // ============================================================
