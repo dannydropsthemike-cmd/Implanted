@@ -68,21 +68,90 @@
     <!-- ============================================================
          HOME PAGE
     ============================================================ -->
+    <style>
+    /* ── Split-layout hero ── */
+    .hero-split {
+        display: flex;
+        align-items: flex-start;
+        min-height: calc(100vh - 90px);
+    }
+
+    /* LEFT: sticky 4:3 image panel */
+    .hero-left {
+        position: sticky;
+        top: 90px;
+        flex: 0 0 auto;
+        width: calc((100vh - 90px) * 4 / 3);
+        max-width: 52vw;
+        height: calc(100vh - 90px);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .hero-left .img-frame {
+        flex: 1 1 0;
+        background-size: cover;
+        background-position: center;
+        transition: flex 0.45s cubic-bezier(.22,1,.36,1);
+    }
+
+    .hero-left .img-frame:hover {
+        flex: 1.7 1 0;
+    }
+
+    /* RIGHT: scrollable content column */
+    .home-right-column {
+        flex: 1 1 0;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Hero headline inside the right column */
+    .hero-right {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 64px 52px 40px;
+        min-height: 38vh;
+    }
+
+    .hero-right h2 {
+        font-size: clamp(1.4rem, 2.4vw, 2.6rem);
+        margin-bottom: 0;
+    }
+
+    /* Left-align mission/expectations inside the right column */
+    .hero-split .mission,
+    .hero-split .expectations {
+        padding-left: 52px;
+        padding-right: 52px;
+        text-align: left;
+    }
+    </style>
+
     <div id="content-home">
 
-        <!-- Hero -->
-        <section class="hero">
-            <h2>Your <span class="furry-text">furry friend</span> with your <span class="green-text">green one</span></h2>
+        <!-- Hero split layout -->
+        <div class="hero-split">
 
-            <div class="image-gallery">
-                <div class="img-placeholder"
+            <!-- LEFT: three stacked image frames filling a 4:3 area -->
+            <div class="hero-left">
+                <div class="img-frame"
                      style="background-image: url('https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0048_1_dnknin.jpg');"></div>
-                <div class="img-placeholder"
+                <div class="img-frame"
                      style="background-image: url('https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0044_1_jrao4p.jpg');"></div>
-                <div class="img-placeholder"
+                <div class="img-frame"
                      style="background-image: url('https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0056_r2qeh1.jpg');"></div>
             </div>
-        </section>
+
+            <!-- RIGHT: headline + mission stacked vertically -->
+            <div class="home-right-column">
+                <section class="hero hero-right">
+                    <h2>Your <span class="furry-text">furry friend</span> with your <span class="green-text">green one</span></h2>
+                </section>
 
         <!-- Mission -->
         <section class="mission reveal">
@@ -158,7 +227,11 @@
 
             </div>
         </section>
-    </div>
+
+            </div><!-- /.home-right-column -->
+        </div><!-- /.hero-split -->
+
+    </div><!-- /#content-home -->
 
     <!-- ============================================================
          CONTACT PAGE (Live Chat)
