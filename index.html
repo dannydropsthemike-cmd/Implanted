@@ -44,13 +44,13 @@
     <header>
         <a class="logo" aria-label="implanted Home" id="logoLink" href="javascript:void(0)" onclick="showPage('home')">
             <div id="logoContainer">
-                <img class="logo-frame active" src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778346682/2_r85n5z.png" alt="implanted logo" />
-                <img class="logo-frame"        src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778346682/3_go7izg.png" alt="" />
-                <img class="logo-frame"        src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778346682/4_mn1ec3.png" alt="" />
-                <img class="logo-frame"        src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778346682/5_gssavq.png" alt="" />
-                <img class="logo-frame"        src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778346683/6_uotqrd.png" alt="" />
-                <img class="logo-frame"        src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778346683/7_otspck.png" alt="" />
-                <img class="logo-frame"        src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778346683/8_k2afnw.png" alt="" />
+                <img class="logo-frame active" src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778347550/2_coyaic.png" alt="implanted logo" />
+                <img class="logo-frame"        src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778347550/3_gdafje.png" alt="" />
+                <img class="logo-frame"        src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778347550/4_cb2seg.png" alt="" />
+                <img class="logo-frame"        src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778347550/5_opm301.png" alt="" />
+                <img class="logo-frame"        src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778347549/6_aorsab.png" alt="" />
+                <img class="logo-frame"        src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778347549/7_xacohg.png" alt="" />
+                <img class="logo-frame"        src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778347549/8_jvsukc.png" alt="" />
             </div>
         </a>
 
@@ -63,13 +63,13 @@
         #logoContainer {
             position: relative;
             display: block;
-            height: 160px;
-            width: 280px; /* will be corrected by JS once image loads */
+            height: 100px;
+            width: 175px; /* will be corrected by JS once image loads */
         }
         #logoContainer .logo-frame {
             position: absolute;
             top: 0; left: 0;
-            height: 160px;
+            height: 100px;
             width: auto;
             opacity: 0;
             pointer-events: none;
@@ -87,7 +87,7 @@
             var imgs = Array.prototype.slice.call(container.querySelectorAll('.logo-frame'));
             var current = 0;
             var animTimer = null;
-            var STEP_MS = 35; /* fast, fluid */
+            var STEP_MS = 50; /* fast, fluid */
 
             function show(idx) {
                 imgs[current].classList.remove('active');
@@ -121,7 +121,7 @@
             /* Size container to image's natural aspect ratio */
             function sizeContainer() {
                 if (!imgs[0].naturalWidth) return;
-                var w = Math.round(160 * imgs[0].naturalWidth / imgs[0].naturalHeight);
+                var w = Math.round(100 * imgs[0].naturalWidth / imgs[0].naturalHeight);
                 container.style.width = w + 'px';
                 imgs.forEach(function(img){ img.style.width = w + 'px'; });
             }
