@@ -42,64 +42,59 @@
          HEADER
     ============================================================ -->
     <header>
-        <a class="logo" aria-label="implanted Home" id="logoLink" href="javascript:void(0)">
-            <div id="logoContainer" style="width:90px;height:90px;overflow:hidden;position:relative;cursor:pointer;">
-                <img id="logoImg" src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778341981/Implanted_Logo_-_2_qygt20.png"
-                     alt="implanted logo"
-                     style="width:180px;height:180px;object-fit:cover;object-position:center center;transform:translate(-50%,-50%);position:absolute;top:50%;left:50%;transition:opacity 0.12s ease;" />
+        <a class="logo" aria-label="implanted Home" id="logoLink" href="javascript:void(0)" onclick="showPage('home')">
+            <div id="logoContainer">
+                <img class="logo-frame" src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778342986/Implanted_Logo_-_2_qygt20_f3jxas.png" alt="implanted logo" />
+                <img class="logo-frame" src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778342986/3_uxht03_qtskmv.png"                   alt="" />
+                <img class="logo-frame" src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778342986/4_kf7tmh_l6cxb0.png"                   alt="" />
+                <img class="logo-frame" src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778342986/5_fbfara_pjautr.png"                    alt="" />
             </div>
         </a>
 
         <style>
-        #logoContainer { user-select:none; }
-        #logoContainer img { image-rendering: auto; }
+        #logoContainer {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            height: 72px; /* fits header comfortably */
+        }
+        #logoContainer .logo-frame {
+            position: absolute;
+            top: 0; left: 0;
+            height: 72px;
+            width: auto;
+            opacity: 0;
+            transition: opacity 0.13s ease;
+            pointer-events: none;
+            display: block;
+        }
+        /* first frame visible by default; JS will take over after load */
+        #logoContainer .logo-frame:first-child { opacity: 1; }
         </style>
 
         <script>
         (function(){
-            var frames = [
-                'https://res.cloudinary.com/daa6tizgt/image/upload/v1778341981/Implanted_Logo_-_2_qygt20.png',
-                'https://res.cloudinary.com/daa6tizgt/image/upload/v1778342181/3_uxht03.png',
-                'https://res.cloudinary.com/daa6tizgt/image/upload/v1778342181/4_kf7tmh.png',
-                'https://res.cloudinary.com/daa6tizgt/image/upload/v1778342181/5_fbfara.png'
-            ];
-
-            // Preload all frames
-            frames.forEach(function(src){ var i = new Image(); i.src = src; });
-
-            var img = document.getElementById('logoImg');
             var container = document.getElementById('logoContainer');
+            var imgs = container.querySelectorAll('.logo-frame');
             var current = 0;
             var animTimer = null;
-            var STEP_MS = 110; // ms per frame — fluid but readable
+            var STEP_MS = 120;
 
-            function goTo(idx, cb) {
-                if (idx === current) { if(cb) cb(); return; }
-                img.style.opacity = '0';
-                setTimeout(function(){
-                    img.src = frames[idx];
-                    current = idx;
-                    img.style.opacity = '1';
-                    if(cb) cb();
-                }, 80);
+            function show(idx) {
+                imgs.forEach(function(img, i){ img.style.opacity = i === idx ? '1' : '0'; });
+                current = idx;
             }
 
-            function stepForward() {
-                if (current >= frames.length - 1) return;
-                goTo(current + 1, function(){
-                    if (current < frames.length - 1) {
-                        animTimer = setTimeout(stepForward, STEP_MS);
-                    }
-                });
+            function stepForward(cb) {
+                if (current >= imgs.length - 1) { if(cb) cb(); return; }
+                show(current + 1);
+                animTimer = setTimeout(function(){ stepForward(cb); }, STEP_MS);
             }
 
-            function stepBackward() {
-                if (current <= 0) return;
-                goTo(current - 1, function(){
-                    if (current > 0) {
-                        animTimer = setTimeout(stepBackward, STEP_MS);
-                    }
-                });
+            function stepBackward(cb) {
+                if (current <= 0) { if(cb) cb(); return; }
+                show(current - 1);
+                animTimer = setTimeout(function(){ stepBackward(cb); }, STEP_MS);
             }
 
             function stopAnim() {
@@ -108,21 +103,25 @@
 
             container.addEventListener('mouseenter', function(){
                 stopAnim();
-                animTimer = setTimeout(stepForward, STEP_MS);
+                stepForward();
             });
 
             container.addEventListener('mouseleave', function(){
                 stopAnim();
-                animTimer = setTimeout(stepBackward, STEP_MS);
+                stepBackward();
             });
 
-            container.addEventListener('click', function(e){
-                e.preventDefault(); // prevent navigation, let onclick on <a> handle it separately
-                stopAnim();
-                animTimer = setTimeout(stepBackward, STEP_MS);
-                // Still navigate
-                showPage('home');
+            /* Set natural width once first image loads so container isn't zero-width */
+            imgs[0].addEventListener('load', function(){
+                var ratio = imgs[0].naturalWidth / imgs[0].naturalHeight;
+                container.style.width = (72 * ratio) + 'px';
+                imgs.forEach(function(img){ img.style.width = (72 * ratio) + 'px'; });
             });
+            if (imgs[0].complete && imgs[0].naturalWidth) {
+                var ratio = imgs[0].naturalWidth / imgs[0].naturalHeight;
+                container.style.width = (72 * ratio) + 'px';
+                imgs.forEach(function(img){ img.style.width = (72 * ratio) + 'px'; });
+            }
         })();
         </script>
 
