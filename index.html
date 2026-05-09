@@ -42,21 +42,89 @@
          HEADER
     ============================================================ -->
     <header>
-        <a onclick="showPage('home')" class="logo" aria-label="implanted Home">
-            <svg width="260" height="90" viewBox="0 0 260 90" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <path id="textCurve" d="M 20,65 Q 130,15 240,65" fill="transparent" />
-                </defs>
-                <text font-family="'Dancing Script', cursive" font-size="42" fill="#FFF8E1" font-weight="bold"
-                      style="filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.1));">
-                    <textPath href="#textCurve" startOffset="50%" text-anchor="middle">
-                        implanted
-                    </textPath>
-                </text>
-                <path d="M 50,70 Q 130,30 210,70" stroke="#A5D6A7" stroke-width="3" fill="transparent"
-                      stroke-linecap="round" class="underline-path"/>
-            </svg>
+        <a class="logo" aria-label="implanted Home" id="logoLink" href="javascript:void(0)">
+            <div id="logoContainer" style="width:90px;height:90px;overflow:hidden;position:relative;cursor:pointer;">
+                <img id="logoImg" src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778341981/Implanted_Logo_-_2_qygt20.png"
+                     alt="implanted logo"
+                     style="width:180px;height:180px;object-fit:cover;object-position:center center;transform:translate(-50%,-50%);position:absolute;top:50%;left:50%;transition:opacity 0.12s ease;" />
+            </div>
         </a>
+
+        <style>
+        #logoContainer { user-select:none; }
+        #logoContainer img { image-rendering: auto; }
+        </style>
+
+        <script>
+        (function(){
+            var frames = [
+                'https://res.cloudinary.com/daa6tizgt/image/upload/v1778341981/Implanted_Logo_-_2_qygt20.png',
+                'https://res.cloudinary.com/daa6tizgt/image/upload/v1778342181/3_uxht03.png',
+                'https://res.cloudinary.com/daa6tizgt/image/upload/v1778342181/4_kf7tmh.png',
+                'https://res.cloudinary.com/daa6tizgt/image/upload/v1778342181/5_fbfara.png'
+            ];
+
+            // Preload all frames
+            frames.forEach(function(src){ var i = new Image(); i.src = src; });
+
+            var img = document.getElementById('logoImg');
+            var container = document.getElementById('logoContainer');
+            var current = 0;
+            var animTimer = null;
+            var STEP_MS = 110; // ms per frame — fluid but readable
+
+            function goTo(idx, cb) {
+                if (idx === current) { if(cb) cb(); return; }
+                img.style.opacity = '0';
+                setTimeout(function(){
+                    img.src = frames[idx];
+                    current = idx;
+                    img.style.opacity = '1';
+                    if(cb) cb();
+                }, 80);
+            }
+
+            function stepForward() {
+                if (current >= frames.length - 1) return;
+                goTo(current + 1, function(){
+                    if (current < frames.length - 1) {
+                        animTimer = setTimeout(stepForward, STEP_MS);
+                    }
+                });
+            }
+
+            function stepBackward() {
+                if (current <= 0) return;
+                goTo(current - 1, function(){
+                    if (current > 0) {
+                        animTimer = setTimeout(stepBackward, STEP_MS);
+                    }
+                });
+            }
+
+            function stopAnim() {
+                if (animTimer) { clearTimeout(animTimer); animTimer = null; }
+            }
+
+            container.addEventListener('mouseenter', function(){
+                stopAnim();
+                animTimer = setTimeout(stepForward, STEP_MS);
+            });
+
+            container.addEventListener('mouseleave', function(){
+                stopAnim();
+                animTimer = setTimeout(stepBackward, STEP_MS);
+            });
+
+            container.addEventListener('click', function(e){
+                e.preventDefault(); // prevent navigation, let onclick on <a> handle it separately
+                stopAnim();
+                animTimer = setTimeout(stepBackward, STEP_MS);
+                // Still navigate
+                showPage('home');
+            });
+        })();
+        </script>
 
         <nav>
             <a onclick="showPage('home')">Home</a>
