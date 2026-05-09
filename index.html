@@ -69,63 +69,109 @@
          HOME PAGE
     ============================================================ -->
     <style>
-    /* ── Split-layout hero ── */
-    .hero-split {
+    /* ── Home: fixed 4:3 left panel + scrollable right ── */
+
+    /* The fixed image panel sits flush to the left, below the header.
+       Width is derived from height so the ratio is always exactly 4:3. */
+    #home-slideshow-panel {
+        position: fixed;
+        top: 90px;          /* header height */
+        left: 0;
+        height: calc(100vh - 90px);
+        width: calc((100vh - 90px) * 4 / 3);
+        overflow: hidden;
+        z-index: 10;
+        cursor: pointer;
+        background: #1a1a1a;
+    }
+
+    /* Individual slides — all stacked, opacity crossfade */
+    .hs-slide {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        opacity: 0;
+        transition: opacity 0.9s ease;
+        pointer-events: none;
+    }
+    .hs-slide.hs-active {
+        opacity: 1;
+    }
+
+    /* Dot row at the bottom of the panel */
+    #home-slideshow-dots {
+        position: absolute;
+        bottom: 18px;
+        left: 0;
+        right: 0;
         display: flex;
-        align-items: flex-start;
+        justify-content: center;
+        gap: 10px;
+        z-index: 2;
+        pointer-events: none; /* dots themselves handle events */
+    }
+    .hs-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.45);
+        border: 1.5px solid rgba(255,255,255,0.7);
+        cursor: pointer;
+        pointer-events: all;
+        transition: background 0.3s, transform 0.3s;
+        flex-shrink: 0;
+    }
+    .hs-dot.hs-dot-active {
+        background: #fff;
+        transform: scale(1.25);
+    }
+
+    /* Paused indicator — subtle pill that fades in/out */
+    #home-slideshow-paused {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        background: rgba(0,0,0,0.45);
+        color: #fff;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 0.68rem;
+        letter-spacing: 1.2px;
+        padding: 4px 10px;
+        border-radius: 20px;
+        opacity: 0;
+        transition: opacity 0.4s;
+        pointer-events: none;
+        z-index: 3;
+    }
+    #home-slideshow-paused.hs-paused-visible {
+        opacity: 1;
+    }
+
+    /* Right content column — offset by the panel width */
+    #home-right-col {
+        margin-left: calc((100vh - 90px) * 4 / 3);
+        display: flex;
+        flex-direction: column;
         min-height: calc(100vh - 90px);
     }
 
-    /* LEFT: sticky 4:3 image panel */
-    .hero-left {
-        position: sticky;
-        top: 90px;
-        flex: 0 0 auto;
-        width: calc((100vh - 90px) * 4 / 3);
-        max-width: 52vw;
-        height: calc(100vh - 90px);
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-    }
-
-    .hero-left .img-frame {
-        flex: 1 1 0;
-        background-size: cover;
-        background-position: center;
-        transition: flex 0.45s cubic-bezier(.22,1,.36,1);
-    }
-
-    .hero-left .img-frame:hover {
-        flex: 1.7 1 0;
-    }
-
-    /* RIGHT: scrollable content column */
-    .home-right-column {
-        flex: 1 1 0;
-        min-width: 0;
-        display: flex;
-        flex-direction: column;
-    }
-
-    /* Hero headline inside the right column */
-    .hero-right {
+    /* Hero headline block */
+    .hero-headline-block {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        align-items: flex-start;
-        padding: 64px 52px 40px;
-        min-height: 38vh;
+        padding: 64px 52px 48px;
+        min-height: 40vh;
+    }
+    .hero-headline-block h2 {
+        font-size: clamp(1.5rem, 2.2vw, 2.5rem);
+        margin: 0;
     }
 
-    .hero-right h2 {
-        font-size: clamp(1.4rem, 2.4vw, 2.6rem);
-        margin-bottom: 0;
-    }
-
-    /* Left-align mission/expectations inside the right column */
-    .hero-split .mission,
-    .hero-split .expectations {
+    /* Section overrides — left-align when inside right col */
+    #home-right-col .mission,
+    #home-right-col .expectations {
         padding-left: 52px;
         padding-right: 52px;
         text-align: left;
@@ -134,104 +180,178 @@
 
     <div id="content-home">
 
-        <!-- Hero split layout -->
-        <div class="hero-split">
+        <!-- Fixed 4:3 slideshow panel -->
+        <div id="home-slideshow-panel">
+            <div class="hs-slide hs-active"
+                 style="background-image: url('https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0048_1_dnknin.jpg');"></div>
+            <div class="hs-slide"
+                 style="background-image: url('https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0044_1_jrao4p.jpg');"></div>
+            <div class="hs-slide"
+                 style="background-image: url('https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0056_r2qeh1.jpg');"></div>
 
-            <!-- LEFT: three stacked image frames filling a 4:3 area -->
-            <div class="hero-left">
-                <div class="img-frame"
-                     style="background-image: url('https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0048_1_dnknin.jpg');"></div>
-                <div class="img-frame"
-                     style="background-image: url('https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0044_1_jrao4p.jpg');"></div>
-                <div class="img-frame"
-                     style="background-image: url('https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0056_r2qeh1.jpg');"></div>
+            <div id="home-slideshow-dots">
+                <div class="hs-dot hs-dot-active" data-idx="0"></div>
+                <div class="hs-dot" data-idx="1"></div>
+                <div class="hs-dot" data-idx="2"></div>
             </div>
 
-            <!-- RIGHT: headline + mission stacked vertically -->
-            <div class="home-right-column">
-                <section class="hero hero-right">
-                    <h2>Your <span class="furry-text">furry friend</span> with your <span class="green-text">green one</span></h2>
-                </section>
+            <div id="home-slideshow-paused">PAUSED</div>
+        </div>
 
-        <!-- Mission -->
-        <section class="mission reveal">
-            <h2>The Objective</h2>
-            <p>
-                <svg class="inline-logo-svg" width="200" height="80" viewBox="0 0 250 80"
-                     xmlns="http://www.w3.org/2000/svg" role="img" aria-label="implanted">
-                    <defs>
-                        <path id="inlineTextCurve" d="M 15,60 Q 125,10 235,60" fill="transparent" />
-                    </defs>
-                    <text font-family="'Dancing Script', cursive" font-size="38" fill="#5D4037" font-weight="bold">
-                        <textPath href="#inlineTextCurve" startOffset="50%" text-anchor="middle">
-                            implanted
-                        </textPath>
-                    </text>
-                    <path d="M 45,65 Q 125,25 205,65" stroke="#7CB342" stroke-width="4" fill="transparent"
-                          stroke-linecap="round" class="underline-path"/>
-                </svg>serves those who love their pets, who want them to be
-                <span class="highlight-keyword">forever planted</span> in their hearts, to be
-                <span class="highlight-keyword">forever remembered</span>. Doing this is no easy task, but we try.
-                We offer what we think to be one of the best ways to
-                <span class="highlight-keyword">engrave</span> your pet into your home,
-                <span class="highlight-keyword">custom, human-made</span> products with your furry friend right on
-                the front. Whether you just got that perfect photo of them, or they have passed on and want a way to
-                remember them, we're here for you.
-            </p>
-        </section>
+        <!-- Scrollable right column -->
+        <div id="home-right-col">
 
-        <!-- The Process -->
-        <section class="expectations reveal">
-            <h2>Product Creation</h2>
-            <div class="expectations-grid">
-
-                <!-- Ship -->
-                <div class="expectation-item">
-                    <div class="icon-circle">
-                        <svg class="icon-svg" viewBox="0 0 24 24">
-                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                        </svg>
-                    </div>
-                    <h3>Shipped in 1-7 Days</h3>
-                    <p>Your product will be made and shipped within 1-7 days, unless told otherwise.</p>
-                </div>
-
-                <!-- Human-made -->
-                <div class="expectation-item">
-                    <div class="icon-circle">
-                        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-                            <!-- Border -->
-                            <rect x="2.5" y="2.5" width="19" height="19" rx="2.5" ry="2.5"></rect>
-                            <!-- Rounded conjoined mountains -->
-                            <path d="M2.5,18 C4,18 5,16 6.5,13 C8,10 9,9 10,9 C11,9 12,10.5 13,12 C13.8,13.2 14.5,14 15.5,14 C16.5,14 17.5,12.5 18.5,11 C19.5,9.5 20.5,8.5 21.5,8.5"></path>
-                            <!-- Sun -->
-                            <circle cx="7" cy="7" r="1.5" fill="currentColor" stroke="none"></circle>
-                        </svg>
-                    </div>
-                    <h3>Your Choice</h3>
-                    <p>Your plant stake will be made with whatever image you upload, not our choice. You have partial creative dictation over the creation of your product.</p>
-                </div>
-
-                <!-- Lifelike -->
-                <div class="expectation-item">
-                    <div class="icon-circle">
-                        <svg class="icon-svg" viewBox="0 0 24 24">
-                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                        </svg>
-                    </div>
-                    <h3>Lifelike</h3>
-                    <p>Your recreated pet will be based off of the image YOU send, not a description, true lifelike accuracy, while keeping the aesthetic.</p>
-                </div>
-
+            <div class="hero-headline-block">
+                <h2>Your <span class="furry-text">furry friend</span> with your <span class="green-text">green one</span></h2>
             </div>
-        </section>
 
-            </div><!-- /.home-right-column -->
-        </div><!-- /.hero-split -->
+            <!-- Mission -->
+            <section class="mission reveal">
+                <h2>The Objective</h2>
+                <p>
+                    <svg class="inline-logo-svg" width="200" height="80" viewBox="0 0 250 80"
+                         xmlns="http://www.w3.org/2000/svg" role="img" aria-label="implanted">
+                        <defs>
+                            <path id="inlineTextCurve" d="M 15,60 Q 125,10 235,60" fill="transparent" />
+                        </defs>
+                        <text font-family="'Dancing Script', cursive" font-size="38" fill="#5D4037" font-weight="bold">
+                            <textPath href="#inlineTextCurve" startOffset="50%" text-anchor="middle">
+                                implanted
+                            </textPath>
+                        </text>
+                        <path d="M 45,65 Q 125,25 205,65" stroke="#7CB342" stroke-width="4" fill="transparent"
+                              stroke-linecap="round" class="underline-path"/>
+                    </svg>serves those who love their pets, who want them to be
+                    <span class="highlight-keyword">forever planted</span> in their hearts, to be
+                    <span class="highlight-keyword">forever remembered</span>. Doing this is no easy task, but we try.
+                    We offer what we think to be one of the best ways to
+                    <span class="highlight-keyword">engrave</span> your pet into your home,
+                    <span class="highlight-keyword">custom, human-made</span> products with your furry friend right on
+                    the front. Whether you just got that perfect photo of them, or they have passed on and want a way to
+                    remember them, we're here for you.
+                </p>
+            </section>
+
+            <!-- The Process -->
+            <section class="expectations reveal">
+                <h2>Product Creation</h2>
+                <div class="expectations-grid">
+
+                    <!-- Ship -->
+                    <div class="expectation-item">
+                        <div class="icon-circle">
+                            <svg class="icon-svg" viewBox="0 0 24 24">
+                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                            </svg>
+                        </div>
+                        <h3>Shipped in 1-7 Days</h3>
+                        <p>Your product will be made and shipped within 1-7 days, unless told otherwise.</p>
+                    </div>
+
+                    <!-- Human-made -->
+                    <div class="expectation-item">
+                        <div class="icon-circle">
+                            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2.5" y="2.5" width="19" height="19" rx="2.5" ry="2.5"></rect>
+                                <path d="M2.5,18 C4,18 5,16 6.5,13 C8,10 9,9 10,9 C11,9 12,10.5 13,12 C13.8,13.2 14.5,14 15.5,14 C16.5,14 17.5,12.5 18.5,11 C19.5,9.5 20.5,8.5 21.5,8.5"></path>
+                                <circle cx="7" cy="7" r="1.5" fill="currentColor" stroke="none"></circle>
+                            </svg>
+                        </div>
+                        <h3>Your Choice</h3>
+                        <p>Your plant stake will be made with whatever image you upload, not our choice. You have partial creative dictation over the creation of your product.</p>
+                    </div>
+
+                    <!-- Lifelike -->
+                    <div class="expectation-item">
+                        <div class="icon-circle">
+                            <svg class="icon-svg" viewBox="0 0 24 24">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </div>
+                        <h3>Lifelike</h3>
+                        <p>Your recreated pet will be based off of the image YOU send, not a description, true lifelike accuracy, while keeping the aesthetic.</p>
+                    </div>
+
+                </div>
+            </section>
+
+        </div><!-- /#home-right-col -->
 
     </div><!-- /#content-home -->
+
+    <script>
+    /* ── Home slideshow ──────────────────────────────────────────── */
+    (function () {
+        var INTERVAL   = 4000;   // ms between auto-advances
+        var IDLE_RESET = 30000;  // ms of no interaction before autopilot resumes
+
+        var slides  = document.querySelectorAll('#home-slideshow-panel .hs-slide');
+        var dots    = document.querySelectorAll('#home-slideshow-panel .hs-dot');
+        var pauseEl = document.getElementById('home-slideshow-paused');
+        var panel   = document.getElementById('home-slideshow-panel');
+
+        var current   = 0;
+        var paused    = false;
+        var autoTimer = null;
+        var idleTimer = null;
+
+        function goTo(idx) {
+            slides[current].classList.remove('hs-active');
+            dots[current].classList.remove('hs-dot-active');
+            current = (idx + slides.length) % slides.length;
+            slides[current].classList.add('hs-active');
+            dots[current].classList.add('hs-dot-active');
+        }
+
+        function startAuto() {
+            if (autoTimer) clearInterval(autoTimer);
+            autoTimer = setInterval(function () {
+                if (!paused) goTo(current + 1);
+            }, INTERVAL);
+        }
+
+        function pause() {
+            paused = true;
+            pauseEl.classList.add('hs-paused-visible');
+            resetIdleTimer();
+        }
+
+        function resume() {
+            paused = false;
+            pauseEl.classList.remove('hs-paused-visible');
+        }
+
+        function resetIdleTimer() {
+            if (idleTimer) clearTimeout(idleTimer);
+            idleTimer = setTimeout(resume, IDLE_RESET);
+        }
+
+        /* Click on the panel (but NOT on a dot) toggles pause */
+        panel.addEventListener('click', function (e) {
+            if (e.target.classList.contains('hs-dot')) return;
+            if (paused) {
+                resume();
+                if (idleTimer) clearTimeout(idleTimer);
+            } else {
+                pause();
+            }
+        });
+
+        /* Dot clicks: jump to slide + pause + reset idle */
+        dots.forEach(function (dot) {
+            dot.addEventListener('click', function (e) {
+                e.stopPropagation();
+                var idx = parseInt(dot.getAttribute('data-idx'), 10);
+                goTo(idx);
+                pause();
+            });
+        });
+
+        startAuto();
+    })();
+    </script>
 
     <!-- ============================================================
          CONTACT PAGE (Live Chat)
