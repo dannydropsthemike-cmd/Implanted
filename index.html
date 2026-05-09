@@ -60,13 +60,13 @@
         #logoContainer {
             position: relative;
             display: block;
-            height: 68px;
-            width: 120px; /* will be corrected by JS once image loads */
+            height: 100px;
+            width: 175px; /* will be corrected by JS once image loads */
         }
         #logoContainer .logo-frame {
             position: absolute;
             top: 0; left: 0;
-            height: 68px;
+            height: 100px;
             width: auto;
             opacity: 0;
             pointer-events: none;
@@ -84,7 +84,7 @@
             var imgs = Array.prototype.slice.call(container.querySelectorAll('.logo-frame'));
             var current = 0;
             var animTimer = null;
-            var STEP_MS = 80; /* fast, fluid */
+            var STEP_MS = 50; /* fast, fluid */
 
             function show(idx) {
                 imgs[current].classList.remove('active');
@@ -118,7 +118,7 @@
             /* Size container to image's natural aspect ratio */
             function sizeContainer() {
                 if (!imgs[0].naturalWidth) return;
-                var w = Math.round(68 * imgs[0].naturalWidth / imgs[0].naturalHeight);
+                var w = Math.round(100 * imgs[0].naturalWidth / imgs[0].naturalHeight);
                 container.style.width = w + 'px';
                 imgs.forEach(function(img){ img.style.width = w + 'px'; });
             }
