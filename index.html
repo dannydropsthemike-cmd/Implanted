@@ -44,84 +44,86 @@
     <header>
         <a class="logo" aria-label="implanted Home" id="logoLink" href="javascript:void(0)" onclick="showPage('home')">
             <div id="logoContainer">
-                <img class="logo-frame" src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778342986/Implanted_Logo_-_2_qygt20_f3jxas.png" alt="implanted logo" />
-                <img class="logo-frame" src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778342986/3_uxht03_qtskmv.png"                   alt="" />
-                <img class="logo-frame" src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778342986/4_kf7tmh_l6cxb0.png"                   alt="" />
-                <img class="logo-frame" src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778342986/5_fbfara_pjautr.png"                    alt="" />
+                <img class="logo-frame active" src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778342986/Implanted_Logo_-_2_qygt20_f3jxas.png" alt="implanted logo" />
+                <img class="logo-frame"        src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778342986/3_uxht03_qtskmv.png"                   alt="" />
+                <img class="logo-frame"        src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778342986/4_kf7tmh_l6cxb0.png"                   alt="" />
+                <img class="logo-frame"        src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778342986/5_fbfara_pjautr.png"                    alt="" />
             </div>
         </a>
 
         <style>
+        #logoLink {
+            display: flex;
+            align-items: center;
+            line-height: 0;
+        }
         #logoContainer {
             position: relative;
-            display: inline-block;
-            cursor: pointer;
-            height: 72px; /* fits header comfortably */
+            display: block;
+            height: 68px;
+            width: 120px; /* will be corrected by JS once image loads */
         }
         #logoContainer .logo-frame {
             position: absolute;
             top: 0; left: 0;
-            height: 72px;
+            height: 68px;
             width: auto;
             opacity: 0;
-            transition: opacity 0.13s ease;
             pointer-events: none;
             display: block;
+            /* NO transition here — instant swap, no flicker */
         }
-        /* first frame visible by default; JS will take over after load */
-        #logoContainer .logo-frame:first-child { opacity: 1; }
+        #logoContainer .logo-frame.active {
+            opacity: 1;
+        }
         </style>
 
         <script>
         (function(){
             var container = document.getElementById('logoContainer');
-            var imgs = container.querySelectorAll('.logo-frame');
+            var imgs = Array.prototype.slice.call(container.querySelectorAll('.logo-frame'));
             var current = 0;
             var animTimer = null;
-            var STEP_MS = 120;
+            var STEP_MS = 80; /* fast, fluid */
 
             function show(idx) {
-                imgs.forEach(function(img, i){ img.style.opacity = i === idx ? '1' : '0'; });
+                imgs[current].classList.remove('active');
+                imgs[idx].classList.add('active');
                 current = idx;
             }
 
-            function stepForward(cb) {
-                if (current >= imgs.length - 1) { if(cb) cb(); return; }
+            function stepForward() {
+                if (current >= imgs.length - 1) return;
                 show(current + 1);
-                animTimer = setTimeout(function(){ stepForward(cb); }, STEP_MS);
+                if (current < imgs.length - 1) {
+                    animTimer = setTimeout(stepForward, STEP_MS);
+                }
             }
 
-            function stepBackward(cb) {
-                if (current <= 0) { if(cb) cb(); return; }
+            function stepBackward() {
+                if (current <= 0) return;
                 show(current - 1);
-                animTimer = setTimeout(function(){ stepBackward(cb); }, STEP_MS);
+                if (current > 0) {
+                    animTimer = setTimeout(stepBackward, STEP_MS);
+                }
             }
 
             function stopAnim() {
                 if (animTimer) { clearTimeout(animTimer); animTimer = null; }
             }
 
-            container.addEventListener('mouseenter', function(){
-                stopAnim();
-                stepForward();
-            });
+            container.addEventListener('mouseenter', function(){ stopAnim(); stepForward(); });
+            container.addEventListener('mouseleave', function(){ stopAnim(); stepBackward(); });
 
-            container.addEventListener('mouseleave', function(){
-                stopAnim();
-                stepBackward();
-            });
-
-            /* Set natural width once first image loads so container isn't zero-width */
-            imgs[0].addEventListener('load', function(){
-                var ratio = imgs[0].naturalWidth / imgs[0].naturalHeight;
-                container.style.width = (72 * ratio) + 'px';
-                imgs.forEach(function(img){ img.style.width = (72 * ratio) + 'px'; });
-            });
-            if (imgs[0].complete && imgs[0].naturalWidth) {
-                var ratio = imgs[0].naturalWidth / imgs[0].naturalHeight;
-                container.style.width = (72 * ratio) + 'px';
-                imgs.forEach(function(img){ img.style.width = (72 * ratio) + 'px'; });
+            /* Size container to image's natural aspect ratio */
+            function sizeContainer() {
+                if (!imgs[0].naturalWidth) return;
+                var w = Math.round(68 * imgs[0].naturalWidth / imgs[0].naturalHeight);
+                container.style.width = w + 'px';
+                imgs.forEach(function(img){ img.style.width = w + 'px'; });
             }
+            imgs[0].addEventListener('load', sizeContainer);
+            sizeContainer(); /* if already cached */
         })();
         </script>
 
