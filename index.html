@@ -13,13 +13,7 @@
         })();
     </script>
     <title>implanted | Custom 3D Pet Decor</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Montserrat:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Saira+Condensed:wght@300;400;500&display=swap" rel="stylesheet">
-    <!-- Calps font via @font-face from a CDN alternative — use Capriola as close match, then override with Calps if available -->
-    <link href="https://fonts.googleapis.com/css2?family=Capriola&display=swap" rel="stylesheet">
-    <style>
-      /* Calps is not on Google Fonts — use a self-hosted approach or fallback */
-      /* We'll embed the Calps-like styling via a custom approach */
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Montserrat:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <style>
     /* ── Silky animation keyframes ── */
@@ -45,62 +39,9 @@
 <body>
 
     <!-- ============================================================
-         NEW HEADER — matches screenshot design
+         HEADER
     ============================================================ -->
-    <style>
-    header {
-        background: transparent !important;
-        box-shadow: none !important;
-        padding: 18px 24px 0 24px !important;
-        display: flex !important;
-        align-items: flex-start !important;
-        justify-content: flex-start !important;
-        position: relative;
-        z-index: 100;
-    }
-    .new-nav { display: flex; gap: 10px; align-items: center; }
-    .new-nav a {
-        font-family: 'Capriola', 'Nunito', sans-serif;
-        font-size: 1.05rem;
-        font-weight: 400;
-        color: #5a4a42;
-        text-decoration: none;
-        background: #e8e0d8;
-        border-radius: 10px;
-        padding: 9px 22px;
-        letter-spacing: 0.01em;
-        transition: background 0.18s, color 0.18s;
-        cursor: pointer;
-        display: block;
-        box-shadow: 3px 4px 0px rgba(120,90,70,0.18);
-    }
-    .new-nav a:hover { background: #d9cfc5; color: #3b2e27; }
-    footer {
-        background: #8a6e60 !important;
-        color: #f5ede7 !important;
-        padding: 18px 28px !important;
-        text-align: left !important;
-        font-family: 'Saira Condensed', sans-serif !important;
-        font-size: 0.85rem !important;
-        font-weight: 400 !important;
-        letter-spacing: 0.02em !important;
-        line-height: 1.7 !important;
-        margin-top: 0 !important;
-    }
-    footer p { margin: 0 0 2px 0 !important; font-family: 'Saira Condensed', sans-serif !important; font-size: 0.85rem !important; color: #f5ede7 !important; }
-    footer a { color: #f5ede7 !important; font-family: 'Saira Condensed', sans-serif !important; font-size: 0.85rem !important; text-decoration: none !important; cursor: pointer; }
-    footer a:hover { text-decoration: underline !important; }
-    footer div { margin-top: 0 !important; display: flex; align-items: center; gap: 6px; }
-    </style>
     <header>
-        <nav class="new-nav">
-            <a onclick="showPage('home')">home</a>
-            <a onclick="showPage('shop')">the garden</a>
-            <a onclick="showPage('contact')">contact</a>
-        </nav>
-    </header>
-    <!-- OLD HEADER REMOVED, keeping script for other pages -->
-    <div style="display:none" id="logoLink_placeholder">
         <a class="logo" aria-label="implanted Home" id="logoLink" href="javascript:void(0)" onclick="showPage('home')">
             <div id="logoContainer">
                 <img class="logo-frame active" src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778347550/2_coyaic.png" alt="implanted logo" />
@@ -189,151 +130,30 @@
         })();
         </script>
 
-    </div><!-- end logoLink_placeholder -->
+        <nav>
+            <a onclick="showPage('home')">Home</a>
+            <a onclick="showPage('shop')">THE GARDEN</a>
+            <a style="opacity:0.4;cursor:default;pointer-events:none;">Contact <span style="font-size:0.65em;font-style:italic;letter-spacing:0.5px;">Coming soon!</span></a>
+        </nav>
+    </header>
 
     <!-- ============================================================
-         HOME PAGE — redesigned to match screenshot
+         HOME PAGE
     ============================================================ -->
-    <style>
-    /* ── Home Page Layout ── */
-    #content-home {
-        min-height: calc(100vh - 60px);
-        display: flex;
-        flex-direction: column;
-    }
-
-    .home-main {
-        display: flex;
-        flex: 1;
-        padding: 30px 5% 60px 5%;
-        gap: 0;
-        align-items: flex-start;
-        position: relative;
-    }
-
-    /* ── Left text column ── */
-    .home-left {
-        flex: 0 0 42%;
-        max-width: 520px;
-        padding-top: 40px;
-        padding-right: 20px;
-    }
-
-    .home-quote-box {
-        display: inline-block;
-        background: #ede6de;
-        border-radius: 16px;
-        padding: 14px 28px;
-        margin-bottom: 28px;
-    }
-
-    .home-quote-box p {
-        font-family: 'Capriola', 'Nunito', sans-serif;
-        font-size: 1.55rem;
-        font-weight: 400;
-        color: #6b4e3d;
-        margin: 0;
-        line-height: 1.2;
-        font-style: italic;
-    }
-
-    .home-desc {
-        font-family: 'Capriola', 'Nunito', sans-serif;
-        font-size: 1.18rem;
-        color: #7a5a4a;
-        line-height: 1.75;
-        text-align: center;
-        max-width: 400px;
-        margin: 0 auto;
-    }
-
-    .home-desc strong {
-        font-weight: 700;
-        color: #5a3e32;
-    }
-
-    /* ── Right image collage ── */
-    .home-right {
-        flex: 1;
-        position: relative;
-        height: 600px;
-        min-width: 0;
-    }
-
-    .collage-photo {
-        position: absolute;
-        border: 10px solid #fff;
-        box-shadow: 4px 6px 22px rgba(100,70,55,0.18);
-        object-fit: cover;
-        background-size: cover;
-        background-position: center;
-        border-radius: 2px;
-    }
-
-    /* Top-left: large, dog with plant — slight left tilt */
-    .collage-photo.p1 {
-        width: 46%;
-        height: 58%;
-        top: 0;
-        left: 3%;
-        transform: rotate(-4.5deg);
-    }
-
-    /* Top-right: hand holding stake — slight right tilt */
-    .collage-photo.p2 {
-        width: 32%;
-        height: 43%;
-        top: -10px;
-        right: 2%;
-        transform: rotate(2.5deg);
-    }
-
-    /* Bottom-left: hand holding small stake */
-    .collage-photo.p3 {
-        width: 30%;
-        height: 40%;
-        bottom: 0;
-        left: 14%;
-        transform: rotate(3.5deg);
-    }
-
-    /* Bottom-right: stake in pot */
-    .collage-photo.p4 {
-        width: 36%;
-        height: 48%;
-        bottom: 0;
-        right: 1%;
-        transform: rotate(-2deg);
-    }
-    </style>
-
     <div id="content-home">
-        <div class="home-main">
-            <!-- Left: text -->
-            <div class="home-left">
-                <div class="home-quote-box">
-                    <p>"The perfect memorial keepsake"</p>
-                </div>
-                <p class="home-desc">
-                    implanted makes custom made products for <strong>you</strong>. Each product is unique, one of a kind, and <strong>yours.</strong> We try our best to recreate your pet's likeness, so you can implant it with any plant you'd like.
-                </p>
-            </div>
 
-            <!-- Right: photo collage -->
-            <div class="home-right">
-                <!-- Top left — big dog with plant stake -->
-                <div class="collage-photo p1" style="background-image:url('https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0044_1_jrao4p.jpg');"></div>
-                <!-- Top right — hand holding stake outdoors -->
-                <div class="collage-photo p2" style="background-image:url('https://res.cloudinary.com/daa6tizgt/image/upload/v1776380717/IMG_0185_nzknkl.jpg');"></div>
-                <!-- Bottom left — hand holding small stake -->
-                <div class="collage-photo p3" style="background-image:url('https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0048_1_dnknin.jpg');"></div>
-                <!-- Bottom right — stake in terracotta pot -->
-                <div class="collage-photo p4" style="background-image:url('https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0056_r2qeh1.jpg');"></div>
-            </div>
-        </div>
-        <!-- keep old hero/mission as hidden so JS page switching still works -->
-        <section class="hero" style="display:none;">
+        <!-- Hero -->
+        <section class="hero">
             <h2>Your <span class="furry-text">furry friend</span> with your <span class="green-text">green one</span></h2>
+
+            <div class="image-gallery">
+                <div class="img-placeholder"
+                     style="background-image: url('https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0048_1_dnknin.jpg');"></div>
+                <div class="img-placeholder"
+                     style="background-image: url('https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0044_1_jrao4p.jpg');"></div>
+                <div class="img-placeholder"
+                     style="background-image: url('https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0056_r2qeh1.jpg');"></div>
+            </div>
         </section>
 
         <!-- Mission -->
@@ -1005,14 +825,15 @@
     </script>
 
     <!-- ============================================================
-         FOOTER — matches screenshot
+         FOOTER
     ============================================================ -->
     <footer>
         <p>Copyright implanted 2026</p>
-        <div>
-            <a onclick="showPage('terms')">Terms of Service</a>
-            <span class="footer-sep">|</span>
+
+        <div style="margin-top: 25px;">
             <a onclick="showPage('privacy')">Privacy Policy</a>
+            |
+            <a onclick="showPage('terms')">Terms of Service</a>
         </div>
     </footer>
 
