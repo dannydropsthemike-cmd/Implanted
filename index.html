@@ -13,7 +13,7 @@
         })();
     </script>
     <title>implanted | Custom 3D Pet Decor</title>
-    <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@300;400;500;600&family=Cormorant+Garamond:wght@300;400;500;600;700&family=Dancing+Script:wght@600;700&family=Montserrat:wght@300;400;500&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Montserrat:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <style>
     /* ── Silky animation keyframes ── */
@@ -63,13 +63,13 @@
         #logoContainer {
             position: relative;
             display: block;
-            height: 68px;
+            height: 100px;
             width: 175px; /* will be corrected by JS once image loads */
         }
         #logoContainer .logo-frame {
             position: absolute;
             top: 0; left: 0;
-            height: 68px;
+            height: 100px;
             width: auto;
             opacity: 0;
             pointer-events: none;
@@ -121,7 +121,7 @@
             /* Size container to image's natural aspect ratio */
             function sizeContainer() {
                 if (!imgs[0].naturalWidth) return;
-                var w = Math.round(68 * imgs[0].naturalWidth / imgs[0].naturalHeight);
+                var w = Math.round(100 * imgs[0].naturalWidth / imgs[0].naturalHeight);
                 container.style.width = w + 'px';
                 imgs.forEach(function(img){ img.style.width = w + 'px'; });
             }
@@ -148,11 +148,9 @@
 
             <div class="image-gallery">
                 <div class="img-placeholder"
-                     style="background-image: url('https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0044_1_jrao4p.jpg');"></div>
-                <div class="img-placeholder"
-                     style="background-image: url('https://res.cloudinary.com/daa6tizgt/image/upload/v1776380717/IMG_0185_nzknkl.jpg');"></div>
-                <div class="img-placeholder"
                      style="background-image: url('https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0048_1_dnknin.jpg');"></div>
+                <div class="img-placeholder"
+                     style="background-image: url('https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0044_1_jrao4p.jpg');"></div>
                 <div class="img-placeholder"
                      style="background-image: url('https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0056_r2qeh1.jpg');"></div>
             </div>
