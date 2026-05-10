@@ -13,7 +13,13 @@
         })();
     </script>
     <title>implanted | Custom 3D Pet Decor</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Montserrat:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Montserrat:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Saira+Condensed:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- Calps font via @font-face from a CDN alternative — use Capriola as close match, then override with Calps if available -->
+    <link href="https://fonts.googleapis.com/css2?family=Capriola&display=swap" rel="stylesheet">
+    <style>
+      /* Calps is not on Google Fonts — use a self-hosted approach or fallback */
+      /* We'll embed the Calps-like styling via a custom approach */
+    </style>
     <link rel="stylesheet" href="styles.css">
     <style>
     /* ── Silky animation keyframes ── */
@@ -39,9 +45,62 @@
 <body>
 
     <!-- ============================================================
-         HEADER
+         NEW HEADER — matches screenshot design
     ============================================================ -->
+    <style>
+    header {
+        background: transparent !important;
+        box-shadow: none !important;
+        padding: 18px 24px 0 24px !important;
+        display: flex !important;
+        align-items: flex-start !important;
+        justify-content: flex-start !important;
+        position: relative;
+        z-index: 100;
+    }
+    .new-nav { display: flex; gap: 10px; align-items: center; }
+    .new-nav a {
+        font-family: 'Capriola', 'Nunito', sans-serif;
+        font-size: 1.05rem;
+        font-weight: 400;
+        color: #5a4a42;
+        text-decoration: none;
+        background: #e8e0d8;
+        border-radius: 10px;
+        padding: 9px 22px;
+        letter-spacing: 0.01em;
+        transition: background 0.18s, color 0.18s;
+        cursor: pointer;
+        display: block;
+        box-shadow: 3px 4px 0px rgba(120,90,70,0.18);
+    }
+    .new-nav a:hover { background: #d9cfc5; color: #3b2e27; }
+    footer {
+        background: #8a6e60 !important;
+        color: #f5ede7 !important;
+        padding: 18px 28px !important;
+        text-align: left !important;
+        font-family: 'Saira Condensed', sans-serif !important;
+        font-size: 0.85rem !important;
+        font-weight: 400 !important;
+        letter-spacing: 0.02em !important;
+        line-height: 1.7 !important;
+        margin-top: 0 !important;
+    }
+    footer p { margin: 0 0 2px 0 !important; font-family: 'Saira Condensed', sans-serif !important; font-size: 0.85rem !important; color: #f5ede7 !important; }
+    footer a { color: #f5ede7 !important; font-family: 'Saira Condensed', sans-serif !important; font-size: 0.85rem !important; text-decoration: none !important; cursor: pointer; }
+    footer a:hover { text-decoration: underline !important; }
+    footer div { margin-top: 0 !important; display: flex; align-items: center; gap: 6px; }
+    </style>
     <header>
+        <nav class="new-nav">
+            <a onclick="showPage('home')">home</a>
+            <a onclick="showPage('shop')">the garden</a>
+            <a onclick="showPage('contact')">contact</a>
+        </nav>
+    </header>
+    <!-- OLD HEADER REMOVED, keeping script for other pages -->
+    <div style="display:none" id="logoLink_placeholder">
         <a class="logo" aria-label="implanted Home" id="logoLink" href="javascript:void(0)" onclick="showPage('home')">
             <div id="logoContainer">
                 <img class="logo-frame active" src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778347550/2_coyaic.png" alt="implanted logo" />
@@ -130,52 +189,227 @@
         })();
         </script>
 
-        <nav>
-            <a onclick="showPage('home')">Home</a>
-            <a onclick="showPage('shop')">THE GARDEN</a>
-            <a style="opacity:0.4;cursor:default;pointer-events:none;">Contact <span style="font-size:0.65em;font-style:italic;letter-spacing:0.5px;">Coming soon!</span></a>
-        </nav>
-    </header>
+    </div><!-- end logoLink_placeholder -->
 
     <!-- ============================================================
-         HOME PAGE
+         HOME PAGE — redesigned to match screenshot
     ============================================================ -->
-    <div id="content-home">
-        <div class="home-layout">
+    <style>
+    /* ── Home Page Layout ── */
+    #content-home {
+        min-height: calc(100vh - 60px);
+        display: flex;
+        flex-direction: column;
+    }
 
-            <!-- Left column: quote + body text -->
+    .home-main {
+        display: flex;
+        flex: 1;
+        padding: 30px 5% 60px 5%;
+        gap: 0;
+        align-items: flex-start;
+        position: relative;
+    }
+
+    /* ── Left text column ── */
+    .home-left {
+        flex: 0 0 42%;
+        max-width: 520px;
+        padding-top: 40px;
+        padding-right: 20px;
+    }
+
+    .home-quote-box {
+        display: inline-block;
+        background: #ede6de;
+        border-radius: 16px;
+        padding: 14px 28px;
+        margin-bottom: 28px;
+    }
+
+    .home-quote-box p {
+        font-family: 'Capriola', 'Nunito', sans-serif;
+        font-size: 1.55rem;
+        font-weight: 400;
+        color: #6b4e3d;
+        margin: 0;
+        line-height: 1.2;
+        font-style: italic;
+    }
+
+    .home-desc {
+        font-family: 'Capriola', 'Nunito', sans-serif;
+        font-size: 1.18rem;
+        color: #7a5a4a;
+        line-height: 1.75;
+        text-align: center;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    .home-desc strong {
+        font-weight: 700;
+        color: #5a3e32;
+    }
+
+    /* ── Right image collage ── */
+    .home-right {
+        flex: 1;
+        position: relative;
+        height: 600px;
+        min-width: 0;
+    }
+
+    .collage-photo {
+        position: absolute;
+        border: 10px solid #fff;
+        box-shadow: 4px 6px 22px rgba(100,70,55,0.18);
+        object-fit: cover;
+        background-size: cover;
+        background-position: center;
+        border-radius: 2px;
+    }
+
+    /* Top-left: large, dog with plant — slight left tilt */
+    .collage-photo.p1 {
+        width: 46%;
+        height: 58%;
+        top: 0;
+        left: 3%;
+        transform: rotate(-4.5deg);
+    }
+
+    /* Top-right: hand holding stake — slight right tilt */
+    .collage-photo.p2 {
+        width: 32%;
+        height: 43%;
+        top: -10px;
+        right: 2%;
+        transform: rotate(2.5deg);
+    }
+
+    /* Bottom-left: hand holding small stake */
+    .collage-photo.p3 {
+        width: 30%;
+        height: 40%;
+        bottom: 0;
+        left: 14%;
+        transform: rotate(3.5deg);
+    }
+
+    /* Bottom-right: stake in pot */
+    .collage-photo.p4 {
+        width: 36%;
+        height: 48%;
+        bottom: 0;
+        right: 1%;
+        transform: rotate(-2deg);
+    }
+    </style>
+
+    <div id="content-home">
+        <div class="home-main">
+            <!-- Left: text -->
             <div class="home-left">
-                <div class="quote-box">
-                    <p class="quote-text">"The perfect memorial keepsake"</p>
+                <div class="home-quote-box">
+                    <p>"The perfect memorial keepsake"</p>
                 </div>
-                <p class="home-body-text">
+                <p class="home-desc">
                     implanted makes custom made products for <strong>you</strong>. Each product is unique, one of a kind, and <strong>yours.</strong> We try our best to recreate your pet's likeness, so you can implant it with any plant you'd like.
                 </p>
             </div>
 
-            <!-- Right column: photo collage -->
+            <!-- Right: photo collage -->
             <div class="home-right">
-                <div class="photo-collage">
-                    <!-- Top-left: large dog photo, rotated CCW -->
-                    <div class="photo photo-dog">
-                        <img src="https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0044_1_jrao4p.jpg" alt="Dog with plant stake in pot" />
-                    </div>
-                    <!-- Top-right: stake held up, rotated CW -->
-                    <div class="photo photo-stake-tr">
-                        <img src="https://res.cloudinary.com/daa6tizgt/image/upload/v1776380717/IMG_0185_nzknkl.jpg" alt="Plant stake held up" />
-                    </div>
-                    <!-- Bottom-left: stake held, rotated CW slightly -->
-                    <div class="photo photo-stake-bl">
-                        <img src="https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0048_1_dnknin.jpg" alt="Plant stake close-up" />
-                    </div>
-                    <!-- Bottom-right: pot with stake, rotated CCW slightly -->
-                    <div class="photo photo-pot">
-                        <img src="https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0056_r2qeh1.jpg" alt="Plant stake in pot" />
-                    </div>
-                </div>
+                <!-- Top left — big dog with plant stake -->
+                <div class="collage-photo p1" style="background-image:url('https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0044_1_jrao4p.jpg');"></div>
+                <!-- Top right — hand holding stake outdoors -->
+                <div class="collage-photo p2" style="background-image:url('https://res.cloudinary.com/daa6tizgt/image/upload/v1776380717/IMG_0185_nzknkl.jpg');"></div>
+                <!-- Bottom left — hand holding small stake -->
+                <div class="collage-photo p3" style="background-image:url('https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0048_1_dnknin.jpg');"></div>
+                <!-- Bottom right — stake in terracotta pot -->
+                <div class="collage-photo p4" style="background-image:url('https://res.cloudinary.com/daa6tizgt/image/upload/v1776377572/IMG_0056_r2qeh1.jpg');"></div>
             </div>
-
         </div>
+        <!-- keep old hero/mission as hidden so JS page switching still works -->
+        <section class="hero" style="display:none;">
+            <h2>Your <span class="furry-text">furry friend</span> with your <span class="green-text">green one</span></h2>
+        </section>
+
+        <!-- Mission -->
+        <section class="mission reveal">
+            <h2>The Objective</h2>
+            <p>
+                <svg class="inline-logo-svg" width="200" height="80" viewBox="0 0 250 80"
+                     xmlns="http://www.w3.org/2000/svg" role="img" aria-label="implanted">
+                    <defs>
+                        <path id="inlineTextCurve" d="M 15,60 Q 125,10 235,60" fill="transparent" />
+                    </defs>
+                    <text font-family="'Dancing Script', cursive" font-size="38" fill="#5D4037" font-weight="bold">
+                        <textPath href="#inlineTextCurve" startOffset="50%" text-anchor="middle">
+                            implanted
+                        </textPath>
+                    </text>
+                    <path d="M 45,65 Q 125,25 205,65" stroke="#7CB342" stroke-width="4" fill="transparent"
+                          stroke-linecap="round" class="underline-path"/>
+                </svg>serves those who love their pets, who want them to be
+                <span class="highlight-keyword">forever planted</span> in their hearts, to be
+                <span class="highlight-keyword">forever remembered</span>. Doing this is no easy task, but we try.
+                We offer what we think to be one of the best ways to
+                <span class="highlight-keyword">engrave</span> your pet into your home,
+                <span class="highlight-keyword">custom, human-made</span> products with your furry friend right on
+                the front. Whether you just got that perfect photo of them, or they have passed on and want a way to
+                remember them, we're here for you.
+            </p>
+        </section>
+
+        <!-- The Process -->
+        <section class="expectations reveal">
+            <h2>Product Creation</h2>
+            <div class="expectations-grid">
+
+                <!-- Ship -->
+                <div class="expectation-item">
+                    <div class="icon-circle">
+                        <svg class="icon-svg" viewBox="0 0 24 24">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                        </svg>
+                    </div>
+                    <h3>Shipped in 1-7 Days</h3>
+                    <p>Your product will be made and shipped within 1-7 days, unless told otherwise.</p>
+                </div>
+
+                <!-- Human-made -->
+                <div class="expectation-item">
+                    <div class="icon-circle">
+                        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                            <!-- Border -->
+                            <rect x="2.5" y="2.5" width="19" height="19" rx="2.5" ry="2.5"></rect>
+                            <!-- Rounded conjoined mountains -->
+                            <path d="M2.5,18 C4,18 5,16 6.5,13 C8,10 9,9 10,9 C11,9 12,10.5 13,12 C13.8,13.2 14.5,14 15.5,14 C16.5,14 17.5,12.5 18.5,11 C19.5,9.5 20.5,8.5 21.5,8.5"></path>
+                            <!-- Sun -->
+                            <circle cx="7" cy="7" r="1.5" fill="currentColor" stroke="none"></circle>
+                        </svg>
+                    </div>
+                    <h3>Your Choice</h3>
+                    <p>Your plant stake will be made with whatever image you upload, not our choice. You have partial creative dictation over the creation of your product.</p>
+                </div>
+
+                <!-- Lifelike -->
+                <div class="expectation-item">
+                    <div class="icon-circle">
+                        <svg class="icon-svg" viewBox="0 0 24 24">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                    </div>
+                    <h3>Lifelike</h3>
+                    <p>Your recreated pet will be based off of the image YOU send, not a description, true lifelike accuracy, while keeping the aesthetic.</p>
+                </div>
+
+            </div>
+        </section>
     </div>
 
     <!-- ============================================================
@@ -771,11 +1005,11 @@
     </script>
 
     <!-- ============================================================
-         FOOTER
+         FOOTER — matches screenshot
     ============================================================ -->
     <footer>
         <p>Copyright implanted 2026</p>
-        <div class="footer-links">
+        <div>
             <a onclick="showPage('terms')">Terms of Service</a>
             <span class="footer-sep">|</span>
             <a onclick="showPage('privacy')">Privacy Policy</a>
