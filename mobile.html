@@ -78,6 +78,12 @@ html, body {
     justify-content: space-between;
     box-shadow: 0 2px 12px rgba(141,110,99,0.18);
     z-index: 20;
+    transition: all 0.3s cubic-bezier(.4,0,.6,1);
+}
+
+#topbar.hidden-header {
+    opacity: 0;
+    transform: translateY(-150%);
 }
 
 #topbar .topbar-right {
@@ -2329,6 +2335,36 @@ async function mSendMessage() {
 }
 
 // Force repaint on orientation change to prevent SVG font-size glitch
+// Header hide on scroll
+let lastScrollY = 0;
+const headerHideThreshold = 200;
+
+function handleScroll() {
+    const currentScrollY = window.scrollY;
+    const topbar = document.getElementById('topbar');
+    
+    if (!topbar) return;
+    
+    // Only show the header when scrolling up or within threshold
+    if (currentScrollY < lastScrollY || currentScrollY <= headerHideThreshold) {
+        topbar.classList.remove('hidden-header');
+    } else {
+        topbar.classList.add('hidden-header');
+    }
+    
+    // Update transition duration based on scroll position
+    const progress = Math.min(1, currentScrollY / headerHideThreshold);
+    topbar.style.transitionDuration = `${(1 - progress) * 0.3 + 0.1}s`;
+    
+    lastScrollY = currentScrollY;
+}
+
+// Debounced scroll handler to prevent performance issues on mobile
+function debounceHandler() {
+    setTimeout(handleScroll, 50);
+}
+
+window.addEventListener('scroll', debounceHandler);
 window.addEventListener('orientationchange', function () {
     setTimeout(function () {
         var cards = document.querySelectorAll('.mission-card');
