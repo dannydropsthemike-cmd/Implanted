@@ -44,13 +44,7 @@
     <header>
         <a class="logo" aria-label="implanted Home" id="logoLink" href="javascript:void(0)" onclick="showPage('home')">
             <div id="logoContainer">
-                <img class="logo-frame active" src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778889267/2_qh4b7q.png" alt="implanted logo" />
-                <img class="logo-frame"        src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778889267/3_tjqcg3.png" alt="" />
-                <img class="logo-frame"        src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778889267/4_g6i24k.png" alt="" />
-                <img class="logo-frame"        src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778889267/5_ikkijr.png" alt="" />
-                <img class="logo-frame"        src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778889267/6_dwthq7.png" alt="" />
-                <img class="logo-frame"        src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778889267/7_st53h7.png" alt="" />
-                <img class="logo-frame"        src="https://res.cloudinary.com/daa6tizgt/image/upload/v1778889267/8_pcerc2.png" alt="" />
+                <img src="https://res.cloudinary.com/daa6tizgt/image/upload/v1780779634/Circle_gfys9k.png" alt="implanted logo" style="width: 100%; height: auto;">
             </div>
         </a>
 
@@ -63,8 +57,8 @@
         #logoContainer {
             position: relative;
             display: block;
-            height: 100px;
-            width: 175px; /* will be corrected by JS once image loads */
+            width: 106px; /* will be corrected by JS once image loads */
+            height: 106px;
         }
         #logoContainer .logo-frame {
             position: absolute;
@@ -81,54 +75,6 @@
         }
         </style>
 
-        <script>
-        (function(){
-            var container = document.getElementById('logoContainer');
-            var imgs = Array.prototype.slice.call(container.querySelectorAll('.logo-frame'));
-            var current = 0;
-            var animTimer = null;
-            var STEP_MS = 35; /* fast, fluid */
-
-            function show(idx) {
-                imgs[current].classList.remove('active');
-                imgs[idx].classList.add('active');
-                current = idx;
-            }
-
-            function stepForward() {
-                if (current >= imgs.length - 1) return;
-                show(current + 1);
-                if (current < imgs.length - 1) {
-                    animTimer = setTimeout(stepForward, STEP_MS);
-                }
-            }
-
-            function stepBackward() {
-                if (current <= 0) return;
-                show(current - 1);
-                if (current > 0) {
-                    animTimer = setTimeout(stepBackward, STEP_MS);
-                }
-            }
-
-            function stopAnim() {
-                if (animTimer) { clearTimeout(animTimer); animTimer = null; }
-            }
-
-            container.addEventListener('mouseenter', function(){ stopAnim(); stepForward(); });
-            container.addEventListener('mouseleave', function(){ stopAnim(); stepBackward(); });
-
-            /* Size container to image's natural aspect ratio */
-            function sizeContainer() {
-                if (!imgs[0].naturalWidth) return;
-                var w = Math.round(100 * imgs[0].naturalWidth / imgs[0].naturalHeight);
-                container.style.width = w + 'px';
-                imgs.forEach(function(img){ img.style.width = w + 'px'; });
-            }
-            imgs[0].addEventListener('load', sizeContainer);
-            sizeContainer(); /* if already cached */
-        })();
-        </script>
 
         <nav>
             <a onclick="showPage('home')">Home</a>
@@ -837,9 +783,44 @@
         </div>
     </footer>
 
+    <style>
+        .fixed-bottom {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 999;
+        }
+        /* Add some space before footer when it's fixed */
+        #content-home, #content-shop {
+            padding-bottom: 8rem;
+        }
+    </style>
+
     <!-- Scripts — order matters: chat.js first, then app.js -->
     <script src="chat.js"></script>
     <script src="app.js"></script>
+
+    <!-- Always put footer right before closing body tag -->
+    <footer id="pageFooter">
+        <p>Copyright implanted 2026</p>
+
+        <div style="margin-top: 25px;">
+            <a onclick="showPage('privacy')">Privacy Policy</a>
+            |
+            <a onclick="showPage('terms')">Terms of Service</a>
+        </div>
+    </footer>
+
+    <!-- Add script to handle footer positioning -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const footer = document.getElementById('pageFooter');
+            // Check if content is shorter than screen height
+            if (document.documentElement.scrollHeight <= window.innerHeight) {
+                footer.classList.add('fixed-bottom');
+            }
+        });
+    </script>
 
 </body>
 </html>
