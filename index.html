@@ -106,19 +106,7 @@
         <section class="mission reveal">
             <h2>The Objective</h2>
             <p>
-                <svg class="inline-logo-svg" width="200" height="80" viewBox="0 0 250 80"
-                     xmlns="http://www.w3.org/2000/svg" role="img" aria-label="implanted">
-                    <defs>
-                        <path id="inlineTextCurve" d="M 15,60 Q 125,10 235,60" fill="transparent" />
-                    </defs>
-                    <text font-family="'Dancing Script', cursive" font-size="38" fill="#5D4037" font-weight="bold">
-                        <textPath href="#inlineTextCurve" startOffset="50%" text-anchor="middle">
-                            implanted
-                        </textPath>
-                    </text>
-                    <path d="M 45,65 Q 125,25 205,65" stroke="#7CB342" stroke-width="4" fill="transparent"
-                          stroke-linecap="round" class="underline-path"/>
-                </svg>serves those who love their pets, who want them to be
+                <span class="inline-implanted">implanted</span> serves those who love their pets, who want them to be
                 <span class="highlight-keyword">forever planted</span> in their hearts, to be
                 <span class="highlight-keyword">forever remembered</span>. Doing this is no easy task, but we try.
                 We offer what we think to be one of the best ways to
@@ -287,10 +275,13 @@
 
         <div class="shop-grid">
             <div class="product-card" onclick="showPage('product-pet-plant-stake')" style="cursor:pointer;">
+                <style>
+                    .product-image-wrap { max-height: 60vh; }
+                </style>
                 <div class="product-badge" style="display:none;">25% Off</div>
 
                 <div class="product-image-wrap" style="aspect-ratio: 3 / 4; overflow: hidden;">
-                    <div id="shopCardImg" style="width:100%;height:100%;background-size:cover;background-position:center top;border-radius:inherit;"></div>
+                    <div id="shopCardImg" style="width:100% !important;height:100% !important;background-size:cover;background-position:center top;border-radius:inherit;"></div>
                 </div>
 
                 <div class="product-info">
@@ -480,10 +471,23 @@
             thumb.style.aspectRatio = '3 / 4';
             thumb.style.cursor = 'pointer';
             thumb.onclick = function() {
+                // Update both the product image and gallery index
                 window._deskGalleryIdx = i;
                 mainImg.style.backgroundImage = "url('" + url + "')";
-                thumbRow.querySelectorAll('.product-detail-thumb').forEach(function(t) { t.classList.remove('active'); });
+                
+                // Clear active state from all thumbnails
+                thumbRow.querySelectorAll('.product-detail-thumb').forEach(function(t) { 
+                    t.classList.remove('active'); 
+                });
+                
+                // Set active state on clicked thumbnail
                 thumb.classList.add('active');
+                
+                // Update the lightbox gallery index
+                if (window._deskGalleryIdx !== i) {
+                    mainImg.style.backgroundImage = "url('" + allImages[i] + "')";
+                    window._deskGalleryIdx = i;
+                }
             };
             thumb.addEventListener('dblclick', function(e) { e.stopPropagation(); openDesktopGallery(i); });
             thumbRow.appendChild(thumb);
@@ -800,27 +804,6 @@
     <script src="chat.js"></script>
     <script src="app.js"></script>
 
-    <!-- Always put footer right before closing body tag -->
-    <footer id="pageFooter">
-        <p>Copyright implanted 2026</p>
-
-        <div style="margin-top: 25px;">
-            <a onclick="showPage('privacy')">Privacy Policy</a>
-            |
-            <a onclick="showPage('terms')">Terms of Service</a>
-        </div>
-    </footer>
-
-    <!-- Add script to handle footer positioning -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const footer = document.getElementById('pageFooter');
-            // Check if content is shorter than screen height
-            if (document.documentElement.scrollHeight <= window.innerHeight) {
-                footer.classList.add('fixed-bottom');
-            }
-        });
-    </script>
 
 </body>
 </html>
